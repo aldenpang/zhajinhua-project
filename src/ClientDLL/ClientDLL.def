@@ -1,0 +1,6 @@
+; ClientDLL.def : Declares the module parameters for the DLL.
+
+LIBRARY      "ClientDLL"
+
+EXPORTS
+    ; Explicit exports can go here
