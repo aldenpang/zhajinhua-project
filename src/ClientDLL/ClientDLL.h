@@ -23,5 +23,8 @@ public:
 public:
 	virtual BOOL InitInstance();
 
+
 	DECLARE_MESSAGE_MAP()
 };
+
+void SendClientMessage(const char* _msg);

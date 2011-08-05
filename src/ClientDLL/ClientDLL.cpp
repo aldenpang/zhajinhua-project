@@ -67,3 +67,51 @@ BOOL CClientDLLApp::InitInstance()
 
 	return TRUE;
 }
+
+void SendClientMessage( const char* _msg )
+{
+	AfxSocketInit();
+
+	CSocket aSocket;
+
+	CString strIP = "192.168.2.2";
+	CString strPort = "5000";
+	CString strText = _msg;
+
+	// 	this->GetDlgItem(IDC_EDIT_IP)->GetWindowText(strIP);
+	// 	this->GetDlgItem(IDC_EDIT_PORT)->GetWindowText(strPort);
+	// 	this->GetDlgItem(IDC_EDIT_TEXT)->GetWindowText(strText);
+
+	if(!aSocket.Create())
+	{
+		char szMsg[1024] = {0};
+
+		sprintf(szMsg, "create faild: %d", aSocket.GetLastError());
+
+		AfxMessageBox(szMsg);
+		return;
+	}
+
+	int nPort = atoi(strPort);
+
+	if(aSocket.Connect(strIP, nPort))
+	{
+		char szRecValue[1024] = {0};
+
+		aSocket.Send(strText, strText.GetLength());
+
+		aSocket.Receive((void *)szRecValue, 1024);
+
+		AfxMessageBox(szRecValue);
+	}
+	else
+	{
+		char szMsg[1024] = {0};
+
+		sprintf(szMsg, "create faild: %d", aSocket.GetLastError());
+
+		AfxMessageBox(szMsg);
+	}
+
+	aSocket.Close();
+}

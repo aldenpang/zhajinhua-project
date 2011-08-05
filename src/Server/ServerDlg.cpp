@@ -11,7 +11,116 @@
 
 
 // CServerDlg dialog
+CWinThread *pThread = NULL;
 
+bool m_exit = false;
+unsigned int StartServer(LPVOID lParam)
+{
+	if (!AfxSocketInit())
+	{
+		//AfxMessageBox(IDP_SOCKETS_INIT_FAILED);
+		return 1;
+	}
+
+	m_exit = false;
+
+	CServerDlg *aDlg = (CServerDlg *)lParam;
+
+	UINT nPort = 5000;
+
+	//socket------------------------------------------------
+
+	CSocket aSocket, serverSocket;
+
+	if (!aSocket.Socket())
+	{
+		char szError[256] = {0};
+
+		sprintf(szError, "Create Faild: %d", GetLastError());
+
+		AfxMessageBox(szError);
+
+		return 1; 
+	}
+
+	BOOL bOptVal = TRUE;
+	int bOptLen = sizeof(BOOL);
+
+	aSocket.SetSockOpt(SO_REUSEADDR, (void *)&bOptVal, bOptLen, SOL_SOCKET);
+
+
+	if (!aSocket.Bind(nPort))
+	{
+		char szError[256] = {0};
+
+		sprintf(szError, "Bind Faild: %d", GetLastError());
+
+		AfxMessageBox(szError);
+
+		return 1; 
+	}
+
+	if(!aSocket.Listen(10))
+	{	
+		char szError[256] = {0};
+
+		sprintf(szError, "Listen Faild: %d", GetLastError());
+
+		AfxMessageBox(szError);
+
+		return 1;
+	}
+
+
+	CString strText;
+
+	aDlg->GetDlgItemText(IDC_LOG, strText);
+
+	strText += "Server Start! \r\n";
+
+	aDlg->SetDlgItemText(IDC_LOG, strText);
+
+	while(!m_exit)
+	{
+
+		if(aSocket.Accept(serverSocket))
+		{
+			char szRecvMsg[256] = {0};
+			char szOutMsg[256] = {0};	
+
+			serverSocket.Receive(szRecvMsg, 256);
+
+			sprintf(szOutMsg, "Receive Msg: %s \r\n", szRecvMsg);
+
+			aDlg->GetDlgItemText(IDC_LOG, strText);
+
+			strText += szOutMsg;
+
+			aDlg->SetDlgItemText(IDC_LOG, strText);
+
+			serverSocket.Send("Have Receive The Msg", 50);
+
+			serverSocket.Close();
+		}
+
+	}
+
+	aSocket.Close();
+	serverSocket.Close();
+
+	aDlg->GetDlgItemText(IDC_LOG, strText);
+
+	strText += "Have Close!";
+
+	aDlg->SetDlgItemText(IDC_LOG, strText);
+
+	return 0;
+}
+
+void StopServer()
+{
+	m_exit = true;
+}
 
 
 
@@ -30,14 +139,22 @@ BEGIN_MESSAGE_MAP(CServerDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDOK, &CServerDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDCANCEL, &CServerDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDCANCEL2, &CServerDlg::OnBnClickedCancel2)
 END_MESSAGE_MAP()
 
 
 // CServerDlg message handlers
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
 BOOL CServerDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
+	
+	_CrtDumpMemoryLeaks();
 
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog
@@ -45,6 +162,7 @@ BOOL CServerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	this->GetDlgItem(IDCANCEL)->EnableWindow(false);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -85,3 +203,41 @@ HCURSOR CServerDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CServerDlg::OnBnClickedOk()
+{
+	pThread = new CWinThread(StartServer, (LPVOID)this);
+
+	pThread->CreateThread(CREATE_SUSPENDED);
+
+	pThread->ResumeThread();
+
+
+	this->GetDlgItem(IDOK)->EnableWindow(false);
+	this->GetDlgItem(IDCANCEL)->EnableWindow(true);	
+}
+
+void CServerDlg::OnBnClickedCancel()
+{
+	StopServer();
+
+	this->GetDlgItem(IDOK)->EnableWindow(true);
+	this->GetDlgItem(IDCANCEL)->EnableWindow(false);
+
+	if ( pThread == NULL )
+		return;
+
+	pThread->SuspendThread();
+
+	delete pThread;
+
+	pThread = NULL;
+
+}
+
+void CServerDlg::OnBnClickedCancel2()
+{
+	// TODO: Add your control notification handler code here
+	OnBnClickedCancel();
+	PostQuitMessage(0);
+}
