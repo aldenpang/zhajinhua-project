@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Client.h"
 #include "ClientDlg.h"
+#include "ClientDLL.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,6 +31,7 @@ BEGIN_MESSAGE_MAP(CClientDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDOK, &CClientDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -85,3 +87,56 @@ HCURSOR CClientDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+void CClientDlg::OnBnClickedOk()
+{
+	//CClientDLLApp dllApp;
+	//dllApp.SendMessage("MessageFromClientDLL");
+
+	//SendClientMessage("MessageFromClientDLL");
+
+	AfxSocketInit();
+
+	CSocket aSocket;
+
+	CString strIP = "192.168.2.2";
+	CString strPort = "5000";
+	CString strText = "asdf";
+
+	// 	this->GetDlgItem(IDC_EDIT_IP)->GetWindowText(strIP);
+	// 	this->GetDlgItem(IDC_EDIT_PORT)->GetWindowText(strPort);
+	// 	this->GetDlgItem(IDC_EDIT_TEXT)->GetWindowText(strText);
+
+	if(!aSocket.Create())
+	{
+		char szMsg[1024] = {0};
+
+		sprintf(szMsg, "create faild: %d", aSocket.GetLastError());
+
+		AfxMessageBox(szMsg);
+		return;
+	}
+
+	int nPort = atoi(strPort);
+
+	if(aSocket.Connect(strIP, nPort))
+	{
+		char szRecValue[1024] = {0};
+
+		aSocket.Send(strText, strText.GetLength());
+
+		aSocket.Receive((void *)szRecValue, 1024);
+
+		AfxMessageBox(szRecValue);
+	}
+	else
+	{
+		char szMsg[1024] = {0};
+
+		sprintf(szMsg, "create faild: %d", aSocket.GetLastError());
+
+		AfxMessageBox(szMsg);
+	}
+
+	aSocket.Close();
+}
