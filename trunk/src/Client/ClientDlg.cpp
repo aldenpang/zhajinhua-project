@@ -99,9 +99,9 @@ void CClientDlg::OnBnClickedOk()
 
 	CSocket aSocket;
 
-	CString strIP = "192.168.2.2";
+	CString strIP = "192.168.1.101";
 	CString strPort = "5000";
-	CString strText = "asdf";
+	CString strText = "pangshuopangshuo0";
 
 	// 	this->GetDlgItem(IDC_EDIT_IP)->GetWindowText(strIP);
 	// 	this->GetDlgItem(IDC_EDIT_PORT)->GetWindowText(strPort);

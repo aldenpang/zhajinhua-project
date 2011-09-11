@@ -15,10 +15,16 @@
 class NetLayer
 {
 public:
+	NetLayer();	
+	~NetLayer();
+
 	int Initialize();
 	int Start(const int _port);
 	int Uninitialize();
 protected:
+	int parseMessages(Packet& _packet);
+
 private:
+	char mBuffer[MAX_PACKET_SIZE];
 };
 #endif // NetLayer_h__
