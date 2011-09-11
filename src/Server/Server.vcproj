@@ -196,6 +196,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ServerNetLayer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -234,6 +238,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ServerNetLayer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
@@ -269,14 +277,6 @@
 			</File>
 			<File
 				RelativePath="..\Shared\Packet.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Shared\ServerNetLayer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Shared\ServerNetLayer.h"
 				>
 			</File>
 			<File

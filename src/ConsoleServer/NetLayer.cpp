@@ -3,6 +3,15 @@
 
 #define BACKLOG 10 /* 最大同时连接请求数 */
 
+NetLayer::NetLayer()
+{
+	memset(mBuffer, 0, MAX_PACKET_SIZE);
+}
+
+NetLayer::~NetLayer()
+{
+}
+
 int NetLayer::Initialize()
 {
 	WSAData wsadata;
@@ -53,12 +62,36 @@ int NetLayer::Start( const int _port )
 		}
 		printf("received a connection from %s ", inet_ntoa(remote_addr.sin_addr));
 
-		if (send(client_fd, "Hello, you are connected! ", 26, 0) == -1)
+		int preReceivedLength = recv(client_fd, mBuffer, MAX_PACKET_SIZE, 0);
+
+		if (preReceivedLength < 0) 
 		{
-			printf("send出错！");
-			closesocket(client_fd);
-			return -1;
+			std::cout << "recv() failed.";
+		} 
+		else if (preReceivedLength == 0) 
+		{
+			std::cout << "Client has been disconnected.\n";
 		}
+
+		printf("received data:%s data size:%d\n", mBuffer, preReceivedLength);
+
+		Packet pkt;
+		pkt.SetData(mBuffer);
+		if( pkt.IsTokenValid() )
+		{
+			parseMessages(pkt);		
+		}
+		else
+		{
+			printf("packet from %s is invalid", inet_ntoa(remote_addr.sin_addr));
+		}
+
+		//if (send(client_fd, "Hello, you are connected! ", 26, 0) == -1)
+		//{
+		//	printf("send出错！");
+		//	closesocket(client_fd);
+		//	return -1;
+		//}
 		closesocket(client_fd);
 
 	}
@@ -75,4 +108,21 @@ int NetLayer::Uninitialize()
 		return -1;
 	}
 	return 0;
+}
+
+int NetLayer::parseMessages(Packet& _packet)
+{
+	int message = _packet.GetMessage();
+	switch(message)
+	{
+	case SharedData::MSG_TEST:
+		break;
+	case SharedData::MSG_TEST2:
+		break;
+	default:
+		printf("unknow message");
+		break;
+	}
+
+	return 0;	
 }
