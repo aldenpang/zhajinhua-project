@@ -50,6 +50,8 @@ BOOL CClientDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	ClientNetLayer_Initialize();
 
+	ClientNetLayer_Connect("192.168.1.101", 5000);
+
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -92,8 +94,6 @@ HCURSOR CClientDlg::OnQueryDragIcon()
 
 void CClientDlg::OnBnClickedOk()
 {
-	ClientNetLayer_Connect("192.168.2.2", 5000);
-
 	ClientNetLayer_Send("pangshuopangshuo0sent from client with console dll!");
 
 	////CClientDLLApp dllApp;
