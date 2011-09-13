@@ -60,7 +60,7 @@ int NetLayer::Start( const int _port )
 			printf("accept³ö´í");
 			continue;
 		}
-		printf("received a connection from %s ", inet_ntoa(remote_addr.sin_addr));
+		printf("received a connection from %s:%d socket:%d\n", inet_ntoa(remote_addr.sin_addr), remote_addr.sin_port, client_fd);
 
 		int preReceivedLength = recv(client_fd, mBuffer, MAX_PACKET_SIZE, 0);
 
@@ -92,7 +92,8 @@ int NetLayer::Start( const int _port )
 		//	closesocket(client_fd);
 		//	return -1;
 		//}
-		closesocket(client_fd);
+
+		//closesocket(client_fd);
 
 	}
 

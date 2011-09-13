@@ -28,10 +28,17 @@ _declspec(dllexport) int ClientNetLayer_Initialize()
 	return 0;
 }
 
-_declspec(dllexport) int ClientNetLayer_Connect(const char* _ip, const int _port)
+//_declspec(dllexport) int ClientNetLayer_Connect_For_Unity3D()
+//{
+//	ClientNetLayer_Connect("192.168.1.101", 5000);
+//
+//	return 0;
+//}
+
+_declspec(dllexport) int ClientNetLayer_Connect(std::string& _ip, int _port)
 {
 	SOCKADDR_IN addrSrv;
-	addrSrv.sin_addr.S_un.S_addr=inet_addr(_ip);
+	addrSrv.sin_addr.S_un.S_addr=inet_addr(_ip.c_str());
 	addrSrv.sin_family=AF_INET;
 	addrSrv.sin_port=htons(_port);
 
@@ -45,7 +52,7 @@ _declspec(dllexport) int ClientNetLayer_Send(const char* _buffer)
 	if (_buffer == NULL)
 		return -1;
 
-	send(sockClient,_buffer,strlen(_buffer)+1,0);
+	int res = send(sockClient,_buffer,strlen(_buffer)+1,0);
 
 	return 0;
 }

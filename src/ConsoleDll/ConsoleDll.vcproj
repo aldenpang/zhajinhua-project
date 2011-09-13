@@ -134,7 +134,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="../../bin/ConsoleDll_d.dll"
+				AdditionalDependencies="ws2_32.lib"
+				OutputFile="../../bin/ConsoleDll.dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
