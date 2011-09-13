@@ -4,7 +4,8 @@
 #include "stdafx.h"
 #include "Client.h"
 #include "ClientDlg.h"
-#include "ClientDLL.h"
+#include "../ConsoleDll/ConsoleDll.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -47,6 +48,7 @@ BOOL CClientDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	ClientNetLayer_Initialize();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -90,53 +92,57 @@ HCURSOR CClientDlg::OnQueryDragIcon()
 
 void CClientDlg::OnBnClickedOk()
 {
-	//CClientDLLApp dllApp;
-	//dllApp.SendMessage("MessageFromClientDLL");
+	ClientNetLayer_Connect("192.168.2.2", 5000);
 
-	//SendClientMessage("MessageFromClientDLL");
+	ClientNetLayer_Send("pangshuopangshuo0sent from client with console dll!");
 
-	AfxSocketInit();
+	////CClientDLLApp dllApp;
+	////dllApp.SendMessage("MessageFromClientDLL");
 
-	CSocket aSocket;
+	////SendClientMessage("MessageFromClientDLL");
 
-	CString strIP = "192.168.1.101";
-	CString strPort = "5000";
-	CString strText = "pangshuopangshuo0";
+	//AfxSocketInit();
 
-	// 	this->GetDlgItem(IDC_EDIT_IP)->GetWindowText(strIP);
-	// 	this->GetDlgItem(IDC_EDIT_PORT)->GetWindowText(strPort);
-	// 	this->GetDlgItem(IDC_EDIT_TEXT)->GetWindowText(strText);
+	//CSocket aSocket;
 
-	if(!aSocket.Create())
-	{
-		char szMsg[1024] = {0};
+	//CString strIP = "192.168.1.101";
+	//CString strPort = "5000";
+	//CString strText = "pangshuopangshuo0";
 
-		sprintf(szMsg, "create faild: %d", aSocket.GetLastError());
+	//// 	this->GetDlgItem(IDC_EDIT_IP)->GetWindowText(strIP);
+	//// 	this->GetDlgItem(IDC_EDIT_PORT)->GetWindowText(strPort);
+	//// 	this->GetDlgItem(IDC_EDIT_TEXT)->GetWindowText(strText);
 
-		AfxMessageBox(szMsg);
-		return;
-	}
+	//if(!aSocket.Create())
+	//{
+	//	char szMsg[1024] = {0};
 
-	int nPort = atoi(strPort);
+	//	sprintf(szMsg, "create faild: %d", aSocket.GetLastError());
 
-	if(aSocket.Connect(strIP, nPort))
-	{
-		char szRecValue[1024] = {0};
+	//	AfxMessageBox(szMsg);
+	//	return;
+	//}
 
-		aSocket.Send(strText, strText.GetLength());
+	//int nPort = atoi(strPort);
 
-		aSocket.Receive((void *)szRecValue, 1024);
+	//if(aSocket.Connect(strIP, nPort))
+	//{
+	//	char szRecValue[1024] = {0};
 
-		AfxMessageBox(szRecValue);
-	}
-	else
-	{
-		char szMsg[1024] = {0};
+	//	aSocket.Send(strText, strText.GetLength());
 
-		sprintf(szMsg, "create faild: %d", aSocket.GetLastError());
+	//	aSocket.Receive((void *)szRecValue, 1024);
 
-		AfxMessageBox(szMsg);
-	}
+	//	AfxMessageBox(szRecValue);
+	//}
+	//else
+	//{
+	//	char szMsg[1024] = {0};
 
-	aSocket.Close();
+	//	sprintf(szMsg, "create faild: %d", aSocket.GetLastError());
+
+	//	AfxMessageBox(szMsg);
+	//}
+
+	//aSocket.Close();
 }
