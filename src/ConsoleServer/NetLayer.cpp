@@ -39,7 +39,8 @@ int NetLayer::Start( const int _port )
 
 	my_addr.sin_family=AF_INET;
 	my_addr.sin_port=htons(_port);
-	my_addr.sin_addr.s_addr = INADDR_ANY;
+	//my_addr.sin_addr.s_addr = INADDR_ANY;
+	my_addr.sin_addr.s_addr = inet_addr("192.168.2.2");
 	memset(my_addr.sin_zero, 0, 8);
 	if (bind(sockfd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) == -1) 
 	{
@@ -52,6 +53,7 @@ int NetLayer::Start( const int _port )
 		return -1;
 	}
 	int sin_size = 0;
+	printf("Initialize done(%s:%d), waiting for connections...\n", inet_ntoa(my_addr.sin_addr), _port);
 	while(1) 
 	{
 		sin_size = sizeof(struct sockaddr_in);

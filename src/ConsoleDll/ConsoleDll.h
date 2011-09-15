@@ -8,6 +8,6 @@ extern "C" _declspec(dllexport) int ClientNetLayer_Uninitialize();
 
 extern "C" _declspec(dllexport) int test()
 {
-	MessageBox(0, L"from DLL", L"Info", MB_OK);
+	MessageBox(0, "from DLL", "Info", MB_OK);
 	return 100;
 }
