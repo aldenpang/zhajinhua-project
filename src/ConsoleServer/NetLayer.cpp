@@ -39,8 +39,8 @@ int NetLayer::Start( const int _port )
 
 	my_addr.sin_family=AF_INET;
 	my_addr.sin_port=htons(_port);
-	//my_addr.sin_addr.s_addr = INADDR_ANY;
-	my_addr.sin_addr.s_addr = inet_addr("192.168.2.2");
+	my_addr.sin_addr.s_addr = INADDR_ANY;
+	//my_addr.sin_addr.s_addr = inet_addr("192.168.2.2");
 	memset(my_addr.sin_zero, 0, 8);
 	if (bind(sockfd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) == -1) 
 	{
@@ -119,8 +119,10 @@ int NetLayer::parseMessages(Packet& _packet)
 	switch(message)
 	{
 	case SharedData::MSG_TEST:
+		printf("Received MSG_TEST");
 		break;
 	case SharedData::MSG_TEST2:
+		printf("Received MSG_TEST2");
 		break;
 	default:
 		printf("unknow message");
