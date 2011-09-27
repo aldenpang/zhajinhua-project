@@ -5,6 +5,8 @@
 
 int main()
 {
+	Packet p;
+
 	NetLayer net;
 	net.Initialize();
 
