@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Client.h"
 #include "ClientDlg.h"
+#include "../Shared/Packet.h"
 #include "../ConsoleDll/ConsoleDll.h"
 
 
@@ -50,7 +51,7 @@ BOOL CClientDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	ClientNetLayer_Initialize();
 
-	ClientNetLayer_Connect("192.168.1.101", 5000);
+	ClientNetLayer_Connect(std::string("192.168.2.2"), 5000);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -91,10 +92,18 @@ HCURSOR CClientDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
 void CClientDlg::OnBnClickedOk()
 {
-	ClientNetLayer_Send("pangshuopangshuo0sent from client with console dll!");
+	Packet pk;
+	pk.SetMessage(102);
+	pk.Put(100);
+	pk.Put(200);
+	pk.Put(300);
+	pk.SetHeader();
+	const char* temp = pk.GetData();
+
+	//ClientNetLayer_Send(temp);
+	ClientNetLayer_Send("abcd\0\0\0\0abcd");
 
 	////CClientDLLApp dllApp;
 	////dllApp.SendMessage("MessageFromClientDLL");

@@ -262,6 +262,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Shared"
+			>
+			<File
+				RelativePath="..\Shared\Packet.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Shared\Packet.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

@@ -31,6 +31,7 @@ public:
 	~Packet();
 
 	void SetData(const char* _data);
+	const char* GetData(){return mBuff;}
 
 	bool IsTokenValid();
 
