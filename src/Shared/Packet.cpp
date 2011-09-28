@@ -27,6 +27,8 @@ Packet::~Packet()
 
 void Packet::SetData(const char* _data)
 {
+	assert(_data != NULL);
+
 	strcpy_s(mBuff, _data);
 }
 

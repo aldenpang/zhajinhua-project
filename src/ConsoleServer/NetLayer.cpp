@@ -85,7 +85,7 @@ int NetLayer::Start( const int _port )
 		}
 		else
 		{
-			printf("packet from %s is invalid", inet_ntoa(remote_addr.sin_addr));
+			printf("packet from %s is invalid\n", inet_ntoa(remote_addr.sin_addr));
 		}
 
 		//if (send(client_fd, "Hello, you are connected! ", 26, 0) == -1)
