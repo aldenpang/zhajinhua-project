@@ -108,3 +108,16 @@ void Packet::SetHeader()
 
 	return;
 }
+
+// void Packet::GetData( char* _output )
+// {
+// 	assert(_output != NULL);
+// 
+// 	memcpy(_output, mBuff, MAX_PACKET_SIZE);
+// 
+// }
+
+unsigned int Packet::GetDataLength()
+{
+	return mPtr - mBuff;
+}

@@ -96,14 +96,21 @@ void CClientDlg::OnBnClickedOk()
 {
 	Packet pk;
 	pk.SetMessage(102);
+	int len = pk.GetDataLength();
 	pk.Put(100);
+	len = pk.GetDataLength();
 	pk.Put(200);
+	len = pk.GetDataLength();
 	pk.Put(300);
+	len = pk.GetDataLength();
 	pk.SetHeader();
+	//char temp[MAX_PACKET_SIZE] = {0};
+	//pk.GetData(temp);
 	const char* temp = pk.GetData();
+	len = pk.GetDataLength();
 
-	//ClientNetLayer_Send(temp);
-	ClientNetLayer_Send("abcd\0\0\0\0abcd");
+	ClientNetLayer_SendPacket(&pk);
+	//ClientNetLayer_Send("abcd0000abcd");
 
 	////CClientDLLApp dllApp;
 	////dllApp.SendMessage("MessageFromClientDLL");

@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "ConsoleDll.h"
 
+
 SOCKET sockClient;
 _declspec(dllexport) int ClientNetLayer_Initialize()
 {
@@ -47,12 +48,20 @@ _declspec(dllexport) int ClientNetLayer_Connect(std::string& _ip, int _port)
 	return 0;
 }
 
-_declspec(dllexport) int ClientNetLayer_Send(const char* _buffer)
+_declspec(dllexport) int ClientNetLayer_SendPacket(Packet* _pk)
+{
+	ClientNetLayer_SendData(_pk->GetData(), _pk->GetDataLength());
+
+	return 0;
+}
+
+
+_declspec(dllexport) int ClientNetLayer_SendData(const char* _buffer, int _bufferSize)
 {
 	if (_buffer == NULL)
 		return -1;
 
-	int res = send(sockClient,_buffer,strlen(_buffer)+1,0);
+	int res = send(sockClient,_buffer, _bufferSize,0);
 
 	return 0;
 }
