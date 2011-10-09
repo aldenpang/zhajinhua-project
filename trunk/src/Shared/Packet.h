@@ -31,6 +31,7 @@ public:
 	~Packet();
 
 	void SetData(const char* _data);
+	//void GetData(char* _output);
 	const char* GetData(){return mBuff;}
 
 	bool IsTokenValid();
@@ -49,6 +50,8 @@ public:
 
 
 	void SetHeader();	// call before send
+
+	unsigned int GetDataLength();
 
 protected:
 private:

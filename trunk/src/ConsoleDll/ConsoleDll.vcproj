@@ -201,6 +201,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\Shared\Packet.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -228,6 +232,10 @@
 			>
 			<File
 				RelativePath=".\ConsoleDll.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Shared\Packet.h"
 				>
 			</File>
 			<File
