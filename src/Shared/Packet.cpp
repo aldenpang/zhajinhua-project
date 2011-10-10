@@ -29,7 +29,7 @@ void Packet::SetData(const char* _data)
 {
 	assert(_data != NULL);
 
-	strcpy_s(mBuff, _data);
+	memcpy(mBuff, _data, MAX_PACKET_SIZE);
 }
 
 bool Packet::IsTokenValid()
