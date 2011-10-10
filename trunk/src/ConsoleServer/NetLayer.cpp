@@ -125,7 +125,7 @@ int NetLayer::parseMessages(Packet& _packet)
 		printf("Received MSG_TEST2");
 		break;
 	default:
-		printf("unknow message");
+		printf("unknow message is: %d\n", message);
 		break;
 	}
 
