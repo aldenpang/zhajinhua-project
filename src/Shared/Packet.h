@@ -50,8 +50,7 @@ public:
 	void Get(float* _data);
 	void Get(char* _data, int _length);
 
-
-	void SetHeader();	// call before send
+	void SetHeader();	// call before send, to set token and data size
 
 	unsigned int GetDataLength();
 

@@ -51,7 +51,7 @@ BOOL CClientDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	ClientNetLayer_Initialize();
 
-	ClientNetLayer_Connect(std::string("192.168.2.2"), 5000);
+	ClientNetLayer_Connect(std::string("192.168.1.104"), 5000);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -103,11 +103,9 @@ void CClientDlg::OnBnClickedOk()
 	len = pk.GetDataLength();
 	pk.Put(300);
 	len = pk.GetDataLength();
-	pk.SetHeader();
+
 	//char temp[MAX_PACKET_SIZE] = {0};
 	//pk.GetData(temp);
-	const char* temp = pk.GetData();
-	len = pk.GetDataLength();
 
 	ClientNetLayer_SendPacket(&pk);
 	//ClientNetLayer_Send("abcd0000abcd");

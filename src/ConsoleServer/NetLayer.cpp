@@ -3,9 +3,63 @@
 
 #define BACKLOG 10 /* 最大同时连接请求数 */
 
+pthread_mutex_t mMutex;
+
+void *NetLayer::ReceiveMessage(void* _arg)
+{
+	NetLayer* netLayer = (NetLayer*)_arg;
+
+	while(1)
+	{
+		if ( netLayer->mClientList.size() == 0 )
+			continue;
+
+		for ( size_t i = 0; i<netLayer->mClientList.size(); i++ )
+		{
+			pthread_mutex_lock(&mMutex);
+			SOCKET socket = netLayer->mClientList[i];
+			pthread_mutex_unlock(&mMutex);
+
+			char bufffer[MAX_PACKET_SIZE]={0};
+			int preReceivedLength = recv(socket, bufffer, MAX_PACKET_SIZE, 0);
+
+			if (preReceivedLength < 0) 
+			{
+				std::cout << "recv() failed.\n";
+				netLayer->removeSocket(socket);
+				continue;
+			} 
+			else if (preReceivedLength == 0) 
+			{
+				std::cout << "Client has been disconnected.\n";
+				netLayer->removeSocket(socket);
+				continue;
+			}
+
+			printf("received data:%s data size:%d\n", bufffer, preReceivedLength);
+
+			Packet pkt;
+			pkt.SetData(bufffer);
+			if( pkt.IsTokenValid() )
+			{
+				netLayer->parseMessages(pkt);		
+			}
+			else
+			{
+				//printf("packet from %s is invalid\n", inet_ntoa(remote_addr.sin_addr));
+			}
+		}
+	}
+
+	return NULL;
+}
+
 NetLayer::NetLayer()
 {
-	memset(mBuffer, 0, MAX_PACKET_SIZE);
+	pthread_mutex_init(&mMutex, NULL);
+
+	pthread_t thread;
+	pthread_create(&thread, NULL, ReceiveMessage, this);
 }
 
 NetLayer::~NetLayer()
@@ -64,38 +118,10 @@ int NetLayer::Start( const int _port )
 		}
 		printf("received a connection from %s:%d socket:%d\n", inet_ntoa(remote_addr.sin_addr), remote_addr.sin_port, client_fd);
 
-		int preReceivedLength = recv(client_fd, mBuffer, MAX_PACKET_SIZE, 0);
-
-		if (preReceivedLength < 0) 
-		{
-			std::cout << "recv() failed.";
-		} 
-		else if (preReceivedLength == 0) 
-		{
-			std::cout << "Client has been disconnected.\n";
-		}
-
-		printf("received data:%s data size:%d\n", mBuffer, preReceivedLength);
-
-		Packet pkt;
-		pkt.SetData(mBuffer);
-		if( pkt.IsTokenValid() )
-		{
-			parseMessages(pkt);		
-		}
-		else
-		{
-			printf("packet from %s is invalid\n", inet_ntoa(remote_addr.sin_addr));
-		}
-
-		//if (send(client_fd, "Hello, you are connected! ", 26, 0) == -1)
-		//{
-		//	printf("send出错！");
-		//	closesocket(client_fd);
-		//	return -1;
-		//}
-
-		//closesocket(client_fd);
+		pthread_mutex_lock(&mMutex);
+		mClientList.push_back(client_fd);
+		printf("socket:%d\n", client_fd);
+		pthread_mutex_unlock(&mMutex);
 
 	}
 
@@ -130,4 +156,18 @@ int NetLayer::parseMessages(Packet& _packet)
 	}
 
 	return 0;	
+}
+
+void NetLayer::removeSocket( SOCKET _socket )
+{
+	std::vector<SOCKET>::iterator itr = mClientList.begin();
+	for ( size_t i = 0; i<mClientList.size(); i++, itr++ )
+	{
+		if ( _socket == mClientList[i] )
+		{
+			mClientList.erase(itr);
+			break;
+		}
+	}
+	return;
 }
