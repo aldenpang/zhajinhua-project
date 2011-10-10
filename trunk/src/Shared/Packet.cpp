@@ -6,20 +6,6 @@ Packet::Packet()
 {
 	memset(mBuff, 0, MAX_PACKET_SIZE);
 	mPtr = mBuff+POS_DATA;
-
-	//SetHeader();
-
-	//SetMessage(100000);
-
-	//int msg = GetMessage();
-
-	//int dd = 222;
-	//Put(dd);
-	//char dddd[32] = {0};
-	//sprintf(dddd, "abddsfasf");
-	//Put(dddd);
-
-	return;
 }
 
 Packet::~Packet()
@@ -108,14 +94,6 @@ void Packet::SetHeader()
 
 	return;
 }
-
-// void Packet::GetData( char* _output )
-// {
-// 	assert(_output != NULL);
-// 
-// 	memcpy(_output, mBuff, MAX_PACKET_SIZE);
-// 
-// }
 
 unsigned int Packet::GetDataLength()
 {

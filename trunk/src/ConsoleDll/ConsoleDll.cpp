@@ -50,6 +50,7 @@ _declspec(dllexport) int ClientNetLayer_Connect(std::string& _ip, int _port)
 
 _declspec(dllexport) int ClientNetLayer_SendPacket(Packet* _pk)
 {
+	_pk->SetHeader();
 	ClientNetLayer_SendData(_pk->GetData(), _pk->GetDataLength());
 
 	return 0;

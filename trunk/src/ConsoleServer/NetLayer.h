@@ -12,6 +12,8 @@
 #ifndef NetLayer_h__
 #define NetLayer_h__
 
+#include "pthread.h"
+
 class NetLayer
 {
 public:
@@ -24,7 +26,11 @@ public:
 protected:
 	int parseMessages(Packet& _packet);
 
+	static void *NetLayer::ReceiveMessage(void* _arg);
+
+	void removeSocket(SOCKET _socket);
+
 private:
-	char mBuffer[MAX_PACKET_SIZE];
+	std::vector<SOCKET> mClientList;
 };
 #endif // NetLayer_h__

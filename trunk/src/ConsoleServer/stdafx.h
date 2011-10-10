@@ -17,8 +17,12 @@
 #include <sys/types.h>
 #include <WinSock2.h>
 #include <Windows.h>
+#include <vector>
+#include <list>
 
 #include "Packet.h"
 #include "SharedData.h"
+
+using namespace std;
 
 // TODO: reference additional headers your program requires here
