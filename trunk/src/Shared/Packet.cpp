@@ -34,11 +34,11 @@ void Packet::SetData(const char* _data)
 
 bool Packet::IsTokenValid()
 {
-	//if(strstr(mBuff, mToken))
-	//{
-	//	return true;
-	//}
-	//else
+	long token = 0;
+	memcpy(&token, mBuff, sizeof(long));
+	if ( token == TOKEN )
+		return true;
+	else 
 		return false;
 }
 
@@ -103,7 +103,7 @@ void Packet::Get(char* _data, int _length)
 
 void Packet::SetHeader()
 {
-	long token = 1165417621;
+	long token = TOKEN;
 	memcpy(mBuff, &token, sizeof(long));
 
 	return;
