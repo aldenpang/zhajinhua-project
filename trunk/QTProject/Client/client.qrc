@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/Client">
+        <file>client.ui</file>
+    </qresource>
+    <qresource prefix="/Images">
+        <file>Media/bg.png</file>
+    </qresource>
+</RCC>

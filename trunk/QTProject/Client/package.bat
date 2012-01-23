@@ -1,0 +1,1 @@
+rcc -binary client.qrc -o media.dat
