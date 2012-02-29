@@ -8,6 +8,7 @@
 #ifndef _INETLAYER_H_
 #define _INETLAYER_H_
 
+class Packet;
 class INetLayer:public QObject
 {
 Q_OBJECT
@@ -16,7 +17,8 @@ public:
 	~INetLayer();
 	void Init();
 	void Connect(const QString& _ip, const int _port);
-	void Send();
+	void Send(const char* _data);
+	void Send(Packet* _packet);
 	void Disconnect();
 
 	//virtual void packetHandle(GCPacket& _packet) = 0;

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "INetLayer.h"
+#include "Packet.h"
 
 //------------------------------------------------------------------------------
 INetLayer::INetLayer()
@@ -38,10 +39,22 @@ void INetLayer::Connect(const QString& _ip, const int _port)
 	}
 }
 //------------------------------------------------------------------------------
-void INetLayer::Send()
+void INetLayer::Send(const char* _data)
 {
-	//mTcpSocket.write(_packet.GetBlock());
+	mTcpSocket.write(_data);
 }
+
+void INetLayer::Send( Packet* _packet )
+{
+	_packet->End();
+	char sendBuff[MAX_PACKET_SIZE] = {0};
+	memcpy(sendBuff, _packet->GetData(), MAX_PACKET_SIZE);
+
+	qint64 res = mTcpSocket.write(sendBuff);
+	return;
+}
+
+
 //------------------------------------------------------------------------------
 void INetLayer::Disconnect()
 {

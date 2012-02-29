@@ -9,6 +9,7 @@
 #define _ISERVERLAYER_H_
 #include "PublicHeader.h"
 
+class Packet;
 /// \class IServer
 class IServerLayer : public QTcpServer
 {
@@ -23,19 +24,18 @@ signals:
 	void SiClientConnected(const QString& _info);
 	void SiClientDisconnected(const QString& _info);
 public slots:
-	virtual void StStart() = 0;
-	virtual void StStop() = 0;
-	virtual void StRestart() = 0;
+	virtual void StStart();
+	virtual void StStop();
+	//virtual void StRestart() = 0;
 public:
-	IServerLayer()
-		: QTcpServer(0)
-	{
+	IServerLayer();
+	virtual ~IServerLayer();
 
-	}
-	virtual ~IServerLayer()
-	{
-
-	}
+	virtual void PakcetHandler(Packet* _packet)=0;
+private slots:
+	void stNewConnections();
+	void stClientDisconnect();	
+	void stReadData();
 protected:
 	QList<QTcpSocket*>	mClientList;
 private:

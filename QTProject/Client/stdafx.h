@@ -6,3 +6,5 @@
 #include <qt/qfile.h>
 #include <QResource>
 #include <QtNetwork>
+
+#define USE_PRECOMPILED_HANDER

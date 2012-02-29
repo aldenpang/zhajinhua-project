@@ -18,7 +18,7 @@
 #define POS_MSG_TYPE 8
 #define POS_DATA 12
 
-#define TOKEN 1165417621
+#define TOKEN 1234
 
 /////////////////////////////// Packet Header Format //////////////////////////////////////////////////
 // | byte0 | byte1 | byte2 | byte3 | byte4 | byte5 | byte6 | byte7 | byte8 | byte9 | byte10 | byte11 | 
@@ -53,6 +53,8 @@ public:
 	void SetHeader();	// call before send, to set token and data size
 
 	unsigned int GetDataLength();
+
+	void End();		// Move mPtr back to begging
 
 protected:
 private:

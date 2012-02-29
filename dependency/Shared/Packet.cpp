@@ -1,6 +1,3 @@
-#ifndef QT_CORE_LIB
-#include "stdafx.h"
-#endif
 #include "Packet.h"
 #include "assert.h"
 #include <string>
@@ -8,6 +5,7 @@
 Packet::Packet()
 {
 	memset(mBuff, 0, MAX_PACKET_SIZE);
+	memset(mBuff, '/0', POS_DATA);
 	mPtr = mBuff+POS_DATA;
 }
 
@@ -92,8 +90,13 @@ void Packet::Get(char* _data, int _length)
 
 void Packet::SetHeader()
 {
+	// copy token
 	long token = TOKEN;
 	memcpy(mBuff, &token, sizeof(long));
+
+	// copy size
+	long size = sizeof(mBuff);
+	memcpy(mBuff+POS_MSG_SIZE, &size, sizeof(long));
 
 	return;
 }
@@ -101,4 +104,9 @@ void Packet::SetHeader()
 unsigned int Packet::GetDataLength()
 {
 	return mPtr - mBuff;
+}
+
+void Packet::End()
+{
+	mPtr = mBuff;
 }
