@@ -16,17 +16,15 @@ class ZjhGameServer : public IServerLayer
 {
 	Q_OBJECT
 public slots:
-	virtual void StStart();
-	virtual void StStop();
-	virtual void StRestart();
-
-	void StNewConnections();
 
 private slots:
-	void stClientDisconnect();			
+		
 public:
 	ZjhGameServer();
 	~ZjhGameServer();
+
+	virtual void PakcetHandler(Packet* _packet);
+
 protected:
 	
 private:

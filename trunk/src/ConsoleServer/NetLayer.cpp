@@ -5,12 +5,13 @@
 
 pthread_mutex_t mMutex;
 
-void *NetLayer::ReceiveMessage(void* _arg)
+void *NetLayer::ReceiveMessageMT(void* _arg)
 {
 	NetLayer* netLayer = (NetLayer*)_arg;
 
 	while(1)
 	{
+		Sleep(LOOP_INTERVAL);
 		if ( netLayer->mClientList.size() == 0 )
 			continue;
 
@@ -54,12 +55,37 @@ void *NetLayer::ReceiveMessage(void* _arg)
 	return NULL;
 }
 
+void *NetLayer::AcceptSocketMT(void* _arg)
+{
+	int sin_size = 0;
+	SOCKET client_fd;
+	SOCKET sockfd = *((SOCKET*)_arg);
+	struct sockaddr_in remote_addr; /* 客户端地址信息 */
+	while(1) 
+	{
+		sin_size = sizeof(struct sockaddr_in);
+		if ((client_fd = accept(sockfd, (struct sockaddr *)&remote_addr, &sin_size)) == -1) 
+		{
+			printf("accept出错");
+			continue;
+		}
+		printf("received a connection from %s:%d socket:%d\n", inet_ntoa(remote_addr.sin_addr), remote_addr.sin_port, client_fd);
+
+		pthread_mutex_lock(&mMutex);
+		NetLayer::mClientList.push_back(client_fd);
+		printf("socket:%d\n", client_fd);
+		pthread_mutex_unlock(&mMutex);
+
+		Sleep(LOOP_INTERVAL);
+	}
+}
+
 NetLayer::NetLayer()
 {
 	pthread_mutex_init(&mMutex, NULL);
 
 	pthread_t thread;
-	pthread_create(&thread, NULL, ReceiveMessage, this);
+	pthread_create(&thread, NULL, ReceiveMessageMT, this);
 }
 
 NetLayer::~NetLayer()
@@ -81,9 +107,8 @@ int NetLayer::Initialize()
 
 int NetLayer::Start( const int _port )
 {
-	SOCKET sockfd,client_fd; /*sock_fd：监听socket；client_fd：数据传输socket */
+	SOCKET sockfd; /*sock_fd：监听socket */
 	struct sockaddr_in my_addr; /* 本机地址信息 */
-	struct sockaddr_in remote_addr; /* 客户端地址信息 */
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) 
 	{
 		int error = WSAGetLastError();
@@ -106,25 +131,16 @@ int NetLayer::Start( const int _port )
 		printf("listen出错！");
 		return -1;
 	}
-	int sin_size = 0;
 	printf("Initialize done(%s:%d), waiting for connections...\n", inet_ntoa(my_addr.sin_addr), _port);
-	while(1) 
+
+	pthread_t thread;
+	pthread_create(&thread, NULL, AcceptSocketMT, &sockfd);
+
+	while(1) // to keep this program running
 	{
-		sin_size = sizeof(struct sockaddr_in);
-		if ((client_fd = accept(sockfd, (struct sockaddr *)&remote_addr, &sin_size)) == -1) 
-		{
-			printf("accept出错");
-			continue;
-		}
-		printf("received a connection from %s:%d socket:%d\n", inet_ntoa(remote_addr.sin_addr), remote_addr.sin_port, client_fd);
-
-		pthread_mutex_lock(&mMutex);
-		mClientList.push_back(client_fd);
-		printf("socket:%d\n", client_fd);
-		pthread_mutex_unlock(&mMutex);
-
+		printf("idle looping...\n");
+		Sleep(LOOP_INTERVAL);
 	}
-
 }
 
 int NetLayer::Uninitialize()

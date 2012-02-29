@@ -14,6 +14,8 @@
 
 #include "pthread.h"
 
+#define LOOP_INTERVAL 100
+
 class NetLayer
 {
 public:
@@ -26,11 +28,12 @@ public:
 protected:
 	int parseMessages(Packet& _packet);
 
-	static void *NetLayer::ReceiveMessage(void* _arg);
+	static void *NetLayer::AcceptSocketMT(void* _arg);
+	static void *NetLayer::ReceiveMessageMT(void* _arg);
 
 	void removeSocket(SOCKET _socket);
 
 private:
-	std::vector<SOCKET> mClientList;
+	static std::vector<SOCKET> mClientList;
 };
 #endif // NetLayer_h__

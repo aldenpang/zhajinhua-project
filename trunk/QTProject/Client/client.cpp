@@ -3,6 +3,7 @@
 #include "MouseEventFilter.h"
 #include "MousePropagation.h"
 #include "INetLayer.h"
+#include "Packet.h"
 
 
 int argcCount = 1;
@@ -60,4 +61,9 @@ void Client::initNetLayer()
 	mNetLayer = new INetLayer();
 	mNetLayer->Init();
 	mNetLayer->Connect("localhost", 5000);
+
+	Packet p;
+	p.SetMessage(94651621);
+	p.SetHeader();
+	mNetLayer->Send(&p);
 }
