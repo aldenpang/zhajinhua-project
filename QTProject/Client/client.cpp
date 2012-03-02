@@ -63,7 +63,6 @@ void Client::initNetLayer()
 	mNetLayer->Connect("localhost", 5000);
 
 	Packet p;
-	p.SetMessage(94651621);
-	p.SetHeader();
+	p.SetMessage(123);
 	mNetLayer->Send(&p);
 }

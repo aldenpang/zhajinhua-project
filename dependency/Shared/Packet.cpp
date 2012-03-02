@@ -3,6 +3,7 @@
 #include <string>
 
 Packet::Packet()
+: mSize(0)
 {
 	memset(mBuff, 0, MAX_PACKET_SIZE);
 	memset(mBuff, '/0', POS_DATA);
@@ -88,7 +89,12 @@ void Packet::Get(char* _data, int _length)
 	get(_data, _length);
 }
 
-void Packet::SetHeader()
+unsigned int Packet::GetDataLength()
+{
+	return mSize;
+}
+
+void Packet::End()
 {
 	// copy token
 	long token = TOKEN;
@@ -98,15 +104,6 @@ void Packet::SetHeader()
 	long size = sizeof(mBuff);
 	memcpy(mBuff+POS_MSG_SIZE, &size, sizeof(long));
 
-	return;
-}
-
-unsigned int Packet::GetDataLength()
-{
-	return mPtr - mBuff;
-}
-
-void Packet::End()
-{
+	mSize = mPtr - mBuff;
 	mPtr = mBuff;
 }
