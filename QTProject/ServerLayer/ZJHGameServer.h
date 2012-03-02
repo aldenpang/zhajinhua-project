@@ -10,6 +10,7 @@
 
 #include "PublicHeader.h"
 #include "IServerLayer.h"
+#include "ISocketInstance.h"
 
 
 class ZjhGameServer : public IServerLayer
@@ -23,7 +24,7 @@ public:
 	ZjhGameServer();
 	~ZjhGameServer();
 
-	virtual void PakcetHandler(Packet* _packet);
+	virtual void PakcetHandler(ISocketInstancePtr _incomeSocket, Packet* _packet);
 
 protected:
 	

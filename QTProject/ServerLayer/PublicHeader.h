@@ -4,3 +4,4 @@
 #include <QFile>
 #include <QThread>
 #include <QtNetwork>
+#include <QSharedPointer>

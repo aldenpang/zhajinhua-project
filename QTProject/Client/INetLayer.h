@@ -21,7 +21,7 @@ public:
 	void Send(Packet* _packet);
 	void Disconnect();
 
-	//virtual void packetHandle(GCPacket& _packet) = 0;
+	void PakcetHandler(Packet* _packet);
 
 private slots:
 	void stError(QAbstractSocket::SocketError _socketError);

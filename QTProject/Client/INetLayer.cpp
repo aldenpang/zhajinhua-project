@@ -70,5 +70,30 @@ void INetLayer::stError(QAbstractSocket::SocketError _socketError)
 //------------------------------------------------------------------------------
 void INetLayer::stRead()
 {
+	// 将网络发送过来的字节流转化为Packet
+	QTcpSocket* s = (QTcpSocket*)sender();
+	if ( s && s->bytesAvailable() )
+	{
+		char buff[MAX_PACKET_SIZE]={0};
+		s->read(buff, MAX_PACKET_SIZE);
+		qDebug()<<"Data Received:"<<buff;
+
+		Packet p;
+		p.SetData(buff);
+		if ( !p.IsTokenValid() )
+		{
+			//emit SiInfo(QString("Invalid Packet from %1:%2").arg(s->peerAddress().toString()).arg(s->peerPort()));
+			qDebug()<<QString("Invalid Packet from %1:%2").arg(s->peerAddress().toString()).arg(s->peerPort());
+			return;
+		}
+
+		PakcetHandler(&p);
+	}
+}
+
+void INetLayer::PakcetHandler( Packet* _packet )
+{
+	int msg = _packet->GetMessage();
+	qDebug()<<"Client - Msg:"<<msg;
 
 }
