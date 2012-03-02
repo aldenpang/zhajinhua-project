@@ -42,6 +42,8 @@ private:
 	LogModule();	
 
 	LogLevel mLevel;
+
+	void writeToFile(QString _log);
 };
 #define LOG LogModule::GetSingleton()
 
