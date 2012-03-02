@@ -50,7 +50,9 @@ void INetLayer::Send( Packet* _packet )
 	char sendBuff[MAX_PACKET_SIZE] = {0};
 	memcpy(sendBuff, _packet->GetData(), MAX_PACKET_SIZE);
 
-	qint64 res = mTcpSocket.write(sendBuff);
+	//qint64 res = mTcpSocket.write(sendBuff);
+	int leng = _packet->GetDataLength();
+	qint64 res = mTcpSocket.write(QByteArray::fromRawData(sendBuff, leng));
 	return;
 }
 

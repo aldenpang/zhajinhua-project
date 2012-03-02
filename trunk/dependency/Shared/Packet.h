@@ -50,11 +50,9 @@ public:
 	void Get(float* _data);
 	void Get(char* _data, int _length);
 
-	void SetHeader();	// call before send, to set token and data size
-
 	unsigned int GetDataLength();
 
-	void End();		// Move mPtr back to begging
+	void End();		// Move mPtr back to begging, call before send, to set token and data size
 
 protected:
 private:
@@ -65,6 +63,8 @@ private:
 private:
 	void put(void* _data, int _size);
 	void get(void* _data, int _size);
+
+	unsigned int mSize;
 
 };
 #endif // Packet_h__
