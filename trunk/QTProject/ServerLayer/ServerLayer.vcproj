@@ -277,6 +277,14 @@
 				Name="Shared"
 				>
 				<File
+					RelativePath="..\..\dependency\Shared\ISocketInstance.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\dependency\Shared\ISocketInstance.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\dependency\Shared\Packet.cpp"
 					>
 				</File>

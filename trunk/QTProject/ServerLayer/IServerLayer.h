@@ -8,6 +8,7 @@
 #ifndef _ISERVERLAYER_H_
 #define _ISERVERLAYER_H_
 #include "PublicHeader.h"
+#include "ISocketInstance.h"
 
 class Packet;
 /// \class IServer
@@ -31,14 +32,16 @@ public:
 	IServerLayer();
 	virtual ~IServerLayer();
 
-	virtual void PakcetHandler(Packet* _packet)=0;
+	virtual void PakcetHandler(ISocketInstancePtr _incomeSocket, Packet* _packet)=0;
 private slots:
 	void stNewConnections();
 	void stClientDisconnect();	
 	void stReadData();
 protected:
-	QList<QTcpSocket*>	mClientList;
+	QList<ISocketInstancePtr>	mClientList;
 private:
+	// 通过传入的Socket找SocketInstance
+	ISocketInstancePtr findInstance(QTcpSocket* _socket);
 };//class IServerLayer
 
 //typedef boost::shared_ptr<ITcpServer> ITcpServerPtr;
