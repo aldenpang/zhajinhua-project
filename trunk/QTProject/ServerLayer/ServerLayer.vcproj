@@ -285,11 +285,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\dependency\Shared\MyToolkits.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\dependency\Shared\Packet.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\dependency\Shared\Packet.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="SettingModule"
+				>
+				<File
+					RelativePath=".\SettingModule.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SettingModule.h"
 					>
 				</File>
 			</Filter>
