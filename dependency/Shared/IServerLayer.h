@@ -26,7 +26,7 @@ signals:
 	void SiClientConnected(const QString& _info);
 	void SiClientDisconnected(const QString& _info);
 public slots:
-	virtual void StStart();
+	virtual void StStart(QString _ip, uint _port);
 	virtual void StStop();
 	//virtual void StRestart() = 0;
 public:

@@ -17,5 +17,5 @@ AppFrame::~AppFrame()
 //------------------------------------------------------------------------------
 void AppFrame::Run()
 {
-	mGameServer->StStart();
+	mGameServer->StStart("", SETTINGS.GetPort());
 }

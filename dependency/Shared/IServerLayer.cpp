@@ -1,8 +1,6 @@
 #include "IServerLayer.h"
 #include "LogModule.h"
 #include "Packet.h"
-#include "SettingModule.h"
-
 
 IServerLayer::IServerLayer()
 : QTcpServer(0)
@@ -17,15 +15,20 @@ IServerLayer::~IServerLayer()
 }
 
 //------------------------------------------------------------------------------
-void IServerLayer::StStart()
+void IServerLayer::StStart(QString _ip, uint _port)
 {
-	int port = SETTINGS.GetPort();
-	if (!this->listen(QHostAddress::Any, port))
+	QHostAddress addr;
+	if ( _ip.isEmpty() )
+		addr = QHostAddress::Any;
+	else
+		addr = QHostAddress(_ip);
+
+	if (!this->listen(addr, _port))
 	{
 		emit SiError(this->errorString());
 		return;
 	}
-	emit SiStarted(port);
+	emit SiStarted(_port);
 	emit SiInfo("Started!");
 }
 //------------------------------------------------------------------------------
