@@ -7,7 +7,13 @@
 *********************************************************************/
 #ifndef _LOGMODULE_H_
 #define _LOGMODULE_H_
-#include "PublicHeader.h"
+#include <QString>
+#include <QList>
+#include <QQueue>
+#include <QFile>
+#include <QThread>
+#include <QtNetwork>
+#include <QSharedPointer>
 
 /** */
 enum LogLevel
