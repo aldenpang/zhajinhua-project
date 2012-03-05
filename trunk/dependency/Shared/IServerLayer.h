@@ -7,7 +7,8 @@
 *********************************************************************/
 #ifndef _ISERVERLAYER_H_
 #define _ISERVERLAYER_H_
-#include "PublicHeader.h"
+#include <QtNetwork>
+
 #include "ISocketInstance.h"
 
 class Packet;
