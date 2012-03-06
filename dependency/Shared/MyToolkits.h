@@ -18,4 +18,15 @@
 
 #define SAFE_DELETE_ARR(p) {if(p){delete []p; p=NULL;}}
 
+// singleton templete
+template <typename T> class Singleton
+{
+public:
+	static T& GetSingleton(void)
+	{
+		static T s;
+		return s;
+	}
+};
+
 #endif // MyToolkits_h__
