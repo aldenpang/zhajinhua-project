@@ -2,7 +2,7 @@
 #include "client.h"
 #include "MouseEventFilter.h"
 #include "MousePropagation.h"
-#include "INetLayer.h"
+#include "ClientNet.h"
 #include "Packet.h"
 
 
@@ -58,7 +58,7 @@ void Client::stQuit()
 //------------------------------------------------------------------------------
 void Client::initNetLayer()
 {
-	mNetLayer = new INetLayer();
+	mNetLayer = new ClientNet();
 	mNetLayer->Init();
 	mNetLayer->Connect("localhost", 5000);
 

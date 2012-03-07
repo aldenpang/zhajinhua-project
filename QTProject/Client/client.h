@@ -5,7 +5,7 @@
 //#include "ui_client.h"
 
 class MouseEventFilter;
-class INetLayer;
+class ClientNet;
 class Client : public QApplication
 {
 	Q_OBJECT
@@ -21,7 +21,7 @@ private:
 	//Ui::ClientClass ui;
 	QWidget*	mMainWidget;
 	MouseEventFilter* mMouseEventFilter;
-	INetLayer* mNetLayer;
+	ClientNet* mNetLayer;
 
 	void initMouseEventFilter();
 	void regConnections();

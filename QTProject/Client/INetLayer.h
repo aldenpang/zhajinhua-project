@@ -8,7 +8,8 @@
 #ifndef _INETLAYER_H_
 #define _INETLAYER_H_
 
-class Packet;
+#include "Packet.h"
+
 class INetLayer:public QObject
 {
 Q_OBJECT
@@ -21,7 +22,7 @@ public:
 	void Send(Packet* _packet);
 	void Disconnect();
 
-	void PakcetHandler(Packet* _packet);
+	virtual void PakcetHandler(Packet* _packet)=0;
 
 private slots:
 	void stError(QAbstractSocket::SocketError _socketError);
