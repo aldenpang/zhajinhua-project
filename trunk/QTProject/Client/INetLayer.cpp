@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "INetLayer.h"
-#include "Packet.h"
+
 
 //------------------------------------------------------------------------------
 INetLayer::INetLayer()
@@ -89,11 +89,4 @@ void INetLayer::stRead()
 
 		PakcetHandler(&p);
 	}
-}
-
-void INetLayer::PakcetHandler( Packet* _packet )
-{
-	int msg = _packet->GetMessage();
-	qDebug()<<"Client - Msg:"<<msg;
-
 }

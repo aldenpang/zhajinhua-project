@@ -207,6 +207,14 @@
 				Name="Net"
 				>
 				<File
+					RelativePath=".\ClientNet.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ClientNet.h"
+					>
+				</File>
+				<File
 					RelativePath=".\INetLayer.cpp"
 					>
 				</File>
