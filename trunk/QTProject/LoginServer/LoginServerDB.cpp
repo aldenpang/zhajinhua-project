@@ -54,3 +54,10 @@ int LoginServerDB::VerifyUser( QString& _user, QString& _pwd )
 
 //	return 0;
 }
+
+int LoginServerDB::RegUser( QString& _user, QString& _pwd )
+{
+	QString sql = QString("insert into Accounts(UserName, Password) values(\"%1\", \"%2\")").arg(_user).arg(_pwd);
+	QSqlQuery q = mDb.exec(sql);
+	return 0;
+}
