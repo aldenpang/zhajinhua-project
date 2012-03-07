@@ -20,6 +20,7 @@ public:
 	~LoginServerDB();
 
 	int VerifyUser( QString& _user, QString& _pwd );
+	int RegUser(QString& _user, QString& _pwd);
 protected:
 private:
 };

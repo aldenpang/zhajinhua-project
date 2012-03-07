@@ -292,6 +292,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\dependency\Shared\MD5.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\dependency\Shared\MD5.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\dependency\Shared\MyToolkits.h"
 				>
 			</File>
