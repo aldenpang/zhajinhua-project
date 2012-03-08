@@ -26,11 +26,10 @@ void AppFrame::Run()
 
 void AppFrame::InitDatabase()
 {
-
-	DB.Connect("../../DB/db.db");
-	DB.VerifyUser(QString("acc3"), ToMD5(QString("1234")));
-	//DB.RegUser(QString("acc3"), QString(dd));
-
 	connect(&DB, SIGNAL(SiInfo(QString)), &LOG, SLOT(StInfo(QString)));
 	connect(&DB, SIGNAL(SiError(QString)), &LOG, SLOT(StError(QString)));
+
+	DB.Connect("../../DB/db.db");
+	//DB.VerifyUser(QString("acc3"), ToMD5(QString("1234")));
+	//DB.RegUser(QString("acc4"), ToMD5(QString("1234")));
 }

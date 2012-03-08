@@ -4,6 +4,7 @@
 #include "MousePropagation.h"
 #include "ClientNet.h"
 #include "Packet.h"
+#include "MD5.h"
 
 
 int argcCount = 1;
@@ -63,6 +64,12 @@ void Client::initNetLayer()
 	mNetLayer->Connect("localhost", 5000);
 
 	Packet p;
-	p.SetMessage(123);
+	p.SetMessage(MSG_CL_LS_LOGIN);
+	QString userName("acc4");
+	p.Put(userName.size());
+	p.Put(const_cast<char*>(userName.toStdString().c_str()));
+	QString md5pwd = ToMD5(QString("1234"));
+	p.Put(md5pwd.size());
+	p.Put(const_cast<char*>(md5pwd.toStdString().c_str()));
 	mNetLayer->Send(&p);
 }

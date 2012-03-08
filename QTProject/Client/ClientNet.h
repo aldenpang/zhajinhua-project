@@ -23,5 +23,6 @@ public:
 
 protected:
 private:
+	void processLogin(Packet* _packet);
 };
 #endif // ClientNet_h__

@@ -46,13 +46,13 @@ void IServerLayer::stNewConnections()
 	{
 		emit SiInfo(QString("incoming socket: %1:%2").arg(s->peerAddress().toString()).arg(s->peerPort()));
 
+		// 需要创建一个ClientInstance，包含这个Socket的指针，来对不同的server进行不同的实现
 		mClientList.append(ISocketInstancePtr(new ISocketInstance(s)));
 
 		// 这里连接处理Client Socket的所有函数
 		connect(s, SIGNAL(disconnected()), this, SLOT(stClientDisconnect()));
 		connect(s, SIGNAL(readyRead()), this, SLOT(stReadData()));
 
-		// 需要创建一个ClientInstance，包含这个Socket的指针，来对不同的server进行不同的实现
 	}
 }
 

@@ -315,6 +315,22 @@
 				Name="Shared"
 				>
 				<File
+					RelativePath="..\..\dependency\Shared\MD5.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\dependency\Shared\MD5.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\dependency\Shared\Packet.cpp"
 					>
 					<FileConfiguration
@@ -336,6 +352,14 @@
 				</File>
 				<File
 					RelativePath="..\..\dependency\Shared\Packet.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\dependency\Shared\SharedData.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\dependency\Shared\SharedData.h"
 					>
 				</File>
 			</Filter>

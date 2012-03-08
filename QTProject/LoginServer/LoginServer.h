@@ -21,6 +21,7 @@ public:
 
 protected:
 private:
+	void processClientLogin(ISocketInstancePtr _incomeSocket, Packet* _packet);
 };
 
 #endif // LoginServer_h__
