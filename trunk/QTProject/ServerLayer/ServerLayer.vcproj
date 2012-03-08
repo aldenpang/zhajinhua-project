@@ -172,11 +172,39 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GSPlayer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GSPlayer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HardcodeConfig.h"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\PublicHeader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Table.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Table.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TableManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TableManager.h"
 				>
 			</File>
 			<File
@@ -296,16 +324,12 @@
 					RelativePath="..\..\dependency\Shared\Packet.h"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="SettingModule"
-				>
 				<File
-					RelativePath=".\SettingModule.cpp"
+					RelativePath="..\..\dependency\Shared\SettingModule.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SettingModule.h"
+					RelativePath="..\..\dependency\Shared\SettingModule.h"
 					>
 				</File>
 			</Filter>

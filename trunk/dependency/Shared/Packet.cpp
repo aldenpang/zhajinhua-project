@@ -72,6 +72,7 @@ void Packet::get(void* _data, int _size)
 	assert(_data!=NULL);
 
 	memcpy(_data, mPtr, _size);
+	mPtr += _size;
 }
 
 void Packet::Get(int* _data)

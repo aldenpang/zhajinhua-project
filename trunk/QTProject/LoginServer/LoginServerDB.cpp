@@ -57,7 +57,21 @@ int LoginServerDB::VerifyUser( QString& _user, QString& _pwd )
 
 int LoginServerDB::RegUser( QString& _user, QString& _pwd )
 {
-	QString sql = QString("insert into Accounts(UserName, Password) values(\"%1\", \"%2\")").arg(_user).arg(_pwd);
+	// 根据username的记录数判断是否此username已经被注册
+	QString sql = QString("select * from Accounts where UserName like \"%1\"").arg(_user);
 	QSqlQuery q = mDb.exec(sql);
+	int records = 0;
+	while (q.next()) 
+	{
+		records++;
+		if ( records >= 1 )
+		{
+			emit SiInfo(QString("UserName[%1] is already exist").arg(_user));
+			return 1;
+		}
+	}
+
+	sql = QString("insert into Accounts(UserName, Password) values(\"%1\", \"%2\")").arg(_user).arg(_pwd);
+	q = mDb.exec(sql);
 	return 0;
 }

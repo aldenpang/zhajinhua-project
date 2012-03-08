@@ -16,8 +16,18 @@ namespace SharedData
 {
 	enum
 	{
-		MSG_TEST = 0,
-		MSG_TEST2,
+		// messages between client and login server
+		MSG_CL_LS_LOGIN = 0,
+		MSG_LS_CL_LOGIN,
+
+		// messages between client and game server
+		MSG_CL_GS_SOMETHING = 100,
+	};
+
+	enum LoginResponse
+	{
+		LOGIN_OK=0,
+		LOGIN_USER_NOT_FOUND,
 	};
 }
 

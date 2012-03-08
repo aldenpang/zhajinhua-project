@@ -319,6 +319,10 @@
 				RelativePath="..\..\dependency\Shared\SettingModule.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\dependency\Shared\SharedData.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
