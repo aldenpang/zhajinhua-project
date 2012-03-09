@@ -17,7 +17,7 @@
 class LoginServer : public IServerLayer
 {
 public:
-	virtual void PakcetHandler(ISocketInstancePtr _incomeSocket, Packet* _packet);
+	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet* _packet);
 
 protected:
 private:

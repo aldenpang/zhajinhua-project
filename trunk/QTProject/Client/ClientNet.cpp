@@ -11,7 +11,7 @@ ClientNet::~ClientNet()
 
 }
 
-void ClientNet::PakcetHandler( Packet* _packet )
+void ClientNet::PacketHandler( Packet* _packet )
 {
 	int msg = _packet->GetMessage();
 	qDebug()<<"Client - Msg:"<<msg;

@@ -19,7 +19,7 @@ public:
 	ClientNet();
 	~ClientNet();
 
-	virtual void PakcetHandler(Packet* _packet);
+	virtual void PacketHandler(Packet* _packet);
 
 protected:
 private:

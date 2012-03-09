@@ -1,11 +1,13 @@
 #include "IServerLayer.h"
-#include "LogModule.h"
 #include "Packet.h"
 
 IServerLayer::IServerLayer()
 : QTcpServer(0)
 {
 	connect(this, SIGNAL(SiInfo(const QString&)), &LOG, SLOT(StInfo(const QString&)));
+	connect(this, SIGNAL(SiWarn(const QString&)), &LOG, SLOT(StWarn(const QString&)));
+	connect(this, SIGNAL(SiError(const QString&)), &LOG, SLOT(StError(const QString&)));
+
 	connect(this, SIGNAL(newConnection()), this, SLOT(stNewConnections()));
 }
 
@@ -25,18 +27,18 @@ void IServerLayer::StStart(QString _ip, uint _port)
 
 	if (!this->listen(addr, _port))
 	{
-		emit SiError(this->errorString());
+		LOG_ERR(this->errorString());
 		return;
 	}
 	emit SiStarted(_port);
-	emit SiInfo("Started!");
+	LOG_INFO("Started!");
 }
 //------------------------------------------------------------------------------
 void IServerLayer::StStop()
 {
 	this->close();
 	emit SiStoped();
-	emit SiInfo("Stopped!");
+	LOG_INFO("Stopped!");
 }
 
 void IServerLayer::stNewConnections()
@@ -44,7 +46,7 @@ void IServerLayer::stNewConnections()
 	QTcpSocket* s = nextPendingConnection();
 	if (s)
 	{
-		emit SiInfo(QString("incoming socket: %1:%2").arg(s->peerAddress().toString()).arg(s->peerPort()));
+		LOG_INFO(QString("incoming socket: %1:%2").arg(s->peerAddress().toString()).arg(s->peerPort()));
 
 		// 需要创建一个ClientInstance，包含这个Socket的指针，来对不同的server进行不同的实现
 		mClientList.append(ISocketInstancePtr(new ISocketInstance(s)));
@@ -62,7 +64,7 @@ void IServerLayer::stClientDisconnect()
 	ISocketInstancePtr sockIns = findInstance(s);
 	if ( sockIns )
 	{
-		emit SiInfo(QString("socket disconnected: %1:%2").arg(sockIns->GetSocket()->peerAddress().toString()).arg(sockIns->GetSocket()->peerPort()));
+		LOG_INFO(QString("socket disconnected: %1:%2").arg(sockIns->GetSocket()->peerAddress().toString()).arg(sockIns->GetSocket()->peerPort()));
 		mClientList.removeOne(sockIns);
 		//emit SiInfo(QString("ClientListSize:%1").arg(mClientList.size()));
 	}
@@ -83,12 +85,12 @@ void IServerLayer::stReadData()
 		p.SetData(buff);
 		if ( !p.IsTokenValid() )
 		{
-			emit SiInfo(QString("Invalid Packet from %1:%2").arg(s->peerAddress().toString()).arg(s->peerPort()));
+			LOG_INFO(QString("Invalid Packet from %1:%2").arg(s->peerAddress().toString()).arg(s->peerPort()));
 			return;
 		}
 		
 		// 不同的Server拥有自己的PacketHandler()
-		PakcetHandler(sockIns, &p);
+		PacketHandler(sockIns, &p);
 	}
 }
 

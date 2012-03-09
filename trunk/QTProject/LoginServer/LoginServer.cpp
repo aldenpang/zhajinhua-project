@@ -2,20 +2,21 @@
 #include "LoginServerDB.h"
 #include "Packet.h"
 #include "SharedData.h"
+#include "LogModule.h"
 using namespace SharedData;
 
-void LoginServer::PakcetHandler( ISocketInstancePtr _incomeSocket, Packet* _packet )
+void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet* _packet )
 {
 	int msg = _packet->GetMessage();
 
-	emit SiInfo(QString("Class:%1 rev msg[%2]").arg(metaObject()->className()).arg(msg));
+	LOG_INFO(QString("Rev msg[%1] from %2:%3").arg(msg).arg(_incomeSocket->GetSocket()->peerAddress().toString()).arg(_incomeSocket->GetSocket()->peerPort()));
 	switch (msg)
 	{
 	case MSG_CL_LS_LOGIN:
 		processClientLogin(_incomeSocket, _packet);
 		break;
 	default:
-		emit SiError(QString("Wrong Message[%1] from %2:%3").arg(msg).arg(_incomeSocket->GetSocket()->peerAddress().toString()).arg(_incomeSocket->GetSocket()->peerPort()));
+		LOG_ERR(QString("Wrong Message[%1] from %2:%3").arg(msg).arg(_incomeSocket->GetSocket()->peerAddress().toString()).arg(_incomeSocket->GetSocket()->peerPort()));
 		break;
 	}
 	
@@ -31,14 +32,14 @@ void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet* 
 	_packet->Get(&length);
 	_packet->Get(pwd, length);
 
-	emit SiInfo(QString("[%1]wants to login, pwd is[%2]").arg(userName).arg(pwd));
+	LOG_INFO(QString("[%1]wants to login, pwd is[%2]").arg(userName).arg(pwd));
 
 	int res = DB.VerifyUser(QString(userName), QString(pwd));
 
 	if ( res != LOGIN_OK )
-	{
-		emit SiError(QString("LoginFailed! Reason:[%1]").arg(res));
-	}
+		LOG_ERR(QString("LoginFailed! Reason:[%1]").arg(res));
+	else
+		LOG_INFO("Login OK");
 
 	Packet p;
 	p.SetMessage(MSG_LS_CL_LOGIN);

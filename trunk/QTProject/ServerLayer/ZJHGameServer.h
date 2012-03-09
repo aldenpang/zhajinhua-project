@@ -24,11 +24,14 @@ public:
 	ZjhGameServer();
 	~ZjhGameServer();
 
-	virtual void PakcetHandler(ISocketInstancePtr _incomeSocket, Packet* _packet);
+	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet* _packet);
 
 protected:
 	
 private:
+	void processLogin(ISocketInstancePtr _incomeSocket, Packet* _packet);
+	void processTableJoin(ISocketInstancePtr _incomeSocket, Packet* _packet);
+
 };
 
 #endif //_ZJHGAMESERVER_H_

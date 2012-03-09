@@ -20,7 +20,7 @@ int DBLayer::Connect(QString _dbName)
 	mDb.setDatabaseName(_dbName);
 	if ( !mDb.open() )
 	{
-		emit SiInfo(QString("%1:db open error").arg(metaObject()->className()));
+		LOG_INFO(QString("%1:db open error").arg(metaObject()->className()));
 	}
 	bool isSupportQuerySize = mDb.driver()->hasFeature(QSqlDriver::QuerySize);
 
