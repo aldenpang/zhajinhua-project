@@ -1,6 +1,8 @@
 #include "TableManager.h"
 #include "Table.h"
 #include "GSPlayer.h"
+#include "SharedData.h"
+using namespace SharedData;
 
 TableManager::TableManager()
 {
@@ -26,13 +28,13 @@ void TableManager::AssignTables( int _amount/*=MAX_TABLE*/ )
 	}
 }
 
-int TableManager::StJoinTable( ISocketInstancePtr _player, uint _tableID )
+int TableManager::StJoinTable( ISocketInstancePtr _player, uint _tableID, uint _seatID )
 {
 	Table* table = mTables.value(_tableID);
 	if ( table )
 	{
 		int res = table->Join(_player);
-		if(res != 0)
+		if(res != GS_NO_ERR)
 			return res;
 
 		if ( table->PlayerAmount() >= MIN_PLAYER )
@@ -47,7 +49,7 @@ int TableManager::StJoinTable( ISocketInstancePtr _player, uint _tableID )
 		}
 	}
 
-	return 2;
+	return ERR_GS_TABLE_NOT_FOUND;
 }
 
 int TableManager::StLeaveTable( ISocketInstancePtr _player, uint _tableID )
@@ -60,5 +62,5 @@ int TableManager::StLeaveTable( ISocketInstancePtr _player, uint _tableID )
 		return res;
 	}
 
-	return 2;
+	return ERR_GS_TABLE_NOT_FOUND;
 }

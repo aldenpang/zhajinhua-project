@@ -15,5 +15,6 @@
 #define MIN_PLAYER 2
 #define MAX_PLAYER 4
 #define MAX_TABLE 100
+#define REFRESH_INTERVAL 10	// second
 
 #endif // HardcodeConfig_h__

@@ -3,12 +3,18 @@
 #include "Packet.h"
 #include "GameServerDB.h"
 #include "SharedData.h"
+#include "HardcodeConfig.h"
+#include "GSPlayer.h"
+#include "TableManager.h"
 using namespace SharedData;
 
 //------------------------------------------------------------------------------
 ZjhGameServer::ZjhGameServer()
 : IServerLayer()
 {
+	mTimer.setInterval(REFRESH_INTERVAL*1000);
+	mTimer.start();
+	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stRefershTables()));
 }
 //------------------------------------------------------------------------------
 ZjhGameServer::~ZjhGameServer()
@@ -28,6 +34,9 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet* _pa
 		break;
 	case MSG_CL_GS_TABLE_JOIN:
 		processTableJoin(_incomeSocket, _packet);
+		break;
+	case MSG_CL_GS_TABLE_LEAVE:
+		processTableLeave(_incomeSocket, _packet);
 		break;
 	default:
 		break;
@@ -53,13 +62,74 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet* _pac
 	else
 		LOG_INFO("Login OK");
 
+	// send login result
 	Packet p;
 	p.SetMessage(MSG_GS_CL_LOGIN);
 	p.Put(res);
 	_incomeSocket->Send(&p);
+
+	// send room config
+
+	// send table list
+
 }
 
 void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet* _packet )
 {
+	int tableID = 0;
+	int seatID = 0;
+	_packet->Get(&tableID);
+	_packet->Get(&seatID);
+	GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
 
+	// 检查桌子是否可坐 & 加入桌子
+	int res = TABLE.StJoinTable(player, tableID, seatID);
+	if ( res != GS_NO_ERR )
+	{
+		// 不能加入桌子
+		Packet p;
+		p.SetMessage(MSG_GS_CL_TABLE_JOIN);
+		p.Put(res);		// reason
+		_incomeSocket->Send(&p);
+		return;
+	}
+
+	//广播此玩家加入桌子的消息
+	Packet p;
+	p.SetMessage(MSG_GS_BC_TABLE_JOIN);
+	//p.Put(who)
+	Broadcast(&p);
+}
+
+void ZjhGameServer::stRefershTables()
+{
+	LOG_INFO("Refersh Tables");
+
+
+
+}
+
+void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet* _packet )
+{
+	int tableID = 0;
+	_packet->Get(&tableID);
+	GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
+
+	// 检查是否可离开桌子
+	int res = TABLE.StLeaveTable(player, tableID);
+	if ( res != GS_NO_ERR )
+	{
+		// 不能离开桌子
+		Packet p;
+		p.SetMessage(MSG_GS_CL_TABLE_LEAVE);
+		p.Put(res);		// reason
+		_incomeSocket->Send(&p);
+		return;
+	}
+
+	//广播此玩家离开桌子的消息
+	Packet p;
+	p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
+	//p.Put(who)
+	Broadcast(&p);
 }

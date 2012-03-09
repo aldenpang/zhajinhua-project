@@ -28,7 +28,7 @@ signals:
 public slots:
 	// 加入桌子后自动ready，如果达到最低人数，游戏自动开始；如果加入时已经开始，则下一局自动进入
 	// returns: 0-successful 1-table full 2-table not exist
-	int StJoinTable(ISocketInstancePtr _player, uint _tableID);
+	int StJoinTable(ISocketInstancePtr _player, uint _tableID, uint _seatID);
 
 	// returns: 0-successful 1-player not exist 2-table not exist
 	int StLeaveTable(ISocketInstancePtr _player, uint _tableID);
@@ -39,4 +39,6 @@ protected:
 private:
 	QMap<int, Table*> mTables;
 };
+#define TABLE TableManager::GetSingleton()
+
 #endif // TableManager_h__
