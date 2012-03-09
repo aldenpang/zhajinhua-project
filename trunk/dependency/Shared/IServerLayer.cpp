@@ -111,3 +111,16 @@ ISocketInstancePtr IServerLayer::findInstance( QTcpSocket* _socket )
 	return ISocketInstancePtr(NULL);
 }
 
+void IServerLayer::Broadcast( Packet* _packet )
+{
+	if ( mClientList.isEmpty() || _packet == NULL )
+		return;
+
+	foreach(ISocketInstancePtr p, mClientList)
+	{
+		if(p->GetSocket()->isValid())
+			p->Send(_packet);
+	}
+
+}
+
