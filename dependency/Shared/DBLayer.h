@@ -19,6 +19,7 @@
 #include <QSqlError>
 
 #include "MyToolkits.h"
+#include "LogModule.h"
 
 class DBLayer : public QObject
 {

@@ -21,7 +21,14 @@ namespace SharedData
 		MSG_LS_CL_LOGIN,
 
 		// messages between client and game server
-		MSG_CL_GS_SOMETHING = 100,
+		MSG_CL_GS_LOGIN = 100,
+		MSG_GS_CL_LOGIN,
+
+		MSG_CL_GS_TABLE_JOIN,
+		MSG_GS_CL_TABLE_JOIN,
+
+		MSG_GS_START_GAME,
+
 	};
 
 	enum LoginResponse

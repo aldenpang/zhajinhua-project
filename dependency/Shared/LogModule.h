@@ -53,6 +53,13 @@ private:
 };
 #define LOG LogModule::GetSingleton()
 
+//#define DEF_LOG signals: void SiInfo(const QString& _text);void SiWarn(const QString& _text);void SiError(const QString& _text);
+
+#define LOG_INFO(x) emit SiInfo(QString("[%1]-%2").arg(__FUNCTION__).arg(x))
+#define LOG_WARNO(x) emit SiWarn(QString("[%1]-%2").arg(__FUNCTION__).arg(x))
+#define LOG_ERR(x) emit SiError(QString("[%1]-%2").arg(__FUNCTION__).arg(x))
+
+
 #endif //_LOGMODULE_H_
 
 /*

@@ -8,7 +8,7 @@
 #ifndef _ISERVERLAYER_H_
 #define _ISERVERLAYER_H_
 #include <QtNetwork>
-
+#include "LogModule.h"
 #include "ISocketInstance.h"
 
 class Packet;
@@ -16,7 +16,8 @@ class Packet;
 class IServerLayer : public QTcpServer
 {
 	Q_OBJECT
-signals:
+
+signals: 
 	void SiInfo(const QString& _text);
 	void SiWarn(const QString& _text);
 	void SiError(const QString& _text);
@@ -33,7 +34,7 @@ public:
 	IServerLayer();
 	virtual ~IServerLayer();
 
-	virtual void PakcetHandler(ISocketInstancePtr _incomeSocket, Packet* _packet)=0;
+	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet* _packet)=0;
 private slots:
 	void stNewConnections();
 	void stClientDisconnect();	

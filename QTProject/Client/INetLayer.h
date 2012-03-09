@@ -22,7 +22,7 @@ public:
 	void Send(Packet* _packet);
 	void Disconnect();
 
-	virtual void PakcetHandler(Packet* _packet)=0;
+	virtual void PacketHandler(Packet* _packet)=0;
 
 private slots:
 	void stError(QAbstractSocket::SocketError _socketError);
