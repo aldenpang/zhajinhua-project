@@ -12,6 +12,7 @@
 #include "IServerLayer.h"
 #include "ISocketInstance.h"
 
+#include <QTimer>
 
 class ZjhGameServer : public IServerLayer
 {
@@ -26,12 +27,14 @@ public:
 
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet* _packet);
 
-protected:
-	
 private:
 	void processLogin(ISocketInstancePtr _incomeSocket, Packet* _packet);
 	void processTableJoin(ISocketInstancePtr _incomeSocket, Packet* _packet);
-
+	void processTableLeave(ISocketInstancePtr _incomeSocket, Packet* _packet);
+private slots:
+	void stRefershTables();
+private:
+	QTimer mTimer;
 };
 
 #endif //_ZJHGAMESERVER_H_

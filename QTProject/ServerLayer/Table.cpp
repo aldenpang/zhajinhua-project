@@ -1,4 +1,6 @@
 #include "Table.h"
+#include "SharedData.h"
+using namespace SharedData;
 
 Table::Table()
 {
@@ -13,11 +15,11 @@ Table::~Table()
 int Table::Join( ISocketInstancePtr _player )
 {
 	if ( mPlayers.size() >= MAX_PLAYER )
-		return 1;
+		return ERR_GS_TABLE_FULL;
 	
 	mPlayers.insert(_player);
 
-	return 0;
+	return GS_NO_ERR;
 }
 
 int Table::Leave( ISocketInstancePtr _player )
@@ -26,8 +28,8 @@ int Table::Leave( ISocketInstancePtr _player )
 	if ( itr != mPlayers.end() )
 	{
 		mPlayers.erase(itr);
-		return 0;
+		return GS_NO_ERR;
 	}
 	else
-		return 1;
+		return ERR_GS_PLAYER_NOT_FOUND;
 }
