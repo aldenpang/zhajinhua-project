@@ -89,6 +89,6 @@ void INetLayer::stRead()
 			return;
 		}
 
-		PacketHandler(&p);
+		PacketHandler(p);
 	}
 }

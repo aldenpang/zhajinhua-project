@@ -6,9 +6,9 @@
 #include "LogModule.h"
 using namespace SharedData;
 
-void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet* _packet )
+void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
-	int msg = _packet->GetMessage();
+	int msg = _packet.GetMessage();
 
 	LOG_INFO(QString("Rev msg[%1] from %2:%3").arg(msg).arg(_incomeSocket->GetSocket()->peerAddress().toString()).arg(_incomeSocket->GetSocket()->peerPort()));
 	switch (msg)
@@ -26,13 +26,13 @@ void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet* _pack
 	
 }
 
-void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet* _packet )
+void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
 	//int length = 0;
 	//_packet->Get(&length);
 	QString userName;
 	QString pwd;
-	*_packet>>userName>>pwd;
+	_packet>>userName>>pwd;
 	//_packet->Get(userName, length);
 	//_packet->Get(&length);
 	//_packet->Get(pwd, length);
@@ -56,12 +56,12 @@ void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet* 
 	return;
 }
 
-void LoginServer::processClientReqGameList( ISocketInstancePtr _incomeSocket, Packet* _packet )
+void LoginServer::processClientReqGameList( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
 	quint32 gameType = 0;
 	//_packet->Get(&gameType);
-	*_packet>>gameType;
-
+	_packet>>gameType;
+a
 	// send game list
 	sendGameList(gameType, _incomeSocket);
 }

@@ -34,10 +34,6 @@ public:
 	Packet();
 	~Packet();
 
-	//void SetData(const char* _data);
-	//void GetData(char* _output);
-	//const char* GetData(){return mBuff;}
-
 	void SetData(QByteArray& _arr){mBuffer = _arr;}
 	const QByteArray& GetData(){return mBuffer;}
 
@@ -47,22 +43,14 @@ public:
 
 	void SetMessage(int _message);
 
-	//void Put(int _data);
-	//void Put(float _data);
-	//void Put(char* _data);
-	//
-	//void Get(int* _data);
-	//void Get(float* _data);
-	//void Get(char* _data, int _length);
-
-	//unsigned int GetDataLength();
-
 	void End();		// Move mPtr back to begging, call before send, to set token and data size
 
+	Packet& operator << (qint32 _val);
 	Packet& operator << (quint32 _val);
 	Packet& operator << (qreal _val);
 	Packet& operator << (QString& _val);
 
+	Packet& operator >> (qint32& _val);
 	Packet& operator >> (quint32& _val);
 	Packet& operator >> (qreal& _val);
 	Packet& operator >> (QString& _val);
@@ -71,18 +59,12 @@ public:
 protected:
 private:
 	int mMessage;
-	//char mBuff[MAX_PACKET_SIZE];
-	//char* mPtr;
 	QByteArray mBuffer;
 	QSharedPointer<QDataStream> mPtr;
 
 
 private:
-	//void put(void* _data, int _size);
-	//void get(void* _data, int _size);
 
-	//unsigned int mSize;
-	
 
 };
 #endif // Packet_h__

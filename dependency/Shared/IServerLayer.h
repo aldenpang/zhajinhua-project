@@ -34,7 +34,7 @@ public:
 	IServerLayer();
 	virtual ~IServerLayer();
 
-	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet* _packet)=0;
+	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet)=0;
 
 	virtual void Broadcast(Packet* _packet);
 private slots:

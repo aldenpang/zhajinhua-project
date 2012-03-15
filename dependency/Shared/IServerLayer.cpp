@@ -91,7 +91,7 @@ void IServerLayer::stReadData()
 		}
 		
 		// 不同的Server拥有自己的PacketHandler()
-		PacketHandler(sockIns, &p);
+		PacketHandler(sockIns, p);
 	}
 }
 

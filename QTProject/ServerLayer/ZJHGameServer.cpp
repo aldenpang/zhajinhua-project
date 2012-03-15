@@ -22,9 +22,9 @@ ZjhGameServer::~ZjhGameServer()
 
 }
 
-void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet* _packet )
+void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
-	int msg = _packet->GetMessage();
+	int msg = _packet.GetMessage();
 	qDebug()<<"ZjhGameServer - Msg:"<<msg;
 
 	switch(msg)
@@ -43,15 +43,15 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet* _pa
 	}
 }
 
-void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet* _packet )
+void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
 	int length = 0;
-	_packet->Get(&length);
+	//_packet.Get(&length);
 	char userName[32]={0};
 	char pwd[32]={0};
-	_packet->Get(userName, length);
-	_packet->Get(&length);
-	_packet->Get(pwd, length);
+	//_packet->Get(userName, length);
+	//_packet->Get(&length);
+	//_packet->Get(pwd, length);
 
 	LOG_INFO(QString("[%1]wants to login, pwd is[%2]").arg(userName).arg(pwd));
 
@@ -65,7 +65,7 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet* _pac
 	// send login result
 	Packet p;
 	p.SetMessage(MSG_GS_CL_LOGIN);
-	p.Put(res);
+	//p.Put(res);
 	_incomeSocket->Send(&p);
 
 	// send room config
@@ -74,12 +74,13 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet* _pac
 
 }
 
-void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet* _packet )
+void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
-	int tableID = 0;
-	int seatID = 0;
-	_packet->Get(&tableID);
-	_packet->Get(&seatID);
+	quint32 tableID = 0;
+	quint32 seatID = 0;
+	//_packet->Get(&tableID);
+	//_packet->Get(&seatID);
+	_packet>>tableID>>seatID;
 	GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
 
 	// 检查桌子是否可坐 & 加入桌子
@@ -89,7 +90,8 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet* 
 		// 不能加入桌子
 		Packet p;
 		p.SetMessage(MSG_GS_CL_TABLE_JOIN);
-		p.Put(res);		// reason
+		//p.Put(res);		// reason
+		p<<(quint32)res;
 		_incomeSocket->Send(&p);
 		return;
 	}
@@ -104,15 +106,12 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet* 
 void ZjhGameServer::stRefershTables()
 {
 	LOG_INFO("Refersh Tables");
-
-
-
 }
 
-void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet* _packet )
+void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
-	int tableID = 0;
-	_packet->Get(&tableID);
+	quint32 tableID = 0;
+	_packet>>tableID;
 	GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
 
 	// 检查是否可离开桌子
@@ -122,7 +121,7 @@ void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet*
 		// 不能离开桌子
 		Packet p;
 		p.SetMessage(MSG_GS_CL_TABLE_LEAVE);
-		p.Put(res);		// reason
+		p<<res;
 		_incomeSocket->Send(&p);
 		return;
 	}
