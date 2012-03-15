@@ -21,6 +21,8 @@ namespace SharedData
 		//////////////////////////////////////////////
 		MSG_CL_LS_LOGIN = 0,
 		MSG_LS_CL_LOGIN,
+		MSG_CL_LS_GAMELIST,
+		MSG_LS_CL_GAMELIST,
 
 		//////////////////////////////////////////////
 		// messages between client and game server
@@ -55,6 +57,16 @@ namespace SharedData
 		ERR_GS_TABLE_FULL,
 		ERR_GS_PLAYER_NOT_FOUND,
 
+	};
+
+	struct RoomInfo 
+	{
+		QString mName;
+		quint32 mType;
+		QString mIP;
+		quint32 mPort;
+		quint32 mScore;
+		quint32 mUnit; // 0 - silver; 1 - gold
 	};
 }
 

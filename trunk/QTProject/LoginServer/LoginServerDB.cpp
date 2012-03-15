@@ -75,3 +75,29 @@ int LoginServerDB::RegUser( QString& _user, QString& _pwd )
 	q = mDb.exec(sql);
 	return 0;
 }
+
+int LoginServerDB::GetRoomConfig( int _gameType, QVector<RoomInfo>& _info )
+{
+	QString sql = QString("select * from Config where GameType=\"%1\"").arg(_gameType);
+	QSqlQuery q = mDb.exec(sql);
+
+	while (q.next()) 
+	{
+		RoomInfo info;
+		info.mName = q.value(0).toString();
+		info.mType = q.value(1).toInt();
+		info.mIP = q.value(2).toString();
+		info.mPort  = q.value(3).toInt();
+		info.mScore = q.value(4).toInt();
+		info.mUnit = q.value(5).toInt();
+		_info.push_back(info);
+	}
+
+	if ( _info.isEmpty() )
+	{
+		LOG_ERR("Can not load any room config!");
+		return 1;
+	}
+	else
+		return 0;
+}

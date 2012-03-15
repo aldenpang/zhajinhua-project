@@ -4,6 +4,8 @@
 #include "LoginServerDB.h"
 #include "LogModule.h"
 #include "MD5.h"
+#include "SharedData.h"
+using namespace SharedData;
 
 AppFrame::AppFrame()
 {
@@ -32,4 +34,5 @@ void AppFrame::InitDatabase()
 	DB.Connect("../../DB/db.db");
 	//DB.VerifyUser(QString("acc3"), ToMD5(QString("1234")));
 	//DB.RegUser(QString("acc4"), ToMD5(QString("1234")));
+
 }

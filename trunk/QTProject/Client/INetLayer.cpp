@@ -47,12 +47,13 @@ void INetLayer::Send(const char* _data)
 void INetLayer::Send( Packet* _packet )
 {
 	_packet->End();
-	char sendBuff[MAX_PACKET_SIZE] = {0};
-	memcpy(sendBuff, _packet->GetData(), MAX_PACKET_SIZE);
+	//char sendBuff[MAX_PACKET_SIZE] = {0};
+	//memcpy(sendBuff, _packet->GetData(), MAX_PACKET_SIZE);
 
 	//qint64 res = mTcpSocket.write(sendBuff);
-	int leng = _packet->GetDataLength();
-	qint64 res = mTcpSocket.write(QByteArray::fromRawData(sendBuff, leng));
+	//int leng = _packet->GetDataLength();
+	//qint64 res = mTcpSocket.write(QByteArray::fromRawData(sendBuff, leng));
+	qint64 res = mTcpSocket.write(_packet->GetData());
 	return;
 }
 
@@ -74,8 +75,9 @@ void INetLayer::stRead()
 	QTcpSocket* s = (QTcpSocket*)sender();
 	if ( s && s->bytesAvailable() )
 	{
-		char buff[MAX_PACKET_SIZE]={0};
-		s->read(buff, MAX_PACKET_SIZE);
+		QByteArray buff = s->readAll();
+		//char buff[MAX_PACKET_SIZE]={0};
+		//s->read(buff, MAX_PACKET_SIZE);
 		qDebug()<<"Data Received:"<<buff;
 
 		Packet p;

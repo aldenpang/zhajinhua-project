@@ -3,27 +3,24 @@
 #include <string>
 
 Packet::Packet()
-: mSize(0)
+: mMessage(0)
 {
-	memset(mBuff, 0, MAX_PACKET_SIZE);
-	memset(mBuff, '/0', POS_DATA);
-	mPtr = mBuff+POS_DATA;
+	mPtr = QSharedPointer<QDataStream>(new QDataStream(&mBuffer, QIODevice::ReadWrite));
+	mPtr->setVersion(QDataStream::Qt_4_8);
+	mPtr->setByteOrder(QDataStream::LittleEndian);
+
+	*(mPtr.data())<<quint32(0)<<quint32(0)<<quint32(0);
 }
 
 Packet::~Packet()
 {}
 
-void Packet::SetData(const char* _data)
-{
-	assert(_data != NULL);
-
-	memcpy(mBuff, _data, MAX_PACKET_SIZE);
-}
-
 bool Packet::IsTokenValid()
 {
-	long token = 0;
-	memcpy(&token, mBuff, sizeof(long));
+	quint32 token = 0;
+	mPtr->device()->seek(POS_TOKEN);
+	*(mPtr.data())>>token;
+	mPtr->device()->seek(POS_DATA);
 	if ( token == TOKEN )
 		return true;
 	else 
@@ -32,79 +29,90 @@ bool Packet::IsTokenValid()
 
 int Packet::GetMessage()
 {
-	char* ptr = mBuff+POS_MSG_TYPE;
-	
 	int msg = 0;
-	memcpy(&msg, ptr, sizeof(int));
+	mPtr->device()->seek(POS_MSG_TYPE);
+	*(mPtr.data())>>msg;
+	mPtr->device()->seek(POS_DATA);
 
 	return msg;
 }
 
 void Packet::SetMessage( int _message )
 {
-	char* ptr = mBuff+POS_MSG_TYPE;
-	memcpy(ptr, &_message, sizeof(int));
-}
-
-void Packet::put( void* _data, int _size )
-{
-	memcpy(mPtr, _data, _size);
-	mPtr += _size;
-}
-void  Packet::Put(int _data)
-{
-	put(&_data, sizeof(int));
-}
-
-void  Packet::Put(float _data)
-{
-	put(&_data, sizeof(float));
-}
-
-void  Packet::Put(char* _data)
-{
-	int len = strlen(_data);
-	put(_data, len);
-}
-
-void Packet::get(void* _data, int _size)
-{
-	assert(_data!=NULL);
-
-	memcpy(_data, mPtr, _size);
-	mPtr += _size;
-}
-
-void Packet::Get(int* _data)
-{
-	get(_data, sizeof(int));
-}
-
-void Packet::Get(float* _data)
-{
-	get(_data, sizeof(float));
-}
-
-void Packet::Get(char* _data, int _length)
-{
-	get(_data, _length);
-}
-
-unsigned int Packet::GetDataLength()
-{
-	return mSize;
+	mMessage = _message;
 }
 
 void Packet::End()
 {
-	// copy token
-	long token = TOKEN;
-	memcpy(mBuff, &token, sizeof(long));
+	mPtr->device()->seek(0);
+	*(mPtr.data())<<TOKEN;
+	*(mPtr.data())<<quint32(0);
+	*(mPtr.data())<<mMessage;
+}
 
-	// copy size
-	long size = sizeof(mBuff);
-	memcpy(mBuff+POS_MSG_SIZE, &size, sizeof(long));
+Packet& Packet::operator << (quint32 _val)
+{
+	*(mPtr.data())<<_val;
+	return *this;
+}
 
-	mSize = mPtr - mBuff;
-	mPtr = mBuff;
+Packet& Packet::operator << (qreal _val)
+{
+	*(mPtr.data())<<_val;
+	return *this;
+}
+
+Packet& Packet::operator << (QString& _val)
+{
+	QByteArray arr = _val.toUtf8();
+	quint32 s = arr.size();
+	*(mPtr.data())<<s;
+	for ( int i = 0; i<s; ++i )
+	{
+		*(mPtr.data())<<quint8(arr.at(i));
+	}
+	return *this;
+}
+
+Packet& Packet::operator >> (quint32& _val)
+{
+	if ( mPtr->atEnd() )
+		_val = 0;
+	else
+	{
+		*(mPtr.data())>>_val;
+	}
+	return *this;
+}
+
+Packet& Packet::operator >> (qreal& _val)
+{
+	if ( mPtr->atEnd() )
+		_val = 0.0f;
+	else
+	{
+		*(mPtr.data())>>_val;
+	}
+	return *this;
+}
+
+Packet& Packet::operator >> (QString& _val)
+{
+	if ( mPtr->atEnd() )
+		_val = QString();
+	else
+	{
+		QByteArray arr;
+		quint32 s = 0;
+		*(mPtr.data())>>s;
+		for ( int i = 0; i<s; ++i )
+		{
+			quint8 chr;
+			*(mPtr.data())>>chr;
+			arr.append(chr);
+		}
+		_val = QString::fromUtf8(arr);
+	}
+
+	return *this;
 }

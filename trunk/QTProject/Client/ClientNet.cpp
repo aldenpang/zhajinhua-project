@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "ClientNet.h"
+#include "SharedData.h"
+using namespace SharedData;
 
 ClientNet::ClientNet()
 {
@@ -21,6 +23,9 @@ void ClientNet::PacketHandler( Packet* _packet )
 	case MSG_LS_CL_LOGIN:
 		processLogin(_packet);
 		break;
+	case MSG_LS_CL_GAMELIST:
+		processGameList(_packet);
+		break;
 	default:
 		break;
 	}
@@ -29,8 +34,39 @@ void ClientNet::PacketHandler( Packet* _packet )
 
 void ClientNet::processLogin( Packet* _packet )
 {
-	int res = 0;
-	_packet->Get(&res);
+	quint32 res = 0;
+	//_packet->Get(&res);
+	*_packet>>res;
+
+	if ( res == LOGIN_OK )
+	{
+		Packet p;
+		p.SetMessage(MSG_CL_LS_GAMELIST);
+		quint32 gameType = 0;
+		//p.Put(gameType);
+		p<<gameType;
+		Send(&p);
+	}
 
 	return;
+}
+
+void ClientNet::processGameList( Packet* _packet )
+{
+	QVector<RoomInfo> gameList;
+	quint32 size = 0;
+	//_packet->Get(&size);
+	*_packet>>size;
+	for(int i = 0; i<size; i++)
+	{
+		RoomInfo info;
+		*_packet>>info.mName>>info.mType>>info.mIP>>info.mPort>>info.mScore>>info.mUnit;
+		//int leng = 0;
+		//_packet->Get(&leng);
+		//char buff[128]={0};
+		//_packet->Get(buff, leng);
+		//info.mName = QString(buff);
+		//_packet->Get(&info.mType);
+		
+	}
 }

@@ -66,10 +66,11 @@ void Client::initNetLayer()
 	Packet p;
 	p.SetMessage(MSG_CL_LS_LOGIN);
 	QString userName("acc4");
-	p.Put(userName.size());
-	p.Put(const_cast<char*>(userName.toStdString().c_str()));
+	//p.Put(userName.size());
+	//p.Put(const_cast<char*>(userName.toStdString().c_str()));
 	QString md5pwd = ToMD5(QString("1234"));
-	p.Put(md5pwd.size());
-	p.Put(const_cast<char*>(md5pwd.toStdString().c_str()));
+	//p.Put(md5pwd.size());
+	//p.Put(const_cast<char*>(md5pwd.toStdString().c_str()));
+	p<<userName<<md5pwd;
 	mNetLayer->Send(&p);
 }

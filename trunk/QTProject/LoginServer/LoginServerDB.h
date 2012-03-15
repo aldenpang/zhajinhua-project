@@ -13,6 +13,9 @@
 #define LoginServerDB_h__
 
 #include "DBLayer.h"
+#include "SharedData.h"
+using namespace SharedData;
+
 class LoginServerDB : public DBLayer, public Singleton<LoginServerDB>
 {
 public:
@@ -21,6 +24,8 @@ public:
 
 	int VerifyUser( QString& _user, QString& _pwd );
 	int RegUser(QString& _user, QString& _pwd);
+
+	int GetRoomConfig(int _gameType, QVector<RoomInfo>& _info);
 protected:
 private:
 };
