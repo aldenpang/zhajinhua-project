@@ -4,6 +4,8 @@
 
 int main(int argc, char *argv[])
 {
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+
 	Client w(argc, argv);
 	return w.exec();
 }
