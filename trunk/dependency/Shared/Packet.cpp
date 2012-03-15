@@ -50,6 +50,12 @@ void Packet::End()
 	*(mPtr.data())<<mMessage;
 }
 
+Packet& Packet::operator << (qint32 _val)
+{
+	*(mPtr.data())<<_val;
+	return *this;
+}
+
 Packet& Packet::operator << (quint32 _val)
 {
 	*(mPtr.data())<<_val;
@@ -70,6 +76,17 @@ Packet& Packet::operator << (QString& _val)
 	for ( int i = 0; i<s; ++i )
 	{
 		*(mPtr.data())<<quint8(arr.at(i));
+	}
+	return *this;
+}
+
+Packet& Packet::operator >> (qint32& _val)
+{
+	if ( mPtr->atEnd() )
+		_val = 0;
+	else
+	{
+		*(mPtr.data())>>_val;
 	}
 	return *this;
 }

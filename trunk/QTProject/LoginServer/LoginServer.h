@@ -17,12 +17,12 @@
 class LoginServer : public IServerLayer
 {
 public:
-	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet* _packet);
+	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
 
 protected:
 private:
-	void processClientLogin(ISocketInstancePtr _incomeSocket, Packet* _packet);
-	void processClientReqGameList(ISocketInstancePtr _incomeSocket, Packet* _packet);
+	void processClientLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	void processClientReqGameList(ISocketInstancePtr _incomeSocket, Packet& _packet);
 
 	void sendGameList(int _gameType, ISocketInstancePtr _toSocket);
 };

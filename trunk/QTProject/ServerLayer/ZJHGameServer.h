@@ -25,12 +25,12 @@ public:
 	ZjhGameServer();
 	~ZjhGameServer();
 
-	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet* _packet);
+	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
 
 private:
-	void processLogin(ISocketInstancePtr _incomeSocket, Packet* _packet);
-	void processTableJoin(ISocketInstancePtr _incomeSocket, Packet* _packet);
-	void processTableLeave(ISocketInstancePtr _incomeSocket, Packet* _packet);
+	void processLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	void processTableJoin(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	void processTableLeave(ISocketInstancePtr _incomeSocket, Packet& _packet);
 private slots:
 	void stRefershTables();
 private:

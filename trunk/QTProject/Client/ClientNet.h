@@ -19,11 +19,11 @@ public:
 	ClientNet();
 	~ClientNet();
 
-	virtual void PacketHandler(Packet* _packet);
+	virtual void PacketHandler(Packet& _packet);
 
 protected:
 private:
-	void processLogin(Packet* _packet);
-	void processGameList(Packet* _packet);
+	void processLogin(Packet& _packet);
+	void processGameList(Packet& _packet);
 };
 #endif // ClientNet_h__

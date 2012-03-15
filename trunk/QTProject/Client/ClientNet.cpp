@@ -13,9 +13,9 @@ ClientNet::~ClientNet()
 
 }
 
-void ClientNet::PacketHandler( Packet* _packet )
+void ClientNet::PacketHandler( Packet& _packet )
 {
-	int msg = _packet->GetMessage();
+	int msg = _packet.GetMessage();
 	qDebug()<<"Client - Msg:"<<msg;
 
 	switch(msg)
@@ -32,18 +32,16 @@ void ClientNet::PacketHandler( Packet* _packet )
 
 }
 
-void ClientNet::processLogin( Packet* _packet )
+void ClientNet::processLogin( Packet& _packet )
 {
 	quint32 res = 0;
-	//_packet->Get(&res);
-	*_packet>>res;
+	_packet>>res;
 
 	if ( res == LOGIN_OK )
 	{
 		Packet p;
 		p.SetMessage(MSG_CL_LS_GAMELIST);
 		quint32 gameType = 0;
-		//p.Put(gameType);
 		p<<gameType;
 		Send(&p);
 	}
@@ -51,22 +49,14 @@ void ClientNet::processLogin( Packet* _packet )
 	return;
 }
 
-void ClientNet::processGameList( Packet* _packet )
+void ClientNet::processGameList( Packet& _packet )
 {
 	QVector<RoomInfo> gameList;
 	quint32 size = 0;
-	//_packet->Get(&size);
-	*_packet>>size;
+	_packet>>size;
 	for(int i = 0; i<size; i++)
 	{
 		RoomInfo info;
-		*_packet>>info.mName>>info.mType>>info.mIP>>info.mPort>>info.mScore>>info.mUnit;
-		//int leng = 0;
-		//_packet->Get(&leng);
-		//char buff[128]={0};
-		//_packet->Get(buff, leng);
-		//info.mName = QString(buff);
-		//_packet->Get(&info.mType);
-		
+		_packet>>info.mName>>info.mType>>info.mIP>>info.mPort>>info.mScore>>info.mUnit;
 	}
 }
