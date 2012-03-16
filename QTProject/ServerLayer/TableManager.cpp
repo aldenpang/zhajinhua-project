@@ -48,8 +48,10 @@ int TableManager::StJoinTable( ISocketInstancePtr _player, uint _tableID, uint _
 			gsp->SetIsWaiting(true);
 		}
 	}
+	else
+		return ERR_GS_TABLE_NOT_FOUND;
 
-	return ERR_GS_TABLE_NOT_FOUND;
+	return GS_NO_ERR;
 }
 
 int TableManager::StLeaveTable( ISocketInstancePtr _player, uint _tableID )

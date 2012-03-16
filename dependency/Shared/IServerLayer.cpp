@@ -80,7 +80,7 @@ void IServerLayer::stReadData()
 		//char buff[MAX_PACKET_SIZE]={0};
 		QByteArray buff = sockIns->GetSocket()->readAll();
 		//sockIns->GetSocket()->read(buff, MAX_PACKET_SIZE);
-		qDebug()<<"Data Received:"<<buff;
+		//qDebug()<<"Data Received:"<<buff;
 
 		Packet p;
 		p.SetData(buff);

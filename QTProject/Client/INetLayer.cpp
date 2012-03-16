@@ -17,12 +17,10 @@ void INetLayer::Init()
 {
 	mTcpSocket.setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
-	//connect(&mTcpSocket, SIGNAL(connected()), 
-	//	this, SIGNAL(SiOutConnected()));
-	//connect(&mTcpSocket, SIGNAL(connected()), 
-	//	&mTimer, SLOT(stop()));
-	//connect(&mTcpSocket, SIGNAL(disconnected()),
-	//	this, SIGNAL(SiOutDisconnected()));
+	connect(&mTcpSocket, SIGNAL(connected()), 
+		this, SIGNAL(SiConnected()));
+	connect(&mTcpSocket, SIGNAL(disconnected()),
+		this, SIGNAL(SiDisconnected()));
 	connect(&mTcpSocket, SIGNAL(readyRead()),
 		this, SLOT(stRead()));
 	connect(&mTcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),

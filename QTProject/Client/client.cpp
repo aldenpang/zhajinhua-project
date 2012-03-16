@@ -7,6 +7,8 @@
 #include "Packet.h"
 #include "MD5.h"
 
+QString gUserName = "acc4";
+QString gPassword = "1234";
 
 int argcCount = 1;
 Client::Client(int & argc, char ** argv)
@@ -71,8 +73,8 @@ void Client::initLoginServer()
 
 	Packet p;
 	p.SetMessage(MSG_CL_LS_LOGIN);
-	QString userName("acc4");
-	QString md5pwd = ToMD5(QString("1234"));
+	QString userName = gUserName;
+	QString md5pwd = ToMD5(gPassword);
 	p<<userName<<md5pwd;
 	mLoginServer->Send(&p);
 }
@@ -97,7 +99,8 @@ void Client::stGameList( QVector<RoomInfo> _gameList )
 	int size = _gameList.size();
 	qDebug()<<__FUNCTION__<<"GameList size:"<<size;
 
-	emit siConnectGS(_gameList[0].mIP, _gameList[0].mPort);
+	//emit siConnectGS(_gameList[0].mIP, _gameList[0].mPort);
+	stConnectGS(_gameList[0].mIP, _gameList[0].mPort);
 }
 
 void Client::initGameServer()
@@ -105,8 +108,11 @@ void Client::initGameServer()
 	mGameServer = new GameServerNet();
 	mGameServer->Init();
 
-	connect(this, SIGNAL(siConnectGS(QString&, quint32)), mGameServer, SLOT(stConnectGS(QString&, quint32)));
+	//connect(this, SIGNAL(siConnectGS(QString&, quint32)), mGameServer, SLOT(stConnectGS(QString&, quint32)));
 	connect(mGameServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
+	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
+	connect(mGameServer, SIGNAL(SiLoginOK()), this, SLOT(stGSLoginOK()));
+	connect(mGameServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stGSLoginFailed(quint32)));
 }
 
 void Client::stConnectGS( QString& _ip, quint32 _port )
@@ -116,4 +122,34 @@ void Client::stConnectGS( QString& _ip, quint32 _port )
 		mGameServer->Connect(_ip, _port);
 	}
 
+}
+
+void Client::stGSConnected()
+{
+	// login gs
+	Packet p;
+	p.SetMessage(MSG_CL_GS_LOGIN);
+	QString userName = gUserName;
+	QString md5pwd = ToMD5(gPassword);
+	p<<userName<<md5pwd;
+	mGameServer->Send(&p);
+
+	return;
+}
+
+void Client::stGSLoginOK()
+{
+	// join table
+	Packet p;
+	p.SetMessage(MSG_CL_GS_TABLE_JOIN);
+	int tableID = 0;
+	int seatID = 0;
+	p<<tableID<<seatID;
+	mGameServer->Send(&p);
+
+}
+
+void Client::stGSLoginFailed( quint32 _errCode )
+{
+	qDebug()<<__FUNCTION__<<":"<<_errCode;
 }
