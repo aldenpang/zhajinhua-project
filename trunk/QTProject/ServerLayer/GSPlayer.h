@@ -21,6 +21,9 @@ public:
 	GSPlayer(QTcpSocket* _socket);
 	~GSPlayer();
 
+	// Account ID
+	PROPERTY(quint32, AccountID);
+
 	// Í«≥∆
 	PROPERTY(QString, NickName);
 

@@ -27,6 +27,9 @@ private slots:
 	void stGameList(QVector<RoomInfo> _gameList);
 
 	void stConnectGS(QString& _ip, quint32 _port);
+	void stGSConnected();
+	void stGSLoginOK();
+	void stGSLoginFailed(quint32 _errCode);
 private:
 	//Ui::ClientClass ui;
 	QWidget*	mMainWidget;

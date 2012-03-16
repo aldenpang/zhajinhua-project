@@ -28,14 +28,10 @@ void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pack
 
 void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
-	//int length = 0;
-	//_packet->Get(&length);
+
 	QString userName;
 	QString pwd;
 	_packet>>userName>>pwd;
-	//_packet->Get(userName, length);
-	//_packet->Get(&length);
-	//_packet->Get(pwd, length);
 
 	LOG_INFO(QString("[%1]wants to login, pwd is[%2]").arg(userName).arg(pwd));
 
@@ -50,7 +46,6 @@ void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet& 
 	Packet p;
 	p.SetMessage(MSG_LS_CL_LOGIN);
 	p<<(quint32)res;
-	//p.Put(res);
 	_incomeSocket->Send(&p);
 
 	return;
@@ -59,7 +54,6 @@ void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet& 
 void LoginServer::processClientReqGameList( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
 	quint32 gameType = 0;
-	//_packet->Get(&gameType);
 	_packet>>gameType;
 
 	// send game list
@@ -73,20 +67,10 @@ void LoginServer::sendGameList( int _gameType, ISocketInstancePtr _toSocket )
 
 	Packet p;
 	p.SetMessage(MSG_LS_CL_GAMELIST);
-	//p.Put((int)info.size());
 	p<<(quint32)info.size();
 	for ( int i = 0; i<info.size(); i++ )
 	{
 		p<<info[i].mName<<info[i].mType<<info[i].mIP<<info[i].mPort<<info[i].mScore<<info[i].mUnit;
-
-		//p.Put(info[i].mName.size());
-		//p.Put(const_cast<char*>(info[i].mName.toStdString().c_str()));
-		////p.Put(info[i].mType);
-		//p.Put(info[i].mIP.size());
-		//p.Put(const_cast<char*>(info[i].mIP.toStdString().c_str()));
-		//p.Put(info[i].mPort);
-		//p.Put(info[i].mScore);
-		//p.Put(info[i].mUnit);
 	}
 	_toSocket->Send(&p);
 }

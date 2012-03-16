@@ -24,6 +24,8 @@ public:
 
 	virtual void PacketHandler(Packet& _packet)=0;
 signals:
+	void SiConnected();
+	void SiDisconnected();
 	void SiError(QString _err);
 private slots:
 	void stError(QAbstractSocket::SocketError _socketError);

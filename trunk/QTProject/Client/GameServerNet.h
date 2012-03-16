@@ -17,6 +17,9 @@
 class GameServerNet : public INetLayer
 {
 	Q_OBJECT
+signals:
+	void SiLoginOK();
+	void SiLoginFailed(quint32 _errCode);
 public:
 	GameServerNet();
 	~GameServerNet();
@@ -25,6 +28,7 @@ public:
 
 protected:
 private:
+	void processLogin(Packet& _packet);
 };
 
 #endif // GameServerNet_h__
