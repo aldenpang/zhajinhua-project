@@ -4,6 +4,12 @@
 
 int main(int argc, char *argv[])
 {
+	if ( __argc == 1 )
+	{
+		printf("wrong input parameters!\n");
+		return 0;
+	}
+
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
 	QCoreApplication a(argc, argv);

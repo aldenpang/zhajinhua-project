@@ -9,17 +9,29 @@
 #define _APPFRAME_H_
 
 #include "PublicHeader.h"
+#include "SharedData.h"
+using namespace SharedData;
+
 class ZjhGameServer;
 class AppFrame : public QObject
 {
+	Q_OBJECT
+signals:
+	void SiInfo(const QString& _text);
+	void SiWarn(const QString& _text);
+	void SiError(const QString& _text);
 public:
 	AppFrame();
 	~AppFrame();
 
 	void Run();
+
+	void InitDatabase();
 protected:
 private:
 	ZjhGameServer* mGameServer;
+	RoomInfo mRoomInfo;
+
 };
 
 #endif //_APPFRAME_H_
