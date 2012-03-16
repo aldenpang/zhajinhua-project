@@ -5,7 +5,8 @@
 //#include "ui_client.h"
 
 class MouseEventFilter;
-class ClientNet;
+class LoginServerNet;
+class GameServerNet;
 class Client : public QApplication
 {
 	Q_OBJECT
@@ -17,17 +18,25 @@ public:
 private slots:
 	void stQuit();
 
+	// for testing
+	void stLoginOK();
+	void stNetError(QString _err);
+	void stLoginFailed(quint32 _errorCode);
+	void stGameList(QVector<RoomInfo> _gameList);
+
 private:
 	//Ui::ClientClass ui;
 	QWidget*	mMainWidget;
 	MouseEventFilter* mMouseEventFilter;
-	ClientNet* mNetLayer;
+	LoginServerNet* mLoginServer;
+	GameServerNet* mGameServer;
 
 	void initMouseEventFilter();
 	void regConnections();
 
-	void initNetLayer();
-	
+	void initLoginServer();
+	void initGameServer();
+
 };
 
 #endif // CLIENT_H
