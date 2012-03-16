@@ -96,10 +96,24 @@ void Client::stGameList( QVector<RoomInfo> _gameList )
 {
 	int size = _gameList.size();
 	qDebug()<<__FUNCTION__<<"GameList size:"<<size;
+
+	emit siConnectGS(_gameList[0].mIP, _gameList[0].mPort);
 }
 
 void Client::initGameServer()
 {
 	mGameServer = new GameServerNet();
 	mGameServer->Init();
+
+	connect(this, SIGNAL(siConnectGS(QString&, quint32)), mGameServer, SLOT(stConnectGS(QString&, quint32)));
+	connect(mGameServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
+}
+
+void Client::stConnectGS( QString& _ip, quint32 _port )
+{
+	if ( mGameServer )
+	{
+		mGameServer->Connect(_ip, _port);
+	}
+
 }

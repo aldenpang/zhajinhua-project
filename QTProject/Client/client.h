@@ -15,6 +15,8 @@ public:
 	Client(int & argc, char ** argv);
 	~Client();
 
+signals:
+	void siConnectGS(QString& _ip, quint32 _port);
 private slots:
 	void stQuit();
 
@@ -24,6 +26,7 @@ private slots:
 	void stLoginFailed(quint32 _errorCode);
 	void stGameList(QVector<RoomInfo> _gameList);
 
+	void stConnectGS(QString& _ip, quint32 _port);
 private:
 	//Ui::ClientClass ui;
 	QWidget*	mMainWidget;

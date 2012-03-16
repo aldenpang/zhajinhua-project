@@ -15,16 +15,12 @@
 #include "MyToolkits.h"
 
 class QSettings;
-class SettingModule
+class SettingModule : public Singleton<SettingModule>
 {
 public:
+	SettingModule();
 	~SettingModule();
-	void Init(){};
-	static SettingModule& GetSingleton()
-	{
-		static SettingModule singleton;
-		return singleton;
-	}
+	void Init(QString _fileName);
 
 	PROPERTY(QString, IP);
 	PROPERTY(uint, Port);
@@ -32,8 +28,6 @@ public:
 
 protected:
 private:
-	SettingModule();
-
 	QSettings* mSettings;
 };
 

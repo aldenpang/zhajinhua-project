@@ -31,7 +31,7 @@ void IServerLayer::StStart(QString _ip, uint _port)
 		return;
 	}
 	emit SiStarted(_port);
-	LOG_INFO("Started!");
+	LOG_INFO(QString("Started at %1:%2").arg(addr.toString()).arg(_port));
 }
 //------------------------------------------------------------------------------
 void IServerLayer::StStop()

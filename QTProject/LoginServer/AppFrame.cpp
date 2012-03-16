@@ -11,7 +11,7 @@ AppFrame::AppFrame()
 {
 	mLoginServer = new LoginServer();
 
-	SETTINGS.Init();
+	SETTINGS.Init("LSConfig.ini");
 
 	InitDatabase();
 }

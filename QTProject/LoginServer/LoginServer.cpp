@@ -61,7 +61,7 @@ void LoginServer::processClientReqGameList( ISocketInstancePtr _incomeSocket, Pa
 	quint32 gameType = 0;
 	//_packet->Get(&gameType);
 	_packet>>gameType;
-a
+
 	// send game list
 	sendGameList(gameType, _incomeSocket);
 }

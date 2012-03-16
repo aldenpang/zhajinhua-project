@@ -13,6 +13,8 @@
 #define GameServerDB_h__
 
 #include "DBLayer.h"
+#include "SharedData.h"
+using namespace SharedData;
 
 class GameServerDB : public DBLayer, public Singleton<GameServerDB>
 {
@@ -21,6 +23,9 @@ public:
 	~GameServerDB();
 
 	int VerifyUser(QString& _user, QString& _pwd);
+
+	int GetRoomInfo(int _roomID, RoomInfo& _info);
+
 protected:
 private:
 };
