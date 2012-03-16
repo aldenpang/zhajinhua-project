@@ -1,19 +1,19 @@
 #include "stdafx.h"
-#include "ClientNet.h"
+#include "LoginServerNet.h"
 #include "SharedData.h"
 using namespace SharedData;
 
-ClientNet::ClientNet()
+LoginServerNet::LoginServerNet()
 {
 
 }
 
-ClientNet::~ClientNet()
+LoginServerNet::~LoginServerNet()
 {
 
 }
 
-void ClientNet::PacketHandler( Packet& _packet )
+void LoginServerNet::PacketHandler( Packet& _packet )
 {
 	int msg = _packet.GetMessage();
 	qDebug()<<"Client - Msg:"<<msg;
@@ -32,24 +32,18 @@ void ClientNet::PacketHandler( Packet& _packet )
 
 }
 
-void ClientNet::processLogin( Packet& _packet )
+void LoginServerNet::processLogin( Packet& _packet )
 {
 	quint32 res = 0;
 	_packet>>res;
 
 	if ( res == LOGIN_OK )
-	{
-		Packet p;
-		p.SetMessage(MSG_CL_LS_GAMELIST);
-		quint32 gameType = 0;
-		p<<gameType;
-		Send(&p);
-	}
-
-	return;
+		emit SiLoginOK();
+	else
+		emit SiLoginFailed(res);
 }
 
-void ClientNet::processGameList( Packet& _packet )
+void LoginServerNet::processGameList( Packet& _packet )
 {
 	QVector<RoomInfo> gameList;
 	quint32 size = 0;
@@ -58,5 +52,17 @@ void ClientNet::processGameList( Packet& _packet )
 	{
 		RoomInfo info;
 		_packet>>info.mName>>info.mType>>info.mIP>>info.mPort>>info.mScore>>info.mUnit;
+		gameList.push_back(info);
 	}
+
+	emit SiGameList(gameList);
+}
+
+void LoginServerNet::RequestGameList( int _gameType )
+{
+	Packet p;
+	p.SetMessage(MSG_CL_LS_GAMELIST);
+	quint32 gameType = _gameType;
+	p<<gameType;
+	Send(&p);
 }

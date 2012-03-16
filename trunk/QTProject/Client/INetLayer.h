@@ -23,7 +23,8 @@ public:
 	void Disconnect();
 
 	virtual void PacketHandler(Packet& _packet)=0;
-
+signals:
+	void SiError(QString _err);
 private slots:
 	void stError(QAbstractSocket::SocketError _socketError);
 	void stRead();

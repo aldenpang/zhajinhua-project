@@ -2,7 +2,8 @@
 #include "client.h"
 #include "MouseEventFilter.h"
 #include "MousePropagation.h"
-#include "ClientNet.h"
+#include "LoginServerNet.h"
+#include "GameServerNet.h"
 #include "Packet.h"
 #include "MD5.h"
 
@@ -10,7 +11,7 @@
 int argcCount = 1;
 Client::Client(int & argc, char ** argv)
 	: QApplication(argcCount, argv)
-	, mNetLayer(NULL)
+	, mLoginServer(NULL)
 {
 	QResource::registerResource(QString("media.dat"));
 
@@ -27,16 +28,17 @@ Client::Client(int & argc, char ** argv)
 
 		initMouseEventFilter();
 		regConnections();
-		initNetLayer();
+		initLoginServer();
+		initGameServer();
 	}
 }
 
 Client::~Client()
 {
-	if ( mNetLayer )
+	if ( mLoginServer )
 	{
-		delete mNetLayer;
-		mNetLayer = NULL;
+		delete mLoginServer;
+		mLoginServer = NULL;
 	}
 }
 //------------------------------------------------------------------------------
@@ -57,20 +59,47 @@ void Client::stQuit()
 	QApplication::quit();
 }
 //------------------------------------------------------------------------------
-void Client::initNetLayer()
+void Client::initLoginServer()
 {
-	mNetLayer = new ClientNet();
-	mNetLayer->Init();
-	mNetLayer->Connect("localhost", 5000);
+	mLoginServer = new LoginServerNet();
+	mLoginServer->Init();
+	mLoginServer->Connect("localhost", 5000);
+	connect(mLoginServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
+	connect(mLoginServer, SIGNAL(SiLoginOK()), this, SLOT(stLoginOK()));
+	connect(mLoginServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stLoginFailed(quint32)));
+	connect(mLoginServer, SIGNAL(SiGameList(QVector<RoomInfo>)), this, SLOT(stGameList(QVector<RoomInfo>)));
 
 	Packet p;
 	p.SetMessage(MSG_CL_LS_LOGIN);
 	QString userName("acc4");
-	//p.Put(userName.size());
-	//p.Put(const_cast<char*>(userName.toStdString().c_str()));
 	QString md5pwd = ToMD5(QString("1234"));
-	//p.Put(md5pwd.size());
-	//p.Put(const_cast<char*>(md5pwd.toStdString().c_str()));
 	p<<userName<<md5pwd;
-	mNetLayer->Send(&p);
+	mLoginServer->Send(&p);
+}
+
+void Client::stLoginOK()
+{
+	mLoginServer->RequestGameList(0);
+}
+
+void Client::stNetError( QString _err )
+{
+	qDebug()<<__FUNCTION__<<":"<<_err;
+}
+
+void Client::stLoginFailed( quint32 _errorCode )
+{
+	qDebug()<<__FUNCTION__<<":"<<_errorCode;
+}
+
+void Client::stGameList( QVector<RoomInfo> _gameList )
+{
+	int size = _gameList.size();
+	qDebug()<<__FUNCTION__<<"GameList size:"<<size;
+}
+
+void Client::initGameServer()
+{
+	mGameServer = new GameServerNet();
+	mGameServer->Init();
 }

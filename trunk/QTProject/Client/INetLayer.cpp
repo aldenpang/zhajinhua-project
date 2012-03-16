@@ -66,7 +66,7 @@ void INetLayer::Disconnect()
 //------------------------------------------------------------------------------
 void INetLayer::stError(QAbstractSocket::SocketError _socketError)
 {
-
+	emit SiError(mTcpSocket.errorString());
 }
 //------------------------------------------------------------------------------
 void INetLayer::stRead()
