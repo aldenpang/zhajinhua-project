@@ -39,8 +39,11 @@ public:
 	// 在线时长
 	PROPERTY(uint, PlayTime);
 
-	// 在线时长
+	// 是否在等待进入游戏
 	PROPERTY(bool, IsWaiting);
+
+	// 来源IP
+	PROPERTY(QString, IP);
 
 protected:
 private:
