@@ -13,6 +13,7 @@
 #define GameServerDB_h__
 
 #include "DBLayer.h"
+#include "GSPlayer.h"
 #include "SharedData.h"
 using namespace SharedData;
 
@@ -25,6 +26,10 @@ public:
 	int VerifyUser(QString& _user, QString& _pwd);
 
 	int GetRoomInfo(int _roomID, RoomInfo& _info);
+
+	int GetAccountID(QString& _user, quint32& _accountID);
+
+	int GetPlayerInfo(GSPlayer& _player);
 
 protected:
 private:

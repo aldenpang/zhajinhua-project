@@ -42,4 +42,13 @@ void AppFrame::InitDatabase()
 	{
 		LOG_ERR(QString("Can not find room config in db! res[%1]").arg(res));
 	}
+
+	//quint32 acc = 0;
+	//res = DB.GetAccountID(QString("acc2"), acc);
+
+	//GSPlayer p(NULL);
+	//p.SetAccountID(acc);
+	//res = DB.GetPlayerInfo(p);
+
+	return;
 }

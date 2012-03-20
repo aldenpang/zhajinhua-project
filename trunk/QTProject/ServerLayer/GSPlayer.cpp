@@ -8,6 +8,7 @@ GSPlayer::GSPlayer(QTcpSocket* _socket)
 	mCoin = 0;
 	mExp = 0;
 	mPlayTime = 0;
+	mIsWaiting = false;
 }
 
 GSPlayer::~GSPlayer()

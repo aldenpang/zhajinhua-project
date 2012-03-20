@@ -28,14 +28,14 @@ int GameServerDB::VerifyUser( QString& _user, QString& _pwd )
 	if( records == 0)
 	{
 		LOG_INFO(QString("Can not find record for player[%1] pwd[%2]").arg(_user).arg(_pwd));
-		return 1;
+		return ERR_GS_PLAYER_NOT_FOUND;
 	}
 	else if (records == 1)
-		return 0;
+		return GS_NO_ERR;
 	else if ( records > 1 )
 	{
 		LOG_ERR("Query result is more than 1");
-		return 2;
+		return ERR_GS_MULTI_RESULT;
 	}
 	else 
 	{
@@ -66,6 +66,49 @@ int GameServerDB::GetRoomInfo( int _roomID, RoomInfo& _info )
 	}
 	if ( records  == 0 )
 		return ERR_GS_ROOM_NOT_FOUND;
+	else if ( records >= 2)
+		return ERR_GS_MULTI_RESULT;
+	else
+		return GS_NO_ERR;
+}
+
+int GameServerDB::GetPlayerInfo( GSPlayer& _player )
+{
+	QString sql = QString("select * from Accounts where AccountID like \"%1\"").arg(_player.GetAccountID());
+	QSqlQuery q = mDb.exec(sql);
+
+	int records = 0;
+	while (q.next()) 
+	{
+		_player.SetNickName(q.value(3).toString());
+		_player.SetGender(q.value(4).toInt());
+		_player.SetCoin(q.value(5).toInt());
+		_player.SetExp(q.value(6).toInt());
+		_player.SetPlayTime(q.value(7).toInt());
+		
+		records++;
+		if ( records >=2 )
+			break;
+	}
+
+	return GS_NO_ERR;
+}
+
+int GameServerDB::GetAccountID( QString& _user, quint32& _accountID )
+{
+	QString sql = QString("select * from Accounts where UserName like \"%1\"").arg(_user);
+	QSqlQuery q = mDb.exec(sql);
+
+	int records = 0;
+	while (q.next()) 
+	{
+		_accountID = q.value(2).toInt();
+		records++;
+		if ( records >=2 )
+			break;
+	}
+	if ( records  == 0 )
+		return ERR_GS_PLAYER_NOT_FOUND;
 	else if ( records >= 2)
 		return ERR_GS_MULTI_RESULT;
 	else

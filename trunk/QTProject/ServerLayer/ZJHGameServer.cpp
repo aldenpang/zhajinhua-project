@@ -53,7 +53,7 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 
 	int res = DB.VerifyUser(userName, pwd);
 
-	if ( res != LOGIN_OK )
+	if ( res != GS_NO_ERR )
 		LOG_ERR(QString("LoginFailed! Reason:[%1]").arg(res));
 	else
 		LOG_INFO("Login OK");
@@ -64,9 +64,16 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 	p<<res;
 	_incomeSocket->Send(&p);
 
-	// send room config
+	if ( res == GS_NO_ERR )
+	{
+		// get player info
+		GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
 
-	// send table list
+		// send room config
+
+		// send table list
+
+	}
 
 }
 
