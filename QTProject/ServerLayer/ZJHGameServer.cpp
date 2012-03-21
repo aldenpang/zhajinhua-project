@@ -69,10 +69,30 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 		// get player info
 		GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
 
-		// send room config
+		quint32 accID = 0;
+		res = DB.GetAccountID(userName, accID);
+		if ( res == GS_NO_ERR )
+		{
+			// save player ip
+			DB.UpdatePlayerIp(accID, player->GetSocket()->peerAddress().toString());
+			player->SetAccountID(accID);
 
-		// send table list
+			res = DB.GetPlayerInfo(player);
+			if ( res == GS_NO_ERR )
+			{
+				LOG_INFO(QString("Player[AccountID:%1] is login").arg(player->GetAccountID()));
+				// send room config
 
+				// send table list
+
+			}
+			else
+				LOG_ERR(QString("GetPlayerInfo Failed! Reason:[%1]").arg(res));
+		}
+		else
+		{
+			LOG_ERR(QString("GetAccountID Failed! Reason:[%1]").arg(res));
+		}
 	}
 
 }

@@ -72,19 +72,19 @@ int GameServerDB::GetRoomInfo( int _roomID, RoomInfo& _info )
 		return GS_NO_ERR;
 }
 
-int GameServerDB::GetPlayerInfo( GSPlayer& _player )
+int GameServerDB::GetPlayerInfo( GSPlayerPtr _player )
 {
-	QString sql = QString("select * from Accounts where AccountID like \"%1\"").arg(_player.GetAccountID());
+	QString sql = QString("select * from Accounts where AccountID like \"%1\"").arg(_player->GetAccountID());
 	QSqlQuery q = mDb.exec(sql);
 
 	int records = 0;
 	while (q.next()) 
 	{
-		_player.SetNickName(q.value(3).toString());
-		_player.SetGender(q.value(4).toInt());
-		_player.SetCoin(q.value(5).toInt());
-		_player.SetExp(q.value(6).toInt());
-		_player.SetPlayTime(q.value(7).toInt());
+		_player->SetNickName(q.value(3).toString());
+		_player->SetGender(q.value(4).toInt());
+		_player->SetCoin(q.value(5).toInt());
+		_player->SetExp(q.value(6).toInt());
+		_player->SetPlayTime(q.value(7).toInt());
 		
 		records++;
 		if ( records >=2 )
@@ -113,4 +113,12 @@ int GameServerDB::GetAccountID( QString& _user, quint32& _accountID )
 		return ERR_GS_MULTI_RESULT;
 	else
 		return GS_NO_ERR;
+}
+
+int GameServerDB::UpdatePlayerIp( int _accountID, QString& _ip )
+{
+	QString sql = QString("update Accounts set IP=\"%1\" where AccountID=%2").arg(_ip).arg(_accountID);
+	QSqlQuery q = mDb.exec(sql);
+
+	return GS_NO_ERR;
 }

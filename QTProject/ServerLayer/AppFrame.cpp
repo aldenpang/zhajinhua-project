@@ -49,6 +49,7 @@ void AppFrame::InitDatabase()
 	//GSPlayer p(NULL);
 	//p.SetAccountID(acc);
 	//res = DB.GetPlayerInfo(p);
+	//DB.UpdatePlayerIp(4, QString("dbc"));
 
 	return;
 }
