@@ -29,7 +29,9 @@ public:
 
 	int GetAccountID(QString& _user, quint32& _accountID);
 
-	int GetPlayerInfo(GSPlayer& _player);
+	int GetPlayerInfo(GSPlayerPtr _player);
+
+	int UpdatePlayerIp(int _accountID, QString& _ip);
 
 protected:
 private:
