@@ -9,6 +9,7 @@
 #define _APPFRAME_H_
 
 #include "PublicHeader.h"
+#include "WalletServerLayer.h"
 #include "SharedData.h"
 using namespace SharedData;
 
@@ -20,6 +21,11 @@ signals:
 	void SiInfo(const QString& _text);
 	void SiWarn(const QString& _text);
 	void SiError(const QString& _text);
+private slots:
+	void stWalletConnected();
+	void stWalletDisconnected();
+	void stWalletError(QString _err);
+
 public:
 	AppFrame();
 	~AppFrame();
@@ -27,11 +33,13 @@ public:
 	void Run();
 
 	void InitDatabase();
+
+	void InitWalletServer();
 protected:
 private:
 	ZjhGameServer* mGameServer;
 	RoomInfo mRoomInfo;
-
+	WalletServerLayer mWalletServer;
 };
 
 #endif //_APPFRAME_H_
