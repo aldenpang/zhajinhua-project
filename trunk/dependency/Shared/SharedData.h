@@ -43,6 +43,19 @@ namespace SharedData
 		MSG_GS_BC_TABLE_START,
 		MSG_GS_BC_TABLE_END,
 
+		//////////////////////////////////////////////
+		// messages between lobby/game server and wallet server
+		//////////////////////////////////////////////
+		MSG_LS_WS_QUERY_USER_WALLET=200,
+		MSG_WS_LS_QUERY_USER_WALLET,
+
+		MSG_GS_WS_QUERY_TABLE_WALLET,
+		MSG_WS_GS_QUERY_TABLE_WALLET,
+
+		MSG_GS_WS_INSERT_TABLE_WALLET,
+		MSG_WS_GS_INSERT_TABLE_WALLET,
+
+
 	};
 
 	enum ErrorCodes
@@ -59,7 +72,11 @@ namespace SharedData
 		ERR_GS_ROOM_NOT_FOUND,
 		ERR_GS_MULTI_RESULT,
 
-
+		// wallet server
+		WS_NO_ERR=200,
+		ERR_WS_WALLET_NOT_FOUND,
+		ERR_WS_MULTI_RESULT,
+		ERR_WS_TABLE_WALLET_EXIST,
 
 	};
 

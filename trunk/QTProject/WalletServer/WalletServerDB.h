@@ -21,9 +21,20 @@ public:
 	WalletServerDB();
 	~WalletServerDB();
 
+	int QueryUserWallet(quint32 _accountID, quint32& _coinAmount);
+
+	int QueryTableWallet(quint32 _roomID, quint32 _tableID, quint32 _seatID, quint32& _coinAmount);
+
+	// 先查询有没有此TableWallet，如果有就不插入，如果没有就插入，但是不刷新CoinAmount
+	int InsertTableWallet(quint32 _roomID, quint32 _tableID, quint32 _seatID);
+
+	// 刷新CoinAmount
+	int UpdateTableWallet(quint32 _roomID, quint32 _tableID, quint32 _seatID, quint32 _coinAmount);
 
 protected:
 private:
 };
+
+#define DB WalletServerDB::GetSingleton()
 
 #endif // WalletServerDB_h__
