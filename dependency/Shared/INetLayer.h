@@ -9,6 +9,9 @@
 #define _INETLAYER_H_
 
 #include "Packet.h"
+#include <QAbstractSocket>
+#include <QTcpSocket>
+#include <QHostAddress>
 
 class INetLayer:public QObject
 {

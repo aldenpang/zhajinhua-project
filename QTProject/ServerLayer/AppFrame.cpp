@@ -15,6 +15,8 @@ AppFrame::AppFrame()
 
 	InitDatabase();
 
+	InitWalletServer();
+
 	connect(this, SIGNAL(SiInfo(const QString&)), &LOG, SLOT(StInfo(const QString&)));
 	connect(this, SIGNAL(SiWarn(const QString&)), &LOG, SLOT(StWarn(const QString&)));
 	connect(this, SIGNAL(SiError(const QString&)), &LOG, SLOT(StError(const QString&)));
@@ -52,4 +54,29 @@ void AppFrame::InitDatabase()
 	//DB.UpdatePlayerIp(4, QString("dbc"));
 
 	return;
+}
+
+void AppFrame::InitWalletServer()
+{
+	connect(&mWalletServer, SIGNAL(SiConnected()), this, SLOT(stWalletConnected()));
+	connect(&mWalletServer, SIGNAL(SiDisconnected()), this, SLOT(stWalletDisconnected()));
+	connect(&mWalletServer, SIGNAL(SiError(QString)), this, SLOT(stWalletError(QString)));
+
+	mWalletServer.Init();
+	mWalletServer.Connect("192.168.2.2", 4000);
+}
+
+void AppFrame::stWalletConnected()
+{
+	LOG_INFO("Wallet Connected");
+}
+
+void AppFrame::stWalletDisconnected()
+{
+	LOG_INFO("Wallet Disonnected");
+}
+
+void AppFrame::stWalletError(QString _err)
+{
+	LOG_ERR(QString("Wallet Connect Error:%1").arg(_err));
 }
