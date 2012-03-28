@@ -20,6 +20,10 @@ public:
 	~WalletServer();
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
 protected:
+	void processQueryUserWallet( ISocketInstancePtr _incomeSocket, Packet& _p);
+	void processQueryTableWallet( ISocketInstancePtr _incomeSocket, Packet& _p);
+	void processInserTableWallet( ISocketInstancePtr _incomeSocket, Packet& _p);
+
 private:
 };
 

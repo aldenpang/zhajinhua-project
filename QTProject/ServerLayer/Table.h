@@ -41,6 +41,7 @@ public:
 protected:
 private:
 	QSet<ISocketInstancePtr> mPlayers;
+	TableState mState;
 };
 
 #endif // Table_h__

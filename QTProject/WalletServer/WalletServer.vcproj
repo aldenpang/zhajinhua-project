@@ -56,7 +56,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="qtmain.lib QtCore4.lib QtSql4.lib QtNetwork4.lib"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
+				OutputFile="..\Bin\$(ProjectName).exe"
 				AdditionalLibraryDirectories="$(QTDIR)\lib"
 				GenerateDebugInformation="false"
 				SubSystem="1"
@@ -125,7 +125,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="qtmaind.lib QtCored4.lib QtSqld4.lib QtNetworkd4.lib"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
+				OutputFile="..\Bin\$(ProjectName)_d.exe"
 				AdditionalLibraryDirectories="$(QTDIR)\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
