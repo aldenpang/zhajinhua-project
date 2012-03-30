@@ -15,6 +15,14 @@ ZjhGameServer::ZjhGameServer()
 	mTimer.setInterval(REFRESH_INTERVAL*1000);
 	//mTimer.start();
 	//connect(&mTimer, SIGNAL(timeout()), this, SLOT(stRefershTables()));
+
+	GSPlayer player(NULL);
+	player.AddPoker(27);
+	player.AddPoker(0);
+	player.AddPoker(42);
+
+
+
 }
 //------------------------------------------------------------------------------
 ZjhGameServer::~ZjhGameServer()
