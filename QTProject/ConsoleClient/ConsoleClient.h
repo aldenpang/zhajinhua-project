@@ -12,6 +12,9 @@
 #ifndef ConsoleClient_h__
 #define ConsoleClient_h__
 #include <QObject>
+#include <QVector>
+#include "SharedData.h"
+using namespace SharedData;
 
 class LoginServerNet;
 class GameServerNet;
@@ -22,8 +25,18 @@ public:
 	ConsoleClient();
 	~ConsoleClient();
 
-private slots:
+signals:
+	void SiInfo(const QString& _text);
+	void SiWarn(const QString& _text);
+	void SiError(const QString& _text);
 
+private slots:
+	void stLSConnected();
+	void stLSDisconnected();
+	void stNetError(QString _errStr);
+	void stLoginOK();
+	void stLoginFailed(quint32 _errorCode);
+	void stGameList(QVector<RoomInfo> _gameList);
 protected:
 private:
 

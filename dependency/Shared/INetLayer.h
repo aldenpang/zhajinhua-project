@@ -29,10 +29,15 @@ public:
 signals:
 	void SiConnected();
 	void SiDisconnected();
-	void SiError(QString _err);
+
+	void SiInfo(const QString& _text);
+	void SiWarn(const QString& _text);
+	void SiError(const QString& _text);
+
 private slots:
 	void stError(QAbstractSocket::SocketError _socketError);
 	void stRead();
+
 protected:
 	QTcpSocket mTcpSocket;
 

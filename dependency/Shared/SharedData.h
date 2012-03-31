@@ -82,6 +82,7 @@ namespace SharedData
 
 	struct RoomInfo 
 	{
+		quint32 mRoomID;	//在DB中设定，自动增量
 		QString mName;
 		quint32 mType;
 		QString mIP;

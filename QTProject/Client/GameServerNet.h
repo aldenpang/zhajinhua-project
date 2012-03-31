@@ -26,6 +26,10 @@ public:
 
 	virtual void PacketHandler(Packet& _packet);
 
+	void SendLoginGS(QString& _userName, QString& _pwd);
+
+	void SendJoinTable(quint32 _tableID, quint32 _seatID);
+
 protected:
 private:
 	void processLogin(Packet& _packet);

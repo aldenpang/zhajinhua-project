@@ -1,9 +1,12 @@
 #include "INetLayer.h"
-
+#include "LogModule.h"
 
 //------------------------------------------------------------------------------
 INetLayer::INetLayer()
 {
+	connect(this, SIGNAL(SiInfo(const QString&)), &LOG, SLOT(StInfo(const QString&)));
+	connect(this, SIGNAL(SiWarn(const QString&)), &LOG, SLOT(StWarn(const QString&)));
+	connect(this, SIGNAL(SiError(const QString&)), &LOG, SLOT(StError(const QString&)));
 
 }
 //------------------------------------------------------------------------------
