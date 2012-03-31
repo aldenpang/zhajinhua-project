@@ -5,7 +5,6 @@
 #include "LoginServerNet.h"
 #include "GameServerNet.h"
 #include "Packet.h"
-#include "MD5.h"
 
 QString gUserName = "acc4";
 QString gPassword = "1234";
@@ -71,12 +70,8 @@ void Client::initLoginServer()
 	connect(mLoginServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stLoginFailed(quint32)));
 	connect(mLoginServer, SIGNAL(SiGameList(QVector<RoomInfo>)), this, SLOT(stGameList(QVector<RoomInfo>)));
 
-	Packet p;
-	p.SetMessage(MSG_CL_LS_LOGIN);
-	QString userName = gUserName;
-	QString md5pwd = ToMD5(gPassword);
-	p<<userName<<md5pwd;
-	mLoginServer->Send(&p);
+	mLoginServer->SendLoginRequest(gUserName, gPassword);
+
 }
 
 void Client::stLoginOK()
@@ -126,27 +121,15 @@ void Client::stConnectGS( QString& _ip, quint32 _port )
 
 void Client::stGSConnected()
 {
-	// login gs
-	Packet p;
-	p.SetMessage(MSG_CL_GS_LOGIN);
-	QString userName = gUserName;
-	QString md5pwd = ToMD5(gPassword);
-	p<<userName<<md5pwd;
-	mGameServer->Send(&p);
+	mGameServer->SendLoginGS(gUserName, gPassword);
 
 	return;
 }
 
 void Client::stGSLoginOK()
 {
-	// join table
-	Packet p;
-	p.SetMessage(MSG_CL_GS_TABLE_JOIN);
-	int tableID = 0;
-	int seatID = 0;
-	p<<tableID<<seatID;
-	mGameServer->Send(&p);
-
+	mGameServer->SendJoinTable(0, 0);
+	return;
 }
 
 void Client::stGSLoginFailed( quint32 _errCode )

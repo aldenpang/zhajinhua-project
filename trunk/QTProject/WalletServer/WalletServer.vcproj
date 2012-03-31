@@ -42,6 +42,7 @@
 				PreprocessorDefinitions=",UNICODE,WIN32,QT_LARGEFILE_SUPPORT;QT_NO_DEBUG,NDEBUG;QT_CORE_LIB;QT_SQL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
+				ObjectFile="$(IntDir)\"
 				DebugInformationFormat="0"
 			/>
 			<Tool
@@ -111,6 +112,7 @@
 				PreprocessorDefinitions=",UNICODE,WIN32,QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_SQL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
+				ObjectFile="$(IntDir)\"
 				DebugInformationFormat="3"
 			/>
 			<Tool

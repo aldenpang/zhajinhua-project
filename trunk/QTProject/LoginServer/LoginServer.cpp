@@ -65,12 +65,18 @@ void LoginServer::sendGameList( int _gameType, ISocketInstancePtr _toSocket )
 	QVector<RoomInfo> info;
 	DB.GetRoomConfig(_gameType, info);
 
+	if ( info.isEmpty() )
+	{
+		LOG_WARN(QString("Can not get room by gameType:%1").arg(_gameType));
+		return;
+	}
+
 	Packet p;
 	p.SetMessage(MSG_LS_CL_GAMELIST);
 	p<<(quint32)info.size();
 	for ( int i = 0; i<info.size(); i++ )
 	{
-		p<<info[i].mName<<info[i].mType<<info[i].mIP<<info[i].mPort<<info[i].mScore<<info[i].mUnit;
+		p<<info[i].mRoomID<<info[i].mName<<info[i].mType<<info[i].mIP<<info[i].mPort<<info[i].mScore<<info[i].mUnit;
 	}
 	_toSocket->Send(&p);
 }

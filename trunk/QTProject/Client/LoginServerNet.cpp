@@ -1,4 +1,5 @@
 #include "LoginServerNet.h"
+#include "MD5.h"
 #include "SharedData.h"
 using namespace SharedData;
 
@@ -50,7 +51,7 @@ void LoginServerNet::processGameList( Packet& _packet )
 	for(int i = 0; i<size; i++)
 	{
 		RoomInfo info;
-		_packet>>info.mName>>info.mType>>info.mIP>>info.mPort>>info.mScore>>info.mUnit;
+		_packet>>info.mRoomID>>info.mName>>info.mType>>info.mIP>>info.mPort>>info.mScore>>info.mUnit;
 		gameList.push_back(info);
 	}
 
@@ -63,5 +64,15 @@ void LoginServerNet::RequestGameList( int _gameType )
 	p.SetMessage(MSG_CL_LS_GAMELIST);
 	quint32 gameType = _gameType;
 	p<<gameType;
+	Send(&p);
+}
+
+void LoginServerNet::SendLoginRequest( QString& _userName, QString& _pwd )
+{
+	Packet p;
+	p.SetMessage(MSG_CL_LS_LOGIN);
+	QString userName = _userName;
+	QString md5pwd = ToMD5(_pwd);
+	p<<userName<<md5pwd;
 	Send(&p);
 }

@@ -26,6 +26,8 @@ public:
 
 	virtual void PacketHandler(Packet& _packet);
 
+	void SendLoginRequest(QString& _userName, QString& _pwd);
+
 signals:
 	void SiLoginOK();
 	void SiLoginFailed(quint32 _errorCode);

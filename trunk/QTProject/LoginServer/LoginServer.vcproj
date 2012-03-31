@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="LoginServer"
 	ProjectGUID="{E7652917-A8CA-407B-AC4C-32A3F15170F6}"
+	RootNamespace="LoginServer"
 	Keyword="Qt4VSv1.0"
 	TargetFrameworkVersion="0"
 	>
@@ -42,6 +43,7 @@
 				PreprocessorDefinitions=",UNICODE,WIN32,QT_LARGEFILE_SUPPORT;QT_NO_DEBUG,NDEBUG;QT_CORE_LIB;QT_SQL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
+				ObjectFile="$(IntDir)\"
 				DebugInformationFormat="0"
 			/>
 			<Tool
@@ -111,6 +113,7 @@
 				PreprocessorDefinitions=",UNICODE,WIN32,QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_SQL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
+				ObjectFile="$(IntDir)\"
 				DebugInformationFormat="3"
 			/>
 			<Tool
