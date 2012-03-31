@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			>
 			<Tool
@@ -44,6 +44,7 @@
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\$(InputName).pdb"
 				DebugInformationFormat="0"
 			/>
 			<Tool
@@ -88,7 +89,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			>
 			<Tool
@@ -114,6 +115,7 @@
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
 				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\$(InputName).pdb"
 				DebugInformationFormat="3"
 			/>
 			<Tool
