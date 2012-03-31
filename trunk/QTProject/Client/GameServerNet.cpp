@@ -1,5 +1,6 @@
-#include "stdafx.h"
 #include "GameServerNet.h"
+#include "SharedData.h"
+using namespace SharedData;
 
 
 GameServerNet::GameServerNet()

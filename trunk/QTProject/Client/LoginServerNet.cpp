@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LoginServerNet.h"
 #include "SharedData.h"
 using namespace SharedData;

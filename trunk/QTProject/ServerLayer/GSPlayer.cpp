@@ -20,7 +20,28 @@ GSPlayer::~GSPlayer()
 
 int GSPlayer::CanPush( QList<PokerPtr>& _other )
 {
+	//PokerType otherType = analysePokerType(_other);
 
+	//if ( otherType == mHandPokerType )
+	//{
+	//	if ( mHandPokerType[0] > _other[0] )
+	//	{
+	//		return 1;
+	//	}
+	//}
+	//else
+	//{
+	//	if ( mHandPokerType < otherType )
+	//	{
+	//		return 1;		// 自己能压上
+	//	}
+	//	else if ( (mHandPokerType == SANPAI235) && (otherType == BAOZI) )
+	//	{
+	//		return 1;
+	//	}
+	//	else
+	//		return 0;
+	//}
 
 	return 1;
 }

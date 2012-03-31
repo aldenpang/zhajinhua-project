@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoginServer", "LoginServer\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WalletServer", "WalletServer\WalletServer.vcproj", "{F153AEEF-D021-41D4-88BD-95BE9FB311A3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleClient", "ConsoleClient\ConsoleClient.vcproj", "{C37F1E55-E364-4273-8E5B-B599621F92E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +33,10 @@ Global
 		{F153AEEF-D021-41D4-88BD-95BE9FB311A3}.Debug|Win32.Build.0 = Debug|Win32
 		{F153AEEF-D021-41D4-88BD-95BE9FB311A3}.Release|Win32.ActiveCfg = Release|Win32
 		{F153AEEF-D021-41D4-88BD-95BE9FB311A3}.Release|Win32.Build.0 = Release|Win32
+		{C37F1E55-E364-4273-8E5B-B599621F92E9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C37F1E55-E364-4273-8E5B-B599621F92E9}.Debug|Win32.Build.0 = Debug|Win32
+		{C37F1E55-E364-4273-8E5B-B599621F92E9}.Release|Win32.ActiveCfg = Release|Win32
+		{C37F1E55-E364-4273-8E5B-B599621F92E9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

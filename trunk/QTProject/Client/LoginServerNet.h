@@ -12,6 +12,8 @@
 #ifndef LoginServerNet_h__
 #define LoginServerNet_h__
 #include "INetLayer.h"
+#include "SharedData.h"
+using namespace SharedData;
 
 class LoginServerNet : public INetLayer
 {
