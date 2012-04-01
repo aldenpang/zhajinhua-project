@@ -32,7 +32,7 @@ void GameServerNet::processLogin( Packet& _packet )
 	int res = 0;
 	_packet>>res;
 
-	if ( res )
+	if ( res != GS_NO_ERR )
 		emit SiLoginFailed(res);
 	else
 		emit SiLoginOK();

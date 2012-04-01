@@ -59,6 +59,9 @@ private:
 #define LOG_WARN(x) emit SiWarn(QString("[%1]-%2").arg(__FUNCTION__).arg(x))
 #define LOG_ERR(x) emit SiError(QString("[%1]-%2").arg(__FUNCTION__).arg(x))
 
+#define LOG_D_INFO(x) LOG.StInfo(QString("[%1]-%2").arg(__FUNCTION__).arg(x))
+#define LOG_D_WARN(x) LOG.StWarn(QString("[%1]-%2").arg(__FUNCTION__).arg(x))
+#define LOG_D_ERR(x) LOG.StError(QString("[%1]-%2").arg(__FUNCTION__).arg(x))
 
 #endif //_LOGMODULE_H_
 

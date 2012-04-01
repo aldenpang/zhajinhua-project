@@ -11,7 +11,7 @@
 #include "PublicHeader.h"
 #include "IServerLayer.h"
 #include "ISocketInstance.h"
-
+#include "GSPlayer.h"
 #include <QTimer>
 
 class ZjhGameServer : public IServerLayer
@@ -35,6 +35,10 @@ private slots:
 	void stRefershTables();
 private:
 	QTimer mTimer;
+	QList<GSPlayerPtr> mPlayerList;
+
+private:
+	void sendTableInfo(GSPlayerPtr _to);
 };
 
 #endif //_ZJHGAMESERVER_H_

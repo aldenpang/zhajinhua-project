@@ -14,6 +14,7 @@
 
 #include <QSharedPointer>
 #include <QTcpSocket>
+#include <QHostAddress>
 
 class Packet;
 class QTcpSocket;
@@ -26,6 +27,9 @@ public:
 	void Send(Packet* _p);
 
 	QTcpSocket* GetSocket(){return mSocket;}
+
+	QString IP(){ return mSocket->peerAddress().toString(); }
+	quint32 Port(){ return mSocket->peerPort(); }
 
 protected:
 private:

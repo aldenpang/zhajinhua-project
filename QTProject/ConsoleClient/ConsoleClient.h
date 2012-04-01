@@ -37,6 +37,12 @@ private slots:
 	void stLoginOK();
 	void stLoginFailed(quint32 _errorCode);
 	void stGameList(QVector<RoomInfo> _gameList);
+
+	void stGSConnected();
+	void stGSDisconnected();
+	void stGSLoginOK();
+	void stGSLoginFailed(quint32 _errorCode);
+
 protected:
 private:
 

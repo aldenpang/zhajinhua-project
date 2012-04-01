@@ -74,7 +74,7 @@ int GameServerDB::GetRoomInfo( int _roomID, RoomInfo& _info )
 
 int GameServerDB::GetPlayerInfo( GSPlayerPtr _player )
 {
-	QString sql = QString("select * from Accounts where AccountID like \"%1\"").arg(_player->GetAccountID());
+	QString sql = QString("select * from Accounts where AccountID=%1").arg(_player->GetAccountID());
 	QSqlQuery q = mDb.exec(sql);
 
 	int records = 0;

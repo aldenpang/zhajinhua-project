@@ -42,10 +42,11 @@ private slots:
 	void stClientDisconnect();	
 	void stReadData();
 protected:
-	QList<ISocketInstancePtr>	mClientList;
 private:
 	// 通过传入的Socket找SocketInstance
 	ISocketInstancePtr findInstance(QTcpSocket* _socket);
+	QList<ISocketInstancePtr>	mClientList;
+
 };//class IServerLayer
 
 //typedef boost::shared_ptr<ITcpServer> ITcpServerPtr;

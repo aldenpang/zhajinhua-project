@@ -12,7 +12,9 @@
 #ifndef Table_h__
 #define Table_h__
 
+#include <QMap>
 #include <QVector>
+#include "GSPlayer.h"
 #include "ISocketInstance.h"
 #include "HardcodeConfig.h"
 
@@ -25,6 +27,14 @@ enum TableState
 	TS_TOTAL,
 };
 
+enum SeatState
+{
+	SS_EMPTY=0,
+	SS_OCCUPY,
+
+	SS_TOTAL,
+};
+
 class Table
 {
 public:
@@ -32,15 +42,15 @@ public:
 	~Table();
 
 	// returns: 0-successful 1-table full
-	int Join(ISocketInstancePtr _player);
+	int Join(int seatID, GSPlayerPtr _player);
 
 	// returns: 0-successful 1-player not exist
-	int Leave(ISocketInstancePtr _player);
+	int Leave(GSPlayerPtr _player);
 
 	int PlayerAmount(){return mPlayers.size();}
 protected:
 private:
-	QSet<ISocketInstancePtr> mPlayers;
+	QMap<int, GSPlayerPtr> mPlayers;
 	TableState mState;
 };
 

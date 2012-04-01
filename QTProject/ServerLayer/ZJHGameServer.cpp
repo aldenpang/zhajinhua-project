@@ -17,9 +17,11 @@ ZjhGameServer::ZjhGameServer()
 	//connect(&mTimer, SIGNAL(timeout()), this, SLOT(stRefershTables()));
 
 	GSPlayer player(NULL);
-	player.AddPoker(27);
-	player.AddPoker(0);
-	player.AddPoker(42);
+	//QString name = "adsf";
+	//player.SetNickName(name);
+	//player.AddPoker(27);
+	//player.AddPoker(0);
+	//player.AddPoker(42);
 
 
 
@@ -75,12 +77,20 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 	if ( res == GS_NO_ERR )
 	{
 		// get player info
-		GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
-
+		GSPlayerPtr player = GSPlayerPtr(new GSPlayer(_incomeSocket->GetSocket()));
 		quint32 accID = 0;
 		res = DB.GetAccountID(userName, accID);
 		if ( res == GS_NO_ERR )
 		{
+			foreach(GSPlayerPtr p, mPlayerList)
+			{
+				if ( p->GetAccountID() == accID )
+				{
+					LOG_ERR(QString("Player[AccountID:%1] is already exist, deny login").arg(accID));
+					return;
+				}
+			}
+
 			// save player ip
 			DB.UpdatePlayerIp(accID, player->GetSocket()->peerAddress().toString());
 			player->SetAccountID(accID);
@@ -92,7 +102,8 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 				// send room config
 
 				// send table list
-
+				sendTableInfo(player);
+				mPlayerList.push_back(player);
 			}
 			else
 				LOG_ERR(QString("GetPlayerInfo Failed! Reason:[%1]").arg(res));
@@ -126,10 +137,10 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 	}
 
 	//广播此玩家加入桌子的消息
-	Packet p;
-	p.SetMessage(MSG_GS_BC_TABLE_JOIN);
+	//Packet p;
+	//p.SetMessage(MSG_GS_BC_TABLE_JOIN);
 	//p.Put(who)
-	Broadcast(&p);
+	//Broadcast(&p);
 }
 
 void ZjhGameServer::stRefershTables()
@@ -163,4 +174,9 @@ void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet&
 	p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
 	//p.Put(who)
 	Broadcast(&p);
+}
+
+void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
+{
+	
 }

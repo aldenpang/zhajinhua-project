@@ -2,6 +2,7 @@
 #include "Table.h"
 #include "GSPlayer.h"
 #include "SharedData.h"
+#include "LogModule.h"
 using namespace SharedData;
 
 TableManager::TableManager()
@@ -33,16 +34,21 @@ int TableManager::StJoinTable( ISocketInstancePtr _player, uint _tableID, uint _
 	Table* table = mTables.value(_tableID);
 	if ( table )
 	{
-		int res = table->Join(_player);
+		int res = table->Join(_seatID, _player);
 		if(res != GS_NO_ERR)
 			return res;
 
+		LOG_D_INFO(QString("Player[%1:%2], join seat[%3] in table[%4] successful, table has [%5] player now.")
+			.arg(_player->IP()).arg(_player->Port()).arg(_tableID).arg(_seatID).arg(table->PlayerAmount()));
 		if ( table->PlayerAmount() >= MIN_PLAYER )
 		{
+			LOG_D_INFO(QString("Going to start game"));
 			//emit SiStartGame
 		}
 		else
 		{
+			LOG_D_INFO(QString("Player not enought to start game"));
+
 			// 等待当前局结束
 			GSPlayerPtr gsp = _player.staticCast<GSPlayer>();
 			gsp->SetIsWaiting(true);
