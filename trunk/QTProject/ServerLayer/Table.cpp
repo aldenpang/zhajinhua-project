@@ -12,19 +12,22 @@ Table::~Table()
 
 }
 
-int Table::Join( ISocketInstancePtr _player )
+int Table::Join( int seatID, ISocketInstancePtr _player )
 {
 	if ( mPlayers.size() >= MAX_PLAYER )
 		return ERR_GS_TABLE_FULL;
+
+	if ( mPlayers[seatID] != NULL )
+		return ERR_GS_SEAT_OCCUPY;
 	
-	mPlayers.insert(_player);
+	mPlayers.insert(seatID, _player);
 
 	return GS_NO_ERR;
 }
 
 int Table::Leave( ISocketInstancePtr _player )
 {
-	QSet<ISocketInstancePtr>::iterator itr = mPlayers.find(_player);
+	QMap<int, GSPlayerPtr>::iterator itr = mPlayers.find(_player);
 	if ( itr != mPlayers.end() )
 	{
 		mPlayers.erase(itr);

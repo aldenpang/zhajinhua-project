@@ -24,6 +24,11 @@ ConsoleClient::ConsoleClient()
 
 	mGameServer = new GameServerNet();
 	mGameServer->Init();
+	connect(mGameServer, SIGNAL(SiLoginOK()), this, SLOT(stGSLoginOK()));
+	connect(mGameServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stGSLoginFailed(quint32)));
+	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
+	connect(mGameServer, SIGNAL(SiDisconnected()), this, SLOT(stGSDisconnected()));
+
 }
 
 ConsoleClient::~ConsoleClient()
@@ -77,4 +82,26 @@ void ConsoleClient::stLSConnected()
 void ConsoleClient::stLSDisconnected()
 {
 	LOG_ERR("Login Server Disconnected");
+}
+
+void ConsoleClient::stGSLoginOK()
+{
+	LOG_INFO("Game Server Logined");
+	mGameServer->SendJoinTable(0, 0);
+}
+
+void ConsoleClient::stGSLoginFailed( quint32 _errorCode )
+{
+	LOG_ERR(QString("Game Server Login Failed:%1").arg(_errorCode));
+}
+
+void ConsoleClient::stGSConnected()
+{
+	LOG_INFO("Game Server Connected");
+	mGameServer->SendLoginGS(QString(__argv[1]), QString(__argv[2]));
+}
+
+void ConsoleClient::stGSDisconnected()
+{
+	LOG_ERR("Game Server Disconnected");
 }
