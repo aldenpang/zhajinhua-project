@@ -13,6 +13,7 @@
 #define GameServerNet_h__
 
 #include "INetLayer.h"
+#include "TableData.h"
 
 class GameServerNet : public INetLayer
 {
@@ -20,6 +21,7 @@ class GameServerNet : public INetLayer
 signals:
 	void SiLoginOK();
 	void SiLoginFailed(quint32 _errCode);
+	void SiTableList(QMap<int, TableData> _tables);
 public:
 	GameServerNet();
 	~GameServerNet();
@@ -33,6 +35,7 @@ public:
 protected:
 private:
 	void processLogin(Packet& _packet);
+	void processTableInfo(Packet& _packet);
 };
 
 #endif // GameServerNet_h__

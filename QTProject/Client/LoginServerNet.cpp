@@ -16,7 +16,7 @@ LoginServerNet::~LoginServerNet()
 void LoginServerNet::PacketHandler( Packet& _packet )
 {
 	int msg = _packet.GetMessage();
-	qDebug()<<"Client - Msg:"<<msg;
+	qDebug()<<"From Login Server - Recv Msg:"<<msg;
 
 	switch(msg)
 	{

@@ -23,4 +23,6 @@ void ISocketInstance::Send( Packet* _p )
 	//int leng = _p->GetDataLength();
 	//qint64 res = mSocket->write(QByteArray::fromRawData(sendBuff, leng));
 	qint64 res = mSocket->write(_p->GetData());
+	mSocket->flush();
+	qDebug()<<"Send "<<res<<" bytes to "<<mSocket->peerAddress().toString()<<":"<<mSocket->peerPort()<<" Msg: "<<_p->GetMessage();
 }

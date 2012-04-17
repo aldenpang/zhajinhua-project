@@ -6,6 +6,7 @@
 #include "HardcodeConfig.h"
 #include "GSPlayer.h"
 #include "TableManager.h"
+#include "Table.h"
 using namespace SharedData;
 
 //------------------------------------------------------------------------------
@@ -16,7 +17,7 @@ ZjhGameServer::ZjhGameServer()
 	//mTimer.start();
 	//connect(&mTimer, SIGNAL(timeout()), this, SLOT(stRefershTables()));
 
-	GSPlayer player(NULL);
+	//GSPlayer player(NULL);
 	//QString name = "adsf";
 	//player.SetNickName(name);
 	//player.AddPoker(27);
@@ -35,7 +36,7 @@ ZjhGameServer::~ZjhGameServer()
 void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
 	int msg = _packet.GetMessage();
-	qDebug()<<"ZjhGameServer - Msg:"<<msg;
+	qDebug()<<"ZjhGameServer - Recv Msg:"<<msg;
 
 	switch(msg)
 	{
@@ -100,9 +101,10 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 			{
 				LOG_INFO(QString("Player[AccountID:%1] is login").arg(player->GetAccountID()));
 				// send room config
-
+				
 				// send table list
 				sendTableInfo(player);
+
 				mPlayerList.push_back(player);
 			}
 			else
@@ -178,5 +180,30 @@ void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet&
 
 void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
 {
-	
+	Packet p;
+	p.SetMessage(MSG_GS_CL_TABLE_INFO);
+
+	QMap<int, Table*> tables = TABLE.GetTables();
+	p<<(int)tables.size();
+	QMap<int, Table*>::iterator itr;
+	for ( itr = tables.begin(); itr != tables.end(); itr++ )
+	{
+		p<<itr.key();
+		QMap<int, ISocketInstancePtr> players = itr.value()->GetSeatInfo();
+		QMap<int, ISocketInstancePtr>::iterator pItr;
+		for ( pItr = players.begin(); pItr  != players.end(); pItr++)
+		{
+			p<<pItr.key();
+			const GSPlayerPtr player = pItr.value().staticCast<GSPlayer>();
+			if ( pItr.value() )
+			{
+				p<<player->GetNickName();
+			}
+			else
+				p<<QString("");
+		}
+	}
+
+	LOG_INFO(QString("Send table list to player[%1:%2]").arg(_to->IP()).arg(_to->Port()));
+	_to->Send(&p);
 }
