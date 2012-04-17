@@ -28,6 +28,7 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stGSLoginFailed(quint32)));
 	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
 	connect(mGameServer, SIGNAL(SiDisconnected()), this, SLOT(stGSDisconnected()));
+	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
 
 }
 
@@ -104,4 +105,13 @@ void ConsoleClient::stGSConnected()
 void ConsoleClient::stGSDisconnected()
 {
 	LOG_ERR("Game Server Disconnected");
+}
+
+void ConsoleClient::stTableList( QMap<int, TableData> _tables )
+{
+	LOG_INFO(QString("Received Table Size:[%1]").arg(_tables.size()));
+
+
+
+	return;
 }

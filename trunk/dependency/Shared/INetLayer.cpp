@@ -76,10 +76,7 @@ void INetLayer::stRead()
 	if ( s && s->bytesAvailable() )
 	{
 		QByteArray buff = s->readAll();
-		//char buff[MAX_PACKET_SIZE]={0};
-		//s->read(buff, MAX_PACKET_SIZE);
-		qDebug()<<"Data Received:"<<buff;
-
+		qDebug()<<QString("Receive Packet from %1:%2, DataSize:%3").arg(s->peerAddress().toString()).arg(s->peerPort()).arg(buff.length());
 		Packet p;
 		p.SetData(buff);
 		if ( !p.IsTokenValid() )

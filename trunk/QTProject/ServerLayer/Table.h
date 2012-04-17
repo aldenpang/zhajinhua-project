@@ -14,7 +14,6 @@
 
 #include <QMap>
 #include <QVector>
-#include "GSPlayer.h"
 #include "ISocketInstance.h"
 #include "HardcodeConfig.h"
 
@@ -42,15 +41,20 @@ public:
 	~Table();
 
 	// returns: 0-successful 1-table full
-	int Join(int seatID, GSPlayerPtr _player);
+	int Join(int _seatID, ISocketInstancePtr _player);
 
 	// returns: 0-successful 1-player not exist
-	int Leave(GSPlayerPtr _player);
+	int Leave(int _seatID);
+
+	int Leave(ISocketInstancePtr _player);
 
 	int PlayerAmount(){return mPlayers.size();}
+
+	QMap<int, ISocketInstancePtr>& GetSeatInfo(){ return mPlayers; }
+
 protected:
 private:
-	QMap<int, GSPlayerPtr> mPlayers;
+	QMap<int, ISocketInstancePtr> mPlayers;	//<SeatID, PlayerInfo>
 	TableState mState;
 };
 

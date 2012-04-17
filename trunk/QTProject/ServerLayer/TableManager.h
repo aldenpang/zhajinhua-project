@@ -33,6 +33,7 @@ public slots:
 	// returns: 0-successful 1-player not exist 2-table not exist
 	int StLeaveTable(ISocketInstancePtr _player, uint _tableID);
 
+	QMap<int, Table*>& GetTables(){ return mTables; }
 public:
 	void AssignTables(int _amount=MAX_TABLE);
 protected:

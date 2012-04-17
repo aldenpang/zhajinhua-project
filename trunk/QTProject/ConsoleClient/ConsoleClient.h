@@ -13,6 +13,7 @@
 #define ConsoleClient_h__
 #include <QObject>
 #include <QVector>
+#include "TableData.h"
 #include "SharedData.h"
 using namespace SharedData;
 
@@ -42,6 +43,7 @@ private slots:
 	void stGSDisconnected();
 	void stGSLoginOK();
 	void stGSLoginFailed(quint32 _errorCode);
+	void stTableList(QMap<int, TableData> _tables);
 
 protected:
 private:
