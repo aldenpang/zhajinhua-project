@@ -194,8 +194,9 @@ void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
 		for ( pItr = players.begin(); pItr  != players.end(); pItr++)
 		{
 			p<<pItr.key();
-			const GSPlayerPtr player = pItr.value().staticCast<GSPlayer>();
-			if ( pItr.value() )
+			//const GSPlayerPtr player = pItr.value().staticCast<GSPlayer>();
+			GSPlayerPtr player = findPlayer(pItr.value());
+			if ( player )
 			{
 				p<<player->GetNickName();
 			}
@@ -206,4 +207,44 @@ void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
 
 	LOG_INFO(QString("Send table list to player[%1:%2]").arg(_to->IP()).arg(_to->Port()));
 	_to->Send(&p);
+}
+
+void ZjhGameServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
+{
+	// need remove this player
+	GSPlayerPtr player = findPlayer(_clientSocket);
+	if ( player != NULL )
+	{
+		// leave table first
+		//TABLE.
+		// remove player from memory
+		deletePlayer(player);
+	}
+}
+
+GSPlayerPtr ZjhGameServer::findPlayer( ISocketInstancePtr _input )
+{
+	QList<GSPlayerPtr>::iterator itr;
+	for ( itr = mPlayerList.begin(); itr != mPlayerList.end(); itr++ )
+	{
+		if ( (*itr)->GetSocket() == _input->GetSocket() )
+		{
+			return *itr;
+		}
+	}
+
+	LOG_ERR(QString("Can not find player from [%1:%2]").arg(_input->IP()).arg(_input->Port()));
+	return GSPlayerPtr(NULL);
+}
+
+void ZjhGameServer::deletePlayer( GSPlayerPtr _player )
+{
+	QTcpSocket* socket = _player->GetSocket();
+	QList<GSPlayerPtr>::iterator itr = qFind(mPlayerList.begin(), mPlayerList.end(), _player);
+	if ( itr != mPlayerList.end() )
+	{
+		LOG_INFO(QString("Remove player[AccountID:%1]").arg(_player->GetAccountID()));
+		mPlayerList.erase(itr);
+		LOG_INFO(QString("%1 player in mPlayerList now").arg(mPlayerList.size()));
+	}
 }

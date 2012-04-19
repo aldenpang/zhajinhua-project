@@ -18,7 +18,7 @@ class LoginServer : public IServerLayer
 {
 public:
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
-
+	virtual void ClientDisconnected(ISocketInstancePtr _clientSocket);
 protected:
 private:
 	void processClientLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);

@@ -88,7 +88,6 @@ void ConsoleClient::stLSDisconnected()
 void ConsoleClient::stGSLoginOK()
 {
 	LOG_INFO("Game Server Logined");
-	mGameServer->SendJoinTable(0, 0);
 }
 
 void ConsoleClient::stGSLoginFailed( quint32 _errorCode )
@@ -113,5 +112,6 @@ void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 
 
 
+	mGameServer->SendJoinTable(0, 0);
 	return;
 }

@@ -80,3 +80,8 @@ void LoginServer::sendGameList( int _gameType, ISocketInstancePtr _toSocket )
 	}
 	_toSocket->Send(&p);
 }
+
+void LoginServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
+{
+
+}
