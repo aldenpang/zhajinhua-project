@@ -65,8 +65,10 @@ void IServerLayer::stClientDisconnect()
 	if ( sockIns )
 	{
 		LOG_INFO(QString("socket disconnected: %1:%2").arg(sockIns->GetSocket()->peerAddress().toString()).arg(sockIns->GetSocket()->peerPort()));
-		mClientList.removeOne(sockIns);
 		//emit SiInfo(QString("ClientListSize:%1").arg(mClientList.size()));
+		ClientDisconnected(sockIns);
+		mClientList.removeOne(sockIns);
+		LOG_INFO(QString("mClientList size is %1 now").arg(mClientList.size()));
 	}
 }
 

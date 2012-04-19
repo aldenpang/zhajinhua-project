@@ -24,8 +24,8 @@ signals:
 
 	void SiStarted(quint16 _port);
 	void SiStoped();
-	void SiClientConnected(const QString& _info);
-	void SiClientDisconnected(const QString& _info);
+	//void SiClientConnected(const QString& _info);
+	//void SiClientDisconnected(ISocketInstancePtr _player);
 public slots:
 	virtual void StStart(QString _ip, uint _port);
 	virtual void StStop();
@@ -35,6 +35,8 @@ public:
 	virtual ~IServerLayer();
 
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet)=0;
+
+	virtual void ClientDisconnected(ISocketInstancePtr _clientSocket){};
 
 	virtual void Broadcast(Packet* _packet);
 private slots:

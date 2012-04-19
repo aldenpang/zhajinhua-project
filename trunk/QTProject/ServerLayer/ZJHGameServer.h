@@ -26,6 +26,7 @@ public:
 	~ZjhGameServer();
 
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	virtual void ClientDisconnected(ISocketInstancePtr _clientSocket);
 
 private:
 	void processLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);
@@ -39,6 +40,8 @@ private:
 
 private:
 	void sendTableInfo(GSPlayerPtr _to);
+	GSPlayerPtr findPlayer(ISocketInstancePtr _input);
+	void deletePlayer(GSPlayerPtr _player);
 };
 
 #endif //_ZJHGAMESERVER_H_
