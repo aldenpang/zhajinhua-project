@@ -52,6 +52,8 @@ public:
 
 	QMap<int, ISocketInstancePtr>& GetSeatInfo(){ return mPlayers; }
 
+	bool IsPlayerJoin(ISocketInstancePtr _player);
+
 protected:
 private:
 	QMap<int, ISocketInstancePtr> mPlayers;	//<SeatID, PlayerInfo>

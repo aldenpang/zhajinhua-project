@@ -51,3 +51,16 @@ int Table::Leave( ISocketInstancePtr _player )
 
 	return ERR_GS_PLAYER_NOT_FOUND;
 }
+
+bool Table::IsPlayerJoin( ISocketInstancePtr _player )
+{
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	{
+		if ( itr.value() == _player )
+		{
+			return true;
+		}
+	}
+	return false;
+}
