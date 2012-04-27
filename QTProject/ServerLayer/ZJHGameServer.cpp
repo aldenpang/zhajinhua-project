@@ -123,26 +123,32 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 	quint32 tableID = 0;
 	quint32 seatID = 0;
 	_packet>>tableID>>seatID;
-	GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
-
-	// 检查桌子是否可坐 & 加入桌子
-	int res = TABLE.StJoinTable(player, tableID, seatID);
-	LOG_INFO(QString("JoinTable result[%1]").arg(res));
-	if ( res != GS_NO_ERR )
+	GSPlayerPtr player = findPlayer(_incomeSocket);
+	if ( player )
 	{
-		// 不能加入桌子
-		Packet p;
-		p.SetMessage(MSG_GS_CL_TABLE_JOIN);
-		p<<res;
-		_incomeSocket->Send(&p);
-		return;
-	}
+		// 检查桌子是否可坐 & 加入桌子
+		int res = TABLE.StJoinTable(player, tableID, seatID);
+		LOG_INFO(QString("JoinTable result[%1]").arg(res));
+		if ( res != GS_NO_ERR )
+		{
+			// 不能加入桌子
+			Packet p;
+			p.SetMessage(MSG_GS_CL_TABLE_JOIN);
+			p<<res;
+			_incomeSocket->Send(&p);
+			return;
+		}
 
-	//广播此玩家加入桌子的消息
-	//Packet p;
-	//p.SetMessage(MSG_GS_BC_TABLE_JOIN);
-	//p.Put(who)
-	//Broadcast(&p);
+		//广播此玩家加入桌子的消息
+		//Packet p;
+		//p.SetMessage(MSG_GS_BC_TABLE_JOIN);
+		//p.Put(who)
+		//Broadcast(&p);
+	}
+	else
+	{
+		LOG_ERR(QString("Not Find Player from [%1:%2]").arg(_incomeSocket->IP()).arg(_incomeSocket->Port()));
+	}
 }
 
 void ZjhGameServer::stRefershTables()
@@ -154,28 +160,34 @@ void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet&
 {
 	quint32 tableID = 0;
 	_packet>>tableID;
-	GSPlayerPtr player = _incomeSocket.staticCast<GSPlayer>();
-
-	// 检查是否可离开桌子
-	int res = TABLE.StLeaveTable(player, tableID);
-	if ( res != GS_NO_ERR )
+	GSPlayerPtr player = findPlayer(_incomeSocket);
+	if ( player )
 	{
-		LOG_WARN("player can not join this table");
+		// 检查是否可离开桌子
+		int res = TABLE.StLeaveTable(player, tableID);
+		if ( res != GS_NO_ERR )
+		{
+			LOG_WARN("player can not join this table");
 
-		// 不能离开桌子
+			// 不能离开桌子
+			Packet p;
+			p.SetMessage(MSG_GS_CL_TABLE_LEAVE);
+			p<<res;
+			_incomeSocket->Send(&p);
+			return;
+		}
+		LOG_INFO("player can join this table");
+
+		//广播此玩家离开桌子的消息
 		Packet p;
-		p.SetMessage(MSG_GS_CL_TABLE_LEAVE);
-		p<<res;
-		_incomeSocket->Send(&p);
-		return;
+		p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
+		//p.Put(who)
+		Broadcast(&p);
 	}
-	LOG_INFO("player can join this table");
-
-	//广播此玩家离开桌子的消息
-	Packet p;
-	p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
-	//p.Put(who)
-	Broadcast(&p);
+	else
+	{
+		LOG_ERR(QString("Not Find Player from [%1:%2]").arg(_incomeSocket->IP()).arg(_incomeSocket->Port()));
+	}
 }
 
 void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
@@ -216,7 +228,8 @@ void ZjhGameServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
 	if ( player != NULL )
 	{
 		// leave table first
-		//TABLE.
+		int res = TABLE.StLeaveTable(player);
+		LOG_INFO(QString("Player Leave from table, res[%1]").arg(res));
 		// remove player from memory
 		deletePlayer(player);
 	}

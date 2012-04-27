@@ -30,6 +30,7 @@ public slots:
 	// returns: 0-successful 1-table full 2-table not exist
 	int StJoinTable(ISocketInstancePtr _player, uint _tableID, uint _seatID);
 
+	int StLeaveTable( ISocketInstancePtr _player );
 	// returns: 0-successful 1-player not exist 2-table not exist
 	int StLeaveTable(ISocketInstancePtr _player, uint _tableID);
 
