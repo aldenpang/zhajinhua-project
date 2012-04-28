@@ -26,6 +26,8 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_CL_TABLE_INFO:
 		processTableInfo(_packet);
 		break;
+	case MSG_GS_CL_TABLE_JOIN:
+		processTableJoin(_packet);
 	default:
 		break;
 	}
@@ -86,4 +88,12 @@ void GameServerNet::processTableInfo( Packet& _packet )
 	}
 
 	emit SiTableList(tables);
+}
+
+void GameServerNet::processTableJoin( Packet& _packet )
+{
+	quint32 res = 0;
+	_packet>>res;
+
+	emit SiTableJoinResult(res);
 }

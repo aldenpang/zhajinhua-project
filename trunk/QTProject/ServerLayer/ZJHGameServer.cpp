@@ -129,15 +129,14 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 		// 检查桌子是否可坐 & 加入桌子
 		int res = TABLE.StJoinTable(player, tableID, seatID);
 		LOG_INFO(QString("JoinTable result[%1]").arg(res));
-		if ( res != GS_NO_ERR )
-		{
-			// 不能加入桌子
-			Packet p;
-			p.SetMessage(MSG_GS_CL_TABLE_JOIN);
-			p<<res;
-			_incomeSocket->Send(&p);
-			return;
-		}
+
+		// 发送加入桌子的结果
+		Packet p;
+		p.SetMessage(MSG_GS_CL_TABLE_JOIN);
+		p<<res;
+		_incomeSocket->Send(&p);
+		return;
+
 
 		//广播此玩家加入桌子的消息
 		//Packet p;
@@ -214,6 +213,7 @@ void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
 			}
 			else
 				p<<QString("");
+			LOG_INFO(QString("Player[%1] seat at [%2]").arg(player->GetNickName()).arg(pItr.key()));
 		}
 	}
 

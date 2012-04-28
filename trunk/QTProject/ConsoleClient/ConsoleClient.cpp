@@ -29,6 +29,7 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
 	connect(mGameServer, SIGNAL(SiDisconnected()), this, SLOT(stGSDisconnected()));
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
+	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32)), this, SLOT(stTableJoinRes(quint32)));
 
 }
 
@@ -111,7 +112,45 @@ void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 	LOG_INFO(QString("Received Table Size:[%1]").arg(_tables.size()));
 
 
+	// TODO: 这里应该从桌子列表中选择一个有人的进入（为了快速配桌）
+	int tableID = 0; 
+	int seatID = 0;
+	QMap<int, TableData>::iterator itr;
+	for ( itr = _tables.begin(); itr != _tables.end(); itr++)
+	{
+		if ( itr.value().isSeatOccupied(seatID) )
+		{
+			seatID++;
+		}
+		else 
+			break;
+	}
 
-	mGameServer->SendJoinTable(0, 0);
+	LOG_INFO(QString("Join to table[%1] seat[%2]").arg(tableID).arg(seatID));
+	mGameServer->SendJoinTable(tableID, seatID);
 	return;
+}
+
+void ConsoleClient::stTableJoinRes( quint32 _res )
+{
+	if ( _res == GS_NO_ERR )
+	{
+		LOG_INFO("Join Table OK");
+	}
+	else if ( _res == ERR_GS_TABLE_NOT_FOUND )
+	{
+		LOG_ERR(QString("Table Join Result:ERR_GS_TABLE_NOT_FOUND"));
+	}
+	else if ( _res == ERR_GS_TABLE_FULL )
+	{
+		LOG_ERR(QString("Table Join Result:ERR_GS_TABLE_FULL"));
+	}
+	else if ( _res == ERR_GS_SEAT_OCCUPY )
+	{
+		LOG_ERR(QString("Table Join Result:ERR_GS_SEAT_OCCUPY"));
+	}
+	else
+		LOG_ERR(QString("Table Join Result:%1").arg(_res));
+
+
 }
