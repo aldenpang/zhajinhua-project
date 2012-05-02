@@ -117,7 +117,7 @@
 				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="0"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\$(InputName).pdb"
+				ProgramDataBaseFileName="$(IntDir)\vc90.pdb"
 				DebugInformationFormat="3"
 			/>
 			<Tool
