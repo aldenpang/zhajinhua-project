@@ -114,7 +114,7 @@
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\$(InputName).pdb"
+				ProgramDataBaseFileName="$(IntDir)\vc90.pdb"
 				DebugInformationFormat="3"
 			/>
 			<Tool
