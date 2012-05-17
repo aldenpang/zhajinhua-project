@@ -39,7 +39,7 @@ int TableManager::StJoinTable( ISocketInstancePtr _player, uint _tableID, uint _
 			return res;
 
 		LOG_D_INFO(QString("Player[%1:%2], join seat[%3] in table[%4] successful, table has [%5] player now.")
-			.arg(_player->IP()).arg(_player->Port()).arg(_tableID).arg(_seatID).arg(table->PlayerAmount()));
+			.arg(_player->IP()).arg(_player->Port()).arg(_seatID).arg(_tableID).arg(table->PlayerAmount()));
 		if ( table->PlayerAmount() >= MIN_PLAYER )
 		{
 			LOG_D_INFO(QString("Going to start game"));

@@ -69,14 +69,16 @@ void GameServerNet::processTableInfo( Packet& _packet )
 	QMap<int, TableData> tables;
 	quint32 tableAmount = 0;
 	quint32 tableID = 0;
+	int playerAmount = 0;
 	_packet>>tableAmount;
 	
 	for ( int i = 0; i<tableAmount; i++ )
 	{
 		TableData table;
 		_packet>>tableID;
+		_packet>>playerAmount;
 		table.SetID(tableID);
-		for ( int j = 0; j < 4; j++ )
+		for ( int j = 0; j < playerAmount; j++ )
 		{
 			int seatID = 0;
 			_packet>>seatID;

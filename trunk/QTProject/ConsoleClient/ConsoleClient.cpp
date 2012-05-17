@@ -110,7 +110,14 @@ void ConsoleClient::stGSDisconnected()
 void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 {
 	LOG_INFO(QString("Received Table Size:[%1]").arg(_tables.size()));
+	//QMap<int, QString> playerTable0 = _tables[0].GetPlayers();
+	//QMap<int, QString>::iterator playerTable0Itr;
+	//for ( playerTable0Itr = playerTable0.begin(); playerTable0Itr != playerTable0.end(); playerTable0Itr++ )
+	//{
+	//	LOG_INFO(QString("##### [%1] seat on [%2]").arg(playerTable0Itr.value()).arg(playerTable0Itr.key()));
+	//}
 
+	//return;
 
 	// TODO: 这里应该从桌子列表中选择一个有人的进入（为了快速配桌）
 	int tableID = 0; 
@@ -118,14 +125,24 @@ void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 	QMap<int, TableData>::iterator itr;
 	for ( itr = _tables.begin(); itr != _tables.end(); itr++)
 	{
-		if ( itr.value().isSeatOccupied(seatID) )
+		quint32 playerNum = itr.value().GetPlayers().size();
+		for ( int i = 0; i<playerNum; i++)
 		{
-			seatID++;
-		}
-		else 
-			break;
-	}
+			if ( itr.value().isSeatOccupied(i) )
+			{
+				LOG_INFO(QString("Seat[%1] in Table[%2] is occupied").arg(i).arg(itr.key()));
+			}
+			else 
+			{
+				seatID = i;
+				LOG_INFO(QString("Seat[%1] in Table[%2] is not occupied").arg(seatID).arg(itr.key()));
+				goto End;
+				//break;
+			}
 
+		}
+	}
+End:
 	LOG_INFO(QString("Join to table[%1] seat[%2]").arg(tableID).arg(seatID));
 	mGameServer->SendJoinTable(tableID, seatID);
 	return;
