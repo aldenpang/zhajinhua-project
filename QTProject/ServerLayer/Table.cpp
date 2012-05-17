@@ -1,10 +1,13 @@
 #include "Table.h"
 #include "SharedData.h"
+#include "LogModule.h"
+#include <QDateTime>
 using namespace SharedData;
 
 Table::Table()
+: mState(TS_WAITING)
 {
-
+	initPokers();
 }
 
 Table::~Table()
@@ -63,4 +66,49 @@ bool Table::IsPlayerJoin( ISocketInstancePtr _player )
 		}
 	}
 	return false;
+}
+
+void Table::initPokers()
+{
+	for ( int i = 0; i<MAX_POKERS_ZJH; i++ )
+	{
+		PokerPtr p = PokerPtr(new Poker);
+		p->mID = i;				// ID：从2～K～A，0～51，按照黑红梅方顺序
+		p->mValue = i % 13;		// 牌面值： 从2～K～A，0~12；做比大小用
+		p->mFlower = (PokerFlower)(i / 13);	// 花色
+		mPokers.push_back(p);
+	}
+
+	Shuffle();
+}
+
+void Table::Shuffle()
+{
+	qsrand(QDateTime::currentMSecsSinceEpoch());
+	//LOG_D_INFO(QDateTime::currentMSecsSinceEpoch());
+// 	QString buff;
+// 	LOG_D_INFO("Before Shuffle");
+// 	for ( int i = 0; i<MAX_POKERS_ZJH; i++ )
+// 	{
+// 		buff += QString("%1").arg(mPokers[i]->mID);
+// 		buff += QString("/");
+// 	}
+// 	LOG_D_INFO(buff);
+
+	for ( int i = 0; i<MAX_POKERS_ZJH; i++ )
+	{
+		int rand = qrand() % MAX_POKERS_ZJH;
+		PokerPtr tempP = mPokers.front();
+		mPokers.pop_front();
+		mPokers.insert(rand, tempP);
+	}
+// 
+// 	buff = "";
+// 	LOG_D_INFO("After Shuffle");
+// 	for ( int i = 0; i<MAX_POKERS_ZJH; i++ )
+// 	{
+// 		buff += QString("%1").arg(mPokers[i]->mID);
+// 		buff += QString("/");
+// 	}
+// 	LOG_D_INFO(buff);
 }

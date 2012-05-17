@@ -16,6 +16,7 @@
 #include <QVector>
 #include "ISocketInstance.h"
 #include "HardcodeConfig.h"
+#include "Poker.h"
 
 enum TableState
 {
@@ -54,10 +55,16 @@ public:
 
 	bool IsPlayerJoin(ISocketInstancePtr _player);
 
+	void Shuffle();
+
 protected:
 private:
 	QMap<int, ISocketInstancePtr> mPlayers;	//<SeatID, PlayerInfo>
 	TableState mState;
+	QVector<PokerPtr>		mPokers;
+
+private:
+	void initPokers();
 };
 
 #endif // Table_h__

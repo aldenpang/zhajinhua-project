@@ -429,6 +429,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\dependency\Shared\Poker.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\dependency\Shared\SharedData.h"
 					>
 				</File>
