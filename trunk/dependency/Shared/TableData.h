@@ -14,13 +14,17 @@
 #include <QMap>
 #include "MyToolkits.h"
 #include "LogModule.h"
+#include "SharedData.h"
 
 class TableData
 {
 public:
 	TableData()
 	{
-
+		for ( int i = 0; i <MAX_PLAYER; i++ )
+		{
+			mPlayers.insert(i, "EmptySeat");
+		}
 	}
 
 	PROPERTY(quint32,ID);
@@ -35,6 +39,7 @@ public:
 		QMap<int, QString>::iterator itr = mPlayers.find(_seatID);
 		if ( itr != mPlayers.end() )
 		{
+			LOG_D_INFO(QString("[%1] is on seatID[%2]").arg(itr.value()).arg(itr.key()));
 			if ( itr.value() == QString("EmptySeat") )
 				return false;
 			else

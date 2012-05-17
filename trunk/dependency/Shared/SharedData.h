@@ -93,6 +93,13 @@ namespace SharedData
 		quint32 mScore;
 		quint32 mUnit; // 0 - silver; 1 - gold
 	};
+
+#define MIN_PLAYER 2
+#define MAX_PLAYER 4
+#define MAX_POKERS_ZJH 52
+#define MAX_HAND_POKER 3
+
+
 }
 
 #endif // sharedData_h__
