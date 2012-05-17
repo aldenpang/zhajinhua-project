@@ -44,7 +44,7 @@
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\$(InputName).pdb"
+				ProgramDataBaseFileName="$(IntDir)\vc90.pdb"
 				DebugInformationFormat="0"
 			/>
 			<Tool

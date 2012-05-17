@@ -200,20 +200,23 @@ void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
 	for ( itr = tables.begin(); itr != tables.end(); itr++ )
 	{
 		p<<itr.key();
+		p<<itr.value()->PlayerAmount();
+		LOG_INFO(QString("[%1] players in table [%2]").arg(itr.value()->PlayerAmount()).arg(itr.key()));
 		QMap<int, ISocketInstancePtr> players = itr.value()->GetSeatInfo();
 		QMap<int, ISocketInstancePtr>::iterator pItr;
 		for ( pItr = players.begin(); pItr  != players.end(); pItr++)
 		{
-			p<<pItr.key();
-			//const GSPlayerPtr player = pItr.value().staticCast<GSPlayer>();
-			GSPlayerPtr player = findPlayer(pItr.value());
-			if ( player )
+			if ( pItr.value()->GetSocket() != NULL )
 			{
-				p<<player->GetNickName();
-			}
-			else
-				p<<QString("");
-			LOG_INFO(QString("Player[%1] seat at [%2]").arg(player->GetNickName()).arg(pItr.key()));
+				p<<pItr.key();
+				//const GSPlayerPtr player = pItr.value().staticCast<GSPlayer>();
+				GSPlayerPtr player = findPlayer(pItr.value());
+				if ( player )
+				{
+					p<<player->GetNickName();
+					LOG_INFO(QString("Player[%1] seat at [%2]").arg(player->GetNickName()).arg(pItr.key()));
+				}
+			}		
 		}
 	}
 
@@ -237,6 +240,11 @@ void ZjhGameServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
 
 GSPlayerPtr ZjhGameServer::findPlayer( ISocketInstancePtr _input )
 {
+	if ( mPlayerList.isEmpty() )
+		return GSPlayerPtr(NULL);
+	if ( _input->GetSocket()  == NULL )
+		return GSPlayerPtr(NULL);
+	
 	QList<GSPlayerPtr>::iterator itr;
 	for ( itr = mPlayerList.begin(); itr != mPlayerList.end(); itr++ )
 	{
