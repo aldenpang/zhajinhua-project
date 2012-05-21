@@ -115,10 +115,7 @@ void GSPlayer::AddPoker( quint32 _id )
 	if ( _id > 51 || _id < 0 )
 		return;
 
-	PokerPtr p = PokerPtr(new Poker());
-	p->mValue = _id % 13 + 2;		// +2 是因为整除得到的值是从0开始，而牌面值是从2开始
-	p->mID = _id;
-	p->mFlower = (PokerFlower)(int)(_id/13);
+	PokerPtr p = PokerPtr(new Poker(_id));
 
 	mHandPoker.append(p);
 

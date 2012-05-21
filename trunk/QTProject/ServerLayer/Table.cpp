@@ -72,10 +72,7 @@ void Table::initPokers()
 {
 	for ( int i = 0; i<MAX_POKERS_ZJH; i++ )
 	{
-		PokerPtr p = PokerPtr(new Poker);
-		p->mID = i;				// ID：从2～K～A，0～51，按照黑红梅方顺序
-		p->mValue = i % 13;		// 牌面值： 从2～K～A，0~12；做比大小用
-		p->mFlower = (PokerFlower)(i / 13);	// 花色
+		PokerPtr p = PokerPtr(new Poker(i));
 		mPokers.push_back(p);
 	}
 
