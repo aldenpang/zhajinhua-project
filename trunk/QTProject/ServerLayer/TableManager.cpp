@@ -3,6 +3,7 @@
 #include "GSPlayer.h"
 #include "SharedData.h"
 #include "LogModule.h"
+
 using namespace SharedData;
 
 TableManager::TableManager()
@@ -48,10 +49,6 @@ int TableManager::StJoinTable( ISocketInstancePtr _player, uint _tableID, uint _
 		else
 		{
 			LOG_D_INFO(QString("Player not enought to start game"));
-
-			// 等待当前局结束
-			GSPlayerPtr gsp = _player.staticCast<GSPlayer>();
-			gsp->SetIsWaiting(true);
 		}
 	}
 	else
@@ -91,4 +88,14 @@ int TableManager::StLeaveTable( ISocketInstancePtr _player )
 
 	LOG_D_ERR(QString("NOT Found Player[%1:%2]").arg(_player->IP()).arg(_player->Port()));
 	return ERR_GS_TABLE_NOT_FOUND;
+}
+
+void TableManager::SetReadyToStart( quint32 _tableID, quint32 _seatID )
+{
+	QMap<int, Table*>::iterator itr = mTables.find(_tableID);
+	if ( itr != mTables.end() )
+	{
+
+	}
+
 }

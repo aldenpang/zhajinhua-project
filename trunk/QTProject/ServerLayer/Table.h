@@ -55,16 +55,28 @@ public:
 
 	bool IsPlayerJoin(ISocketInstancePtr _player);
 
-	void Shuffle();
+	void UpdateReadyState( int _seatID );
 
 protected:
 private:
-	QMap<int, ISocketInstancePtr> mPlayers;	//<SeatID, PlayerInfo>
-	TableState mState;
-	QVector<PokerPtr>		mPokers;
+	QMap<int, ISocketInstancePtr>		mPlayers;	//<SeatID, PlayerInfo>
+	TableState							mState;
+	QVector<PokerPtr>					mPokers;
+	int									mReadyAmount;	// 记录有多少个玩家已经准备好开始了，如果跟NotWaiting的玩家数相等，则开始发牌
 
 private:
 	void initPokers();
+
+	void shuffle(bool _print=false);
+
+	void startTable();
+
+	void broadcast( Packet* _p );
+
+	PokerPtr distribute();
+
+	QMap<int, ISocketInstancePtr> getPlayingPlayers();
+
 };
 
 #endif // Table_h__

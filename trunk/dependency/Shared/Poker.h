@@ -56,10 +56,11 @@ public:
 	quint32		mValue;		// 牌面值： 从2～K～A，0~12；做比大小用
 	PokerFlower	mFlower;	// 花色
 
-	Poker()
+	Poker(quint32 _id)
 	{
-		mID=mValue=0;
-		mFlower = HEITAO;
+		mID = _id;
+		mValue = _id % 13 + 2;		// +2 是因为整除得到的值是从0开始，而牌面值是从2开始
+		mFlower = (PokerFlower)(int)(_id/13);
 	}
 
 	// for fit hash table

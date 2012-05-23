@@ -49,6 +49,8 @@ public:
 
 	void AddPoker(quint32 _id);
 
+	void AddPoker(PokerPtr _poker);
+
 	void CleanPokers();
 
 	// 判断别人的牌是否能够压上

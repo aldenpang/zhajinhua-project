@@ -37,6 +37,8 @@ public slots:
 	QMap<int, Table*>& GetTables(){ return mTables; }
 public:
 	void AssignTables(int _amount=MAX_TABLE);
+
+	void SetReadyToStart(quint32 _tableID, quint32 _seatID);
 protected:
 private:
 	QMap<int, Table*> mTables;
