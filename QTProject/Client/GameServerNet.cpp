@@ -28,6 +28,10 @@ void GameServerNet::PacketHandler( Packet& _packet )
 		break;
 	case MSG_GS_CL_TABLE_JOIN:
 		processTableJoin(_packet);
+		break;
+	case MSG_GS_CL_START_GAME:
+		processStartGame(_packet);
+		break;
 	default:
 		break;
 	}
@@ -98,4 +102,9 @@ void GameServerNet::processTableJoin( Packet& _packet )
 	_packet>>res;
 
 	emit SiTableJoinResult(res);
+}
+
+void GameServerNet::processStartGame( Packet& _packet )
+{
+	emit SiStartGame();
 }

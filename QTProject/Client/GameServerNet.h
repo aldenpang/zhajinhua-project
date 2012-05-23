@@ -23,6 +23,7 @@ signals:
 	void SiLoginFailed(quint32 _errCode);
 	void SiTableList(QMap<int, TableData> _tables);
 	void SiTableJoinResult(quint32 _res);
+	void SiStartGame();
 public:
 	GameServerNet();
 	~GameServerNet();
@@ -38,6 +39,8 @@ private:
 	void processLogin(Packet& _packet);
 	void processTableInfo(Packet& _packet);
 	void processTableJoin(Packet& _packet);
+	void processStartGame(Packet& _packet);
+	
 };
 
 #endif // GameServerNet_h__
