@@ -49,6 +49,8 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pa
 	case MSG_CL_GS_TABLE_LEAVE:
 		processTableLeave(_incomeSocket, _packet);
 		break;
+	case MSG_CL_GS_SYNC_START:
+		processSyncStart(_incomeSocket, _packet);
 	default:
 		break;
 	}
@@ -268,4 +270,15 @@ void ZjhGameServer::deletePlayer( GSPlayerPtr _player )
 		mPlayerList.erase(itr);
 		LOG_INFO(QString("%1 player in mPlayerList now").arg(mPlayerList.size()));
 	}
+}
+
+void ZjhGameServer::processSyncStart( ISocketInstancePtr _incomeSocket, Packet& _packet )
+{
+	// 当玩家loading完成以后进入游戏时发送此消息
+	quint32 tableID=0;
+	quint32 seatID=0;
+	_packet>>tableID>>seatID;
+
+	TABLE.SetReadyToStart(tableID, seatID);
+
 }

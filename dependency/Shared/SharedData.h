@@ -37,7 +37,11 @@ namespace SharedData
 
 		MSG_GS_CL_TABLE_INFO,
 
-		MSG_GS_START_GAME,
+		MSG_GS_CL_START_GAME,
+
+		MSG_GS_CL_DISTRIBUTE,
+
+		MSG_CL_GS_SYNC_START,		// 同步消息
 
 		// gameserver broadcast
 		MSG_GS_BC_TABLE_JOIN,

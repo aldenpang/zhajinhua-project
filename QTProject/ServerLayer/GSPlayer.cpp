@@ -125,6 +125,16 @@ void GSPlayer::AddPoker( quint32 _id )
 	}
 }
 
+void GSPlayer::AddPoker( PokerPtr _poker )
+{
+	mHandPoker.append(_poker);
+
+	if ( mHandPoker.size() == MAX_HAND_POKER )
+	{
+		mHandPokerType = analysePokerType(mHandPoker);
+	}
+}
+
 void GSPlayer::CleanPokers()
 {
 	mHandPoker.clear();

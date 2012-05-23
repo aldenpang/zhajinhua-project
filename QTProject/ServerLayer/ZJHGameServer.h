@@ -32,6 +32,8 @@ private:
 	void processLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processTableJoin(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processTableLeave(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	void processSyncStart(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	
 private slots:
 	void stRefershTables();
 private:
