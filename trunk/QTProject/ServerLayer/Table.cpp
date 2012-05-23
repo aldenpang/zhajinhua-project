@@ -154,12 +154,16 @@ void Table::shuffle(bool _print)
 void Table::startTable()
 {
 	// 洗牌
-	shuffle(true);
+	shuffle();
 
 	// 广播开始消息
 	Packet p;
 	p.SetMessage(MSG_GS_CL_START_GAME);
 	broadcast(&p);
+	LOG_D_INFO("Broadcast MSG_GS_CL_START_GAME");
+
+	// 重置已经ready的玩家
+	mReadyAmount = 0;
 }
 
 void Table::broadcast( Packet* _p )

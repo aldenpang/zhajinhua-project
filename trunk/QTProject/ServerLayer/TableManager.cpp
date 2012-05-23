@@ -95,7 +95,7 @@ void TableManager::SetReadyToStart( quint32 _tableID, quint32 _seatID )
 	QMap<int, Table*>::iterator itr = mTables.find(_tableID);
 	if ( itr != mTables.end() )
 	{
-
+		itr.value()->UpdateReadyState(_seatID);
 	}
 
 }

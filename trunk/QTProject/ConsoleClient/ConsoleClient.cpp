@@ -30,6 +30,8 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiDisconnected()), this, SLOT(stGSDisconnected()));
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
 	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32)), this, SLOT(stTableJoinRes(quint32)));
+	connect(mGameServer, SIGNAL(SiStartGame()), this, SLOT(stStartGame()));
+
 
 }
 
@@ -169,5 +171,16 @@ void ConsoleClient::stTableJoinRes( quint32 _res )
 	else
 		LOG_ERR(QString("Table Join Result:%1").arg(_res));
 
+
+}
+
+void ConsoleClient::stStartGame()
+{
+	LOG_INFO("Start Game, client should start loading");
+
+	// 在ConsoleClient里，直接发送开始消息MSG_CL_GS_SYNC_START
+	Packet p;
+	p.SetMessage(MSG_CL_GS_SYNC_START);
+	mGameServer->Send(&p);
 
 }
