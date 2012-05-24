@@ -39,6 +39,9 @@ public:
 	void AssignTables(int _amount=MAX_TABLE);
 
 	void SetReadyToStart(quint32 _tableID, quint32 _seatID);
+	
+	void Follow(quint32 _tableID, quint32 _seatID, quint32 _chip);
+
 protected:
 private:
 	QMap<int, Table*> mTables;

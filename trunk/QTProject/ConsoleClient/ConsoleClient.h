@@ -46,7 +46,7 @@ private slots:
 	void stGSLoginOK();
 	void stGSLoginFailed(quint32 _errorCode);
 	void stTableList(QMap<int, TableData> _tables);
-	void stTableJoinRes(quint32 _res, quint32 _seatID);
+	void stTableJoinRes(quint32 _res, quint32 _tableID, quint32 _seatID);
 	void stStartGame(TableInfo _info);
 	void stDropBaseChip(int _baseChip);
 	void stDistribute(QVector<int> _pokers);
@@ -61,6 +61,7 @@ private:
 	QVector<PokerPtr> mPokers;
 	int mCurrentPlayer;
 	int mMySeatID;
+	int mMyTableID;
 };
 
 #endif // ConsoleClient_h__

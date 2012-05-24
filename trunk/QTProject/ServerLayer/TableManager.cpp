@@ -99,3 +99,12 @@ void TableManager::SetReadyToStart( quint32 _tableID, quint32 _seatID )
 	}
 
 }
+
+void TableManager::Follow( quint32 _tableID, quint32 _seatID, quint32 _chip )
+{
+	QMap<int, Table*>::iterator itr = mTables.find(_tableID);
+	if ( itr != mTables.end() )
+	{
+		itr.value()->Follow(_seatID, _chip);
+	}
+}

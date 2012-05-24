@@ -51,6 +51,10 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pa
 		break;
 	case MSG_CL_GS_SYNC_START:
 		processSyncStart(_incomeSocket, _packet);
+		break;
+	case MSG_CL_GS_FOLLOW:
+		processFollow(_incomeSocket, _packet);
+		break;
 	default:
 		break;
 	}
@@ -135,7 +139,7 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 		// 发送加入桌子的结果
 		Packet p;
 		p.SetMessage(MSG_GS_CL_TABLE_JOIN);
-		p<<res<<seatID;
+		p<<res<<tableID<<seatID;
 		_incomeSocket->Send(&p);
 		return;
 
@@ -280,5 +284,17 @@ void ZjhGameServer::processSyncStart( ISocketInstancePtr _incomeSocket, Packet& 
 	_packet>>tableID>>seatID;
 
 	TABLE.SetReadyToStart(tableID, seatID);
+
+}
+
+void ZjhGameServer::processFollow( ISocketInstancePtr _incomeSocket, Packet& _packet )
+{
+	int tableID = 0;
+	int seatID = 0;
+	int chip = 0;
+
+	_packet>>tableID>>seatID>>chip;
+
+	TABLE.Follow(tableID, seatID, chip);
 
 }
