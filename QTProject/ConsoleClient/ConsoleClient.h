@@ -15,6 +15,8 @@
 #include <QVector>
 #include "TableData.h"
 #include "SharedData.h"
+#include "TableInfo.h"
+#include "Poker.h"
 using namespace SharedData;
 
 class LoginServerNet;
@@ -45,13 +47,17 @@ private slots:
 	void stGSLoginFailed(quint32 _errorCode);
 	void stTableList(QMap<int, TableData> _tables);
 	void stTableJoinRes(quint32 _res);
-	void stStartGame();
+	void stStartGame(TableInfo _info);
+	void stDropBaseChip(int _baseChip);
+	void stDistribute(QVector<int> _pokers);
 
 protected:
 private:
-
 	LoginServerNet* mLoginServer;
 	GameServerNet* mGameServer;
+
+	TableInfo mCurrentTableInfo;
+	QVector<PokerPtr> mPokers;
 };
 
 #endif // ConsoleClient_h__

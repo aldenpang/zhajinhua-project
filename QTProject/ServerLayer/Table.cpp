@@ -159,6 +159,7 @@ void Table::startTable()
 	// 广播开始消息
 	Packet p;
 	p.SetMessage(MSG_GS_CL_START_GAME);
+	p<<BASE_CHIP<<TOP_CHIP;
 	broadcast(&p);
 	LOG_D_INFO("Broadcast MSG_GS_CL_START_GAME");
 
@@ -210,8 +211,20 @@ void Table::UpdateReadyState( int _seatID )
 	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
 	if ( mReadyAmount >= players.size() )
 	{
-		// 每人发三张牌
+		// 先投底注
+		int baseChip = BASE_CHIP;
+		Packet p;
+		p.SetMessage(MSG_GS_CL_BASE_CHIP);
+		p<<baseChip;
+		broadcast(&p);
 		QMap<int, ISocketInstancePtr>::iterator itr;
+		for ( itr = players.begin(); itr != players.end(); itr++ )
+		{
+			GSPlayerPtr player = itr.value().staticCast<GSPlayer>();
+			player->SetCoin(player->GetCoin()-baseChip);
+			LOG_D_INFO(QString("After base chip, [%1] has [%2] left").arg(player->GetNickName()).arg(player->GetCoin()));
+		}
+		// 每人发三张牌
 		for ( itr = players.begin(); itr != players.end(); itr++ )
 		{
 			Packet pp;

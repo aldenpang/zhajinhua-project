@@ -274,7 +274,7 @@ void ZjhGameServer::deletePlayer( GSPlayerPtr _player )
 
 void ZjhGameServer::processSyncStart( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
-	// 当玩家loading完成以后进入游戏时发送此消息
+	// 当玩家loading完成以后进入游戏时接收此消息
 	quint32 tableID=0;
 	quint32 seatID=0;
 	_packet>>tableID>>seatID;

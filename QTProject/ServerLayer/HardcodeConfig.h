@@ -14,5 +14,7 @@
 
 #define MAX_TABLE 10
 #define REFRESH_INTERVAL 10	// second
+#define BASE_CHIP 5
+#define TOP_CHIP 100
 
 #endif // HardcodeConfig_h__

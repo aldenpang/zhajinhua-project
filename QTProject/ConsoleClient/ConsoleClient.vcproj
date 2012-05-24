@@ -509,6 +509,10 @@
 				RelativePath="..\..\dependency\Shared\TableData.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\dependency\Shared\TableInfo.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
