@@ -39,6 +39,9 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_CL_DISTRIBUTE:
 		processDistribute(_packet);
 		break;
+	case MSG_GS_CL_CURRENT_PLAYER:
+		processCurrentPlayer(_packet);
+		break;
 	default:
 		break;
 	}
@@ -106,15 +109,16 @@ void GameServerNet::processTableInfo( Packet& _packet )
 void GameServerNet::processTableJoin( Packet& _packet )
 {
 	quint32 res = 0;
-	_packet>>res;
+	quint32 seatID = 0;
+	_packet>>res>>seatID;
 
-	emit SiTableJoinResult(res);
+	emit SiTableJoinResult(res, seatID);
 }
 
 void GameServerNet::processStartGame( Packet& _packet )
 {
 	TableInfo info;
-	_packet>>info.mBaseChip>>info.mTopChip;
+	_packet>>info.mBaseChip>>info.mTopChip>>info.mDealerSeat;
 
 	emit SiStartGame(info);
 }
@@ -137,4 +141,12 @@ void GameServerNet::processDistribute( Packet& _packet )
 		pokers.push_back(poker);
 	}
 	emit SiDistribute(pokers);
+}
+
+void GameServerNet::processCurrentPlayer( Packet& _packet )
+{
+	int currentPlayer = 0;
+	_packet>>currentPlayer;
+
+	emit SiCurrentPlayer(currentPlayer);
 }

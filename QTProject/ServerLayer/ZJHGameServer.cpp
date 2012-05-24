@@ -135,7 +135,7 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 		// 发送加入桌子的结果
 		Packet p;
 		p.SetMessage(MSG_GS_CL_TABLE_JOIN);
-		p<<res;
+		p<<res<<seatID;
 		_incomeSocket->Send(&p);
 		return;
 

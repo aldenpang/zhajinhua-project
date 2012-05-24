@@ -4,6 +4,8 @@
 #include "LogModule.h"
 
 ConsoleClient::ConsoleClient()
+: mCurrentPlayer(0)
+, mMySeatID(0)
 {
 	connect(this, SIGNAL(SiInfo(const QString&)), &LOG, SLOT(StInfo(const QString&)));
 	connect(this, SIGNAL(SiWarn(const QString&)), &LOG, SLOT(StWarn(const QString&)));
@@ -29,10 +31,11 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
 	connect(mGameServer, SIGNAL(SiDisconnected()), this, SLOT(stGSDisconnected()));
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
-	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32)), this, SLOT(stTableJoinRes(quint32)));
+	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32)), this, SLOT(stTableJoinRes(quint32, quint32)));
 	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(stStartGame(TableInfo)));
 	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
+	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
 
 
 }
@@ -152,11 +155,12 @@ End:
 	return;
 }
 
-void ConsoleClient::stTableJoinRes( quint32 _res )
+void ConsoleClient::stTableJoinRes( quint32 _res, quint32 _seatID )
 {
 	if ( _res == GS_NO_ERR )
 	{
 		LOG_INFO("Join Table OK");
+		mMySeatID = _seatID;
 	}
 	else if ( _res == ERR_GS_TABLE_NOT_FOUND )
 	{
@@ -178,7 +182,7 @@ void ConsoleClient::stTableJoinRes( quint32 _res )
 
 void ConsoleClient::stStartGame(TableInfo _info)
 {
-	LOG_INFO(QString("Start Game, BaseCoin[%1]TopCoin[%2] client should start loading").arg(_info.mBaseChip).arg(_info.mTopChip));
+	LOG_INFO(QString("Start Game, BaseCoin[%1]TopCoin[%2]DealerSeat[%3] client should start loading").arg(_info.mBaseChip).arg(_info.mTopChip).arg(_info.mDealerSeat));
 
 	mCurrentTableInfo = _info;
 
@@ -206,4 +210,14 @@ void ConsoleClient::stDistribute( QVector<int> _pokers )
 		mPokers.push_back(poker);
 	}
 	LOG_INFO(QString("Distribute Pokers[%1]").arg(log));
+}
+
+void ConsoleClient::stCurrentPlayer( int _currentPlayer )
+{
+	mCurrentPlayer = _currentPlayer;
+	LOG_INFO(QString("CurrentPlayer[%1]").arg(mCurrentPlayer));
+	// 如果当前玩家是自己，那么就做动作（下注，跟注、加注）
+	if ( mCurrentPlayer == mMySeatID )
+	{
+	}
 }

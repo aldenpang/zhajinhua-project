@@ -63,6 +63,8 @@ private:
 	TableState							mState;
 	QVector<PokerPtr>					mPokers;
 	int									mReadyAmount;	// 记录有多少个玩家已经准备好开始了，如果跟NotWaiting的玩家数相等，则开始发牌
+	int									mDealerSeat;
+	int									mCurrentPlayer;
 
 private:
 	void initPokers();
