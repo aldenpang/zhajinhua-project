@@ -23,10 +23,11 @@ signals:
 	void SiLoginOK();
 	void SiLoginFailed(quint32 _errCode);
 	void SiTableList(QMap<int, TableData> _tables);
-	void SiTableJoinResult(quint32 _res);
+	void SiTableJoinResult(quint32 _res, quint32 _seatID);
 	void SiStartGame(TableInfo _info);
 	void SiDropBaseChip(int _baseChip);
 	void SiDistribute(QVector<int> _pokers);
+	void SiCurrentPlayer(int _currentPlayer);
 public:
 	GameServerNet();
 	~GameServerNet();
@@ -45,6 +46,7 @@ private:
 	void processStartGame(Packet& _packet);
 	void processDropBaseChip(Packet& _packet);
 	void processDistribute(Packet& _packet);
+	void processCurrentPlayer(Packet& _packet);
 	
 };
 

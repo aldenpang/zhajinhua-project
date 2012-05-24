@@ -18,11 +18,13 @@ class TableInfo
 public:
 	int mBaseChip;
 	int mTopChip;
+	int mDealerSeat;
 
 	TableInfo()
 	{
 		mBaseChip = 0;
 		mTopChip = 0;
+		mDealerSeat = 0;
 	}
 protected:
 private:

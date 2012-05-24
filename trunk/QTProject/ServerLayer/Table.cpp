@@ -9,6 +9,8 @@ using namespace SharedData;
 Table::Table()
 : mState(TS_WAITING)
 , mReadyAmount(0)
+, mDealerSeat(0)
+, mCurrentPlayer(0)
 {
 	initPokers();
 }
@@ -159,7 +161,7 @@ void Table::startTable()
 	// 广播开始消息
 	Packet p;
 	p.SetMessage(MSG_GS_CL_START_GAME);
-	p<<BASE_CHIP<<TOP_CHIP;
+	p<<BASE_CHIP<<TOP_CHIP<<mDealerSeat;
 	broadcast(&p);
 	LOG_D_INFO("Broadcast MSG_GS_CL_START_GAME");
 
@@ -241,5 +243,10 @@ void Table::UpdateReadyState( int _seatID )
 			itr.value()->Send(&pp);
 			LOG_D_INFO(QString("Send Poker [%1] to Player[%2:%3]").arg(log).arg(itr.value()->IP()).arg(itr.value()->Port()));
 		}
+		// 指定当前玩家
+		Packet ppp;
+		ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
+		ppp<<mCurrentPlayer;
+		broadcast(&ppp);
 	}
 }
