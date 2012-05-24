@@ -14,6 +14,7 @@
 
 #include "INetLayer.h"
 #include "TableData.h"
+#include "TableInfo.h"
 
 class GameServerNet : public INetLayer
 {
@@ -23,7 +24,9 @@ signals:
 	void SiLoginFailed(quint32 _errCode);
 	void SiTableList(QMap<int, TableData> _tables);
 	void SiTableJoinResult(quint32 _res);
-	void SiStartGame();
+	void SiStartGame(TableInfo _info);
+	void SiDropBaseChip(int _baseChip);
+	void SiDistribute(QVector<int> _pokers);
 public:
 	GameServerNet();
 	~GameServerNet();
@@ -40,6 +43,8 @@ private:
 	void processTableInfo(Packet& _packet);
 	void processTableJoin(Packet& _packet);
 	void processStartGame(Packet& _packet);
+	void processDropBaseChip(Packet& _packet);
+	void processDistribute(Packet& _packet);
 	
 };
 

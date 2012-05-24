@@ -30,7 +30,9 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiDisconnected()), this, SLOT(stGSDisconnected()));
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
 	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32)), this, SLOT(stTableJoinRes(quint32)));
-	connect(mGameServer, SIGNAL(SiStartGame()), this, SLOT(stStartGame()));
+	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(stStartGame(TableInfo)));
+	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
+	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
 
 
 }
@@ -174,13 +176,34 @@ void ConsoleClient::stTableJoinRes( quint32 _res )
 
 }
 
-void ConsoleClient::stStartGame()
+void ConsoleClient::stStartGame(TableInfo _info)
 {
-	LOG_INFO("Start Game, client should start loading");
+	LOG_INFO(QString("Start Game, BaseCoin[%1]TopCoin[%2] client should start loading").arg(_info.mBaseChip).arg(_info.mTopChip));
+
+	mCurrentTableInfo = _info;
 
 	// 在ConsoleClient里，直接发送开始消息MSG_CL_GS_SYNC_START
 	Packet p;
 	p.SetMessage(MSG_CL_GS_SYNC_START);
 	mGameServer->Send(&p);
 
+}
+
+void ConsoleClient::stDropBaseChip( int _baseChip )
+{
+	LOG_INFO(QString("Drop [%1] for base chip").arg(_baseChip));
+}
+
+void ConsoleClient::stDistribute( QVector<int> _pokers )
+{
+	mPokers.clear();
+
+	QString log;
+	foreach( int p, _pokers )
+	{
+		log += QString("%1/").arg(p);
+		PokerPtr poker = PokerPtr(new Poker(p));
+		mPokers.push_back(poker);
+	}
+	LOG_INFO(QString("Distribute Pokers[%1]").arg(log));
 }

@@ -1,6 +1,7 @@
 #include "GameServerNet.h"
 #include "MD5.h"
 #include "SharedData.h"
+
 using namespace SharedData;
 
 
@@ -31,6 +32,12 @@ void GameServerNet::PacketHandler( Packet& _packet )
 		break;
 	case MSG_GS_CL_START_GAME:
 		processStartGame(_packet);
+		break;
+	case MSG_GS_CL_BASE_CHIP:
+		processDropBaseChip(_packet);
+		break;
+	case MSG_GS_CL_DISTRIBUTE:
+		processDistribute(_packet);
 		break;
 	default:
 		break;
@@ -106,5 +113,28 @@ void GameServerNet::processTableJoin( Packet& _packet )
 
 void GameServerNet::processStartGame( Packet& _packet )
 {
-	emit SiStartGame();
+	TableInfo info;
+	_packet>>info.mBaseChip>>info.mTopChip;
+
+	emit SiStartGame(info);
+}
+
+void GameServerNet::processDropBaseChip( Packet& _packet )
+{
+	int baseChip = 0;
+	_packet>>baseChip;
+
+	emit SiDropBaseChip(baseChip);
+}
+
+void GameServerNet::processDistribute( Packet& _packet )
+{
+	QVector<int> pokers;
+	for ( int i = 0; i<MAX_HAND_POKER; i++ )
+	{
+		int poker = 0;
+		_packet>>poker;
+		pokers.push_back(poker);
+	}
+	emit SiDistribute(pokers);
 }
