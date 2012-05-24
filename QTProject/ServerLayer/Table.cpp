@@ -250,3 +250,17 @@ void Table::UpdateReadyState( int _seatID )
 		broadcast(&ppp);
 	}
 }
+
+void Table::Follow( int _seatID, int _chip )
+{
+	LOG_D_INFO(QString("[%1] follow by [%2] chips").arg(_seatID).arg(_chip));
+	mCurrentPlayer++;
+	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
+	mCurrentPlayer = mCurrentPlayer % players.size();
+
+	Packet ppp;
+	ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
+	ppp<<mCurrentPlayer;
+	broadcast(&ppp);
+
+}

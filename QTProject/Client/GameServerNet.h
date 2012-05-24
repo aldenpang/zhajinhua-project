@@ -23,7 +23,7 @@ signals:
 	void SiLoginOK();
 	void SiLoginFailed(quint32 _errCode);
 	void SiTableList(QMap<int, TableData> _tables);
-	void SiTableJoinResult(quint32 _res, quint32 _seatID);
+	void SiTableJoinResult(quint32 _res, quint32 _tableID, quint32 _seatID);
 	void SiStartGame(TableInfo _info);
 	void SiDropBaseChip(int _baseChip);
 	void SiDistribute(QVector<int> _pokers);

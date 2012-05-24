@@ -57,6 +57,7 @@ public:
 
 	void UpdateReadyState( int _seatID );
 
+	void Follow( int _seatID, int _chip );
 protected:
 private:
 	QMap<int, ISocketInstancePtr>		mPlayers;	//<SeatID, PlayerInfo>

@@ -110,9 +110,10 @@ void GameServerNet::processTableJoin( Packet& _packet )
 {
 	quint32 res = 0;
 	quint32 seatID = 0;
-	_packet>>res>>seatID;
+	quint32 tableID = 0;
+	_packet>>res>>tableID>>seatID;
 
-	emit SiTableJoinResult(res, seatID);
+	emit SiTableJoinResult(res, tableID, seatID);
 }
 
 void GameServerNet::processStartGame( Packet& _packet )
