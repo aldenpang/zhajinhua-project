@@ -11,6 +11,7 @@ Table::Table()
 , mReadyAmount(0)
 , mDealerSeat(0)
 , mCurrentPlayer(0)
+, mCurrentBid(0)
 {
 	initPokers();
 }
@@ -248,19 +249,59 @@ void Table::UpdateReadyState( int _seatID )
 		ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
 		ppp<<mCurrentPlayer;
 		broadcast(&ppp);
+
+		mState = TS_PLAYING;
 	}
 }
 
 void Table::Follow( int _seatID, int _chip )
 {
+	if ( mState != TS_PLAYING )
+		return;
+
 	LOG_D_INFO(QString("[%1] follow by [%2] chips").arg(_seatID).arg(_chip));
-	mCurrentPlayer++;
 	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
+	mCurrentPlayer++;
 	mCurrentPlayer = mCurrentPlayer % players.size();
 
+	// 更新币值
+	GSPlayerPtr currentPlayer = mPlayers[mCurrentPlayer].staticCast<GSPlayer>();
+	currentPlayer->SetCoin(currentPlayer->GetCoin()-_chip);
+
+	// 广播谁跟了多少
+	Packet p;
+	p.SetMessage(MSG_GS_CL_FOLLOW);
+	p<<_seatID<<_chip;
+	broadcast(&p);
+
+	// 广播当前玩家
 	Packet ppp;
 	ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
 	ppp<<mCurrentPlayer;
 	broadcast(&ppp);
 
+	//如果当前出价超过封顶，游戏结束
+	mCurrentBid += _chip;
+	LOG_D_INFO(QString("CurrentBid[%1]").arg(mCurrentBid));
+	if ( mCurrentBid >= TOP_CHIP )
+	{
+		LOG_D_INFO("###### GameEnd ######");
+		mState = TS_BALANCE;
+		Packet pp;
+		pp.SetMessage(MSG_GS_BC_TABLE_END);
+		broadcast(&pp);
+
+		reset();
+	}
+
+}
+
+void Table::reset()
+{
+	mReadyAmount = 0;
+	mDealerSeat = 0;
+	mCurrentPlayer = 0;
+	mCurrentBid = 0;
+
+	initPokers();
 }
