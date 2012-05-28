@@ -51,6 +51,7 @@ private slots:
 	void stDropBaseChip(int _baseChip);
 	void stDistribute(QVector<int> _pokers);
 	void stCurrentPlayer(int _currentPlayer);
+	void stTableEnd();
 
 protected:
 private:

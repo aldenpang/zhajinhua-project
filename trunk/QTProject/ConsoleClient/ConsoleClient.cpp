@@ -37,7 +37,7 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
 	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
-
+	connect(mGameServer, SIGNAL(SiTableEnd()), this, SLOT(stTableEnd()));
 
 }
 
@@ -227,4 +227,16 @@ void ConsoleClient::stCurrentPlayer( int _currentPlayer )
 		p<<mMyTableID<<mMySeatID<<chip;
 		mGameServer->Send(&p);
 	}
+}
+
+void ConsoleClient::stTableEnd()
+{
+	LOG_INFO("######################");
+	LOG_INFO("########Game End######");
+	LOG_INFO("######################");
+
+	Packet p;
+	p.SetMessage(MSG_CL_GS_SYNC_START);
+	mGameServer->Send(&p);
+
 }

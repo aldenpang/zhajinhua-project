@@ -42,6 +42,9 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_CL_CURRENT_PLAYER:
 		processCurrentPlayer(_packet);
 		break;
+	case MSG_GS_BC_TABLE_END:
+		processTableEnd(_packet);
+		break;
 	default:
 		break;
 	}
@@ -150,4 +153,9 @@ void GameServerNet::processCurrentPlayer( Packet& _packet )
 	_packet>>currentPlayer;
 
 	emit SiCurrentPlayer(currentPlayer);
+}
+
+void GameServerNet::processTableEnd( Packet& _packet )
+{
+	emit SiTableEnd();
 }

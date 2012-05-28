@@ -28,6 +28,8 @@ signals:
 	void SiDropBaseChip(int _baseChip);
 	void SiDistribute(QVector<int> _pokers);
 	void SiCurrentPlayer(int _currentPlayer);
+	void SiTableEnd();
+
 public:
 	GameServerNet();
 	~GameServerNet();
@@ -47,6 +49,7 @@ private:
 	void processDropBaseChip(Packet& _packet);
 	void processDistribute(Packet& _packet);
 	void processCurrentPlayer(Packet& _packet);
+	void processTableEnd(Packet& _packet);
 	
 };
 
