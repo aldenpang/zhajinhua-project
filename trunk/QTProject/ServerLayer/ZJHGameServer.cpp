@@ -14,6 +14,7 @@ ZjhGameServer::ZjhGameServer()
 : IServerLayer()
 {
 	mTimer.setInterval(REFRESH_INTERVAL*1000);
+	LOG.SetModuleName("GS");
 	//mTimer.start();
 	//connect(&mTimer, SIGNAL(timeout()), this, SLOT(stRefershTables()));
 

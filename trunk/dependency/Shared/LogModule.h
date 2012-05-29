@@ -43,13 +43,18 @@ public slots:
 	void StWarn(const QString& _text);
 	void StError(const QString& _text);
 		
+public:
+	void SetModuleName(const QString _fileName){ mLogFileName = _fileName; }
 protected:
 private:
 	LogModule();	
 
 	LogLevel mLevel;
+	QString mLogDir;
+	QString mLogFileName;
+	QString mTodayStr;
 
-	void writeToFile(QString _log);
+	void writeToFile(LogLevel _level, QString _log);
 };
 #define LOG LogModule::GetSingleton()
 

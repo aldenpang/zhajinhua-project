@@ -12,6 +12,8 @@ AppFrame::AppFrame()
 	SETTINGS.Init("WSConfig.ini");
 
 	InitDatabase();
+
+	LOG.SetModuleName("WS");
 }
 
 AppFrame::~AppFrame()
