@@ -14,6 +14,8 @@ AppFrame::AppFrame()
 	SETTINGS.Init("LSConfig.ini");
 
 	InitDatabase();
+
+	LOG.SetModuleName("LS");
 }
 
 AppFrame::~AppFrame()

@@ -13,6 +13,7 @@
 #define ConsoleClient_h__
 #include <QObject>
 #include <QVector>
+#include <QTimer>
 #include "TableData.h"
 #include "SharedData.h"
 #include "TableInfo.h"
@@ -53,11 +54,13 @@ private slots:
 	void stCurrentPlayer(int _currentPlayer);
 	void stTableEnd();
 
+	void stFollowByTimer();
 protected:
 private:
 	LoginServerNet* mLoginServer;
 	GameServerNet* mGameServer;
 
+	QTimer mTimer;		// pause before follow
 	TableInfo mCurrentTableInfo;
 	QVector<PokerPtr> mPokers;
 	int mCurrentPlayer;
