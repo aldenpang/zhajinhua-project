@@ -40,6 +40,7 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
 	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
 	connect(mGameServer, SIGNAL(SiTableEnd()), this, SLOT(stTableEnd()));
+	connect(mGameServer, SIGNAL(SiFollow(int, int, int)), this, SLOT(stFollow(int, int, int)));
 
 	//connect(mTimer, SIGNAL(timeout()), this, SLOT(stFollowByTimer()));
 	//mTimer.
@@ -221,12 +222,14 @@ void ConsoleClient::stDistribute( QVector<int> _pokers )
 void ConsoleClient::stCurrentPlayer( int _currentPlayer )
 {
 	mCurrentPlayer = _currentPlayer;
-	LOG_INFO(QString("CurrentPlayer[%1]").arg(mCurrentPlayer));
+	//LOG_INFO(QString("CurrentPlayer[%1]").arg(mCurrentPlayer));
 	// 如果当前玩家是自己，那么就做动作（下注，跟注、加注）
 	if ( mCurrentPlayer == mMySeatID )
 	{
 		// follow after 1 second, can be a randomly number
-		QTimer::singleShot(1000, this, SLOT(stFollowByTimer()));
+		//int ran = qrand() % 3 + 1;
+		int ran = 1;
+		QTimer::singleShot(ran * 1000, this, SLOT(stFollowByTimer()));
 	}
 }
 
@@ -239,7 +242,8 @@ void ConsoleClient::stTableEnd()
 	Packet p;
 	p.SetMessage(MSG_CL_GS_SYNC_START);
 	mGameServer->Send(&p);
-
+	
+	mCurrentPlayer = 0;
 }
 
 void ConsoleClient::stFollowByTimer()
@@ -249,4 +253,11 @@ void ConsoleClient::stFollowByTimer()
 	p.SetMessage(MSG_CL_GS_FOLLOW);
 	p<<mMyTableID<<mMySeatID<<chip;
 	mGameServer->Send(&p);
+	LOG_INFO("#####Send [MSG_CL_GS_FOLLOW]########");
+}
+
+void ConsoleClient::stFollow( int _seatID, int _chip, int _currentPlayer )
+{
+	LOG_INFO(QString("Seat[%1]follow[%2], currentPlayer[%3]").arg(_seatID).arg(_chip).arg(_currentPlayer));
+	stCurrentPlayer(_currentPlayer);
 }

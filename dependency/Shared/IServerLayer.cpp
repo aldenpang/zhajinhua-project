@@ -82,7 +82,6 @@ void IServerLayer::stReadData()
 		//char buff[MAX_PACKET_SIZE]={0};
 		QByteArray buff = sockIns->GetSocket()->readAll();
 		//sockIns->GetSocket()->read(buff, MAX_PACKET_SIZE);
-		//qDebug()<<"Data Received:"<<buff;
 
 		Packet p;
 		p.SetData(buff);
@@ -91,9 +90,11 @@ void IServerLayer::stReadData()
 			LOG_INFO(QString("Invalid Packet from %1:%2").arg(s->peerAddress().toString()).arg(s->peerPort()));
 			return;
 		}
+		qDebug()<<"Data Received:"<<buff.length()<<"bytes";
 		
 		// 不同的Server拥有自己的PacketHandler()
 		PacketHandler(sockIns, p);
+
 	}
 }
 

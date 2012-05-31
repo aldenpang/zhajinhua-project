@@ -87,5 +87,6 @@ void INetLayer::stRead()
 		}
 
 		PacketHandler(p);
+		buff.clear();
 	}
 }

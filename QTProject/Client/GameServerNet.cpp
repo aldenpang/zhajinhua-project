@@ -45,6 +45,9 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_BC_TABLE_END:
 		processTableEnd(_packet);
 		break;
+	case MSG_GS_CL_FOLLOW:
+		processFollow(_packet);
+		break;
 	default:
 		break;
 	}
@@ -158,4 +161,14 @@ void GameServerNet::processCurrentPlayer( Packet& _packet )
 void GameServerNet::processTableEnd( Packet& _packet )
 {
 	emit SiTableEnd();
+}
+
+void GameServerNet::processFollow( Packet& _packet )
+{
+	int seat = 0;
+	int chip = 0;
+	int currentPlayer = 0;
+	_packet>>seat>>chip>>currentPlayer;
+
+	emit SiFollow(seat, chip, currentPlayer);
 }
