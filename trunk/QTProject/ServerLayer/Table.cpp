@@ -259,6 +259,12 @@ void Table::Follow( int _seatID, int _chip )
 	if ( mState != TS_PLAYING )
 		return;
 
+	if ( _seatID != mCurrentPlayer )
+	{
+		LOG_D_WARN(QString("SeatID[%1] not match with mCurrentPlayer[%2]").arg(_seatID).arg(mCurrentPlayer));
+		return;
+	}
+
 	LOG_D_INFO(QString("[%1] follow by [%2] chips").arg(_seatID).arg(_chip));
 	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
 	mCurrentPlayer++;
@@ -271,18 +277,12 @@ void Table::Follow( int _seatID, int _chip )
 	// 广播谁跟了多少
 	Packet p;
 	p.SetMessage(MSG_GS_CL_FOLLOW);
-	p<<_seatID<<_chip;
+	p<<_seatID<<_chip<<mCurrentPlayer;
 	broadcast(&p);
-
-	// 广播当前玩家
-	Packet ppp;
-	ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
-	ppp<<mCurrentPlayer;
-	broadcast(&ppp);
 
 	//如果当前出价超过封顶，游戏结束
 	mCurrentBid += _chip;
-	LOG_D_INFO(QString("CurrentBid[%1]").arg(mCurrentBid));
+	LOG_D_INFO(QString("CurrentBid[%1] CurrentPlayer[%2]").arg(mCurrentBid).arg(mCurrentPlayer));
 	if ( mCurrentBid >= TOP_CHIP )
 	{
 		LOG_D_INFO("###### GameEnd ######");
