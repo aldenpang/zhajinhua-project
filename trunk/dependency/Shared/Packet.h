@@ -13,8 +13,8 @@
 #define Packet_h__
 
 #define MAX_PACKET_SIZE 10240
-#define POS_TOKEN 0
-#define POS_MSG_SIZE 4
+#define POS_TOKEN 4
+#define POS_MSG_SIZE 0
 #define POS_MSG_TYPE 8
 #define POS_DATA 12
 
@@ -22,7 +22,7 @@
 
 /////////////////////////////// Packet Header Format //////////////////////////////////////////////////
 // | byte0 | byte1 | byte2 | byte3 | byte4 | byte5 | byte6 | byte7 | byte8 | byte9 | byte10 | byte11 | 
-// |		Token				   |			Message Size	   |			Message Type		 |
+// |		Message Size		   |			Token	   |			Message Type		 |
 /////////////////////////////// Packet Header Format //////////////////////////////////////////////////
 #include <QByteArray>
 #include <QDataStream>

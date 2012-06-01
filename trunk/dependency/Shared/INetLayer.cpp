@@ -75,7 +75,14 @@ void INetLayer::stRead()
 	QTcpSocket* s = (QTcpSocket*)sender();
 	if ( s && s->bytesAvailable() )
 	{
-		QByteArray buff = s->readAll();
+		char sizeC[4] = {0};
+		s->read(sizeC, sizeof(int));
+		int sizeInt = 0;
+		memcpy(&sizeInt, sizeC, sizeof(int));		// get message size first
+		QByteArray temp = s->read(sizeInt);			// read bytes(exclude bytes of size)
+		QByteArray buff;
+		buff.append(sizeC);							// reconnect size and message body
+		buff.append(temp);
 		qDebug()<<QString("Receive Packet from %1:%2, DataSize:%3").arg(s->peerAddress().toString()).arg(s->peerPort()).arg(buff.length());
 		Packet p;
 		p.SetData(buff);

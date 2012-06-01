@@ -7,6 +7,7 @@ ConsoleClient::ConsoleClient()
 : mCurrentPlayer(0)
 , mMySeatID(0)
 , mMyTableID(0)
+, mIsEnd(false)
 {
 	LOG.SetModuleName(QString("Console_%1").arg(__argv[1]));
 
@@ -40,7 +41,8 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
 	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
 	connect(mGameServer, SIGNAL(SiTableEnd()), this, SLOT(stTableEnd()));
-	connect(mGameServer, SIGNAL(SiFollow(int, int, int)), this, SLOT(stFollow(int, int, int)));
+	connect(mGameServer, SIGNAL(SiFollow(int, int, int, int)), this, SLOT(stFollow(int, int, int, int)));
+	connect(mGameServer, SIGNAL(SiSyncStart()), this, SLOT(stSyncStart()));
 
 	//connect(mTimer, SIGNAL(timeout()), this, SLOT(stFollowByTimer()));
 	//mTimer.
@@ -193,16 +195,12 @@ void ConsoleClient::stStartGame(TableInfo _info)
 
 	mCurrentTableInfo = _info;
 
-	// 在ConsoleClient里，直接发送开始消息MSG_CL_GS_SYNC_START
-	Packet p;
-	p.SetMessage(MSG_CL_GS_SYNC_START);
-	mGameServer->Send(&p);
-
 }
 
 void ConsoleClient::stDropBaseChip( int _baseChip )
 {
 	LOG_INFO(QString("Drop [%1] for base chip").arg(_baseChip));
+	mIsEnd = false;
 }
 
 void ConsoleClient::stDistribute( QVector<int> _pokers )
@@ -223,8 +221,8 @@ void ConsoleClient::stCurrentPlayer( int _currentPlayer )
 {
 	mCurrentPlayer = _currentPlayer;
 	//LOG_INFO(QString("CurrentPlayer[%1]").arg(mCurrentPlayer));
-	// 如果当前玩家是自己，那么就做动作（下注，跟注、加注）
-	if ( mCurrentPlayer == mMySeatID )
+	// if current player is self, he can follow, drop, or add chips
+	if ( mCurrentPlayer == mMySeatID && !mIsEnd )
 	{
 		// follow after 1 second, can be a randomly number
 		//int ran = qrand() % 3 + 1;
@@ -239,11 +237,12 @@ void ConsoleClient::stTableEnd()
 	LOG_INFO("########Game End######");
 	LOG_INFO("######################");
 
-	Packet p;
-	p.SetMessage(MSG_CL_GS_SYNC_START);
-	mGameServer->Send(&p);
+	//Packet p;
+	//p.SetMessage(MSG_CL_GS_SYNC_START);
+	//mGameServer->Send(&p);
 	
 	mCurrentPlayer = 0;
+	mIsEnd = true;
 }
 
 void ConsoleClient::stFollowByTimer()
@@ -256,8 +255,22 @@ void ConsoleClient::stFollowByTimer()
 	LOG_INFO("#####Send [MSG_CL_GS_FOLLOW]########");
 }
 
-void ConsoleClient::stFollow( int _seatID, int _chip, int _currentPlayer )
+void ConsoleClient::stFollow( int _seatID, int _chip, int _currentPlayer, int _currentBid )
 {
-	LOG_INFO(QString("Seat[%1]follow[%2], currentPlayer[%3]").arg(_seatID).arg(_chip).arg(_currentPlayer));
+	LOG_INFO(QString("Seat[%1]follow[%2], currentPlayer[%3] currentBid[%4]")
+		.arg(_seatID).arg(_chip).arg(_currentPlayer).arg(_currentBid));
+	if ( _currentBid >= mCurrentTableInfo.mTopChip || mIsEnd )
+	{
+		return;
+	}
 	stCurrentPlayer(_currentPlayer);
+}
+
+void ConsoleClient::stSyncStart()
+{
+	// 在ConsoleClient里，直接发送开始消息MSG_CL_GS_SYNC_START
+	LOG_INFO("<-= MSG_CL_GS_SYNC_START =->");
+	Packet p;
+	p.SetMessage(MSG_CL_GS_SYNC_START);
+	mGameServer->Send(&p);
 }

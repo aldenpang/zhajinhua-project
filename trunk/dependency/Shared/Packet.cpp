@@ -45,8 +45,8 @@ void Packet::SetMessage( int _message )
 void Packet::End()
 {
 	mPtr->device()->seek(0);
+	*(mPtr.data())<<mBuffer.length();
 	*(mPtr.data())<<TOKEN;
-	*(mPtr.data())<<quint32(0);
 	*(mPtr.data())<<mMessage;
 }
 

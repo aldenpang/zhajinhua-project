@@ -29,7 +29,8 @@ signals:
 	void SiDistribute(QVector<int> _pokers);
 	void SiCurrentPlayer(int _currentPlayer);
 	void SiTableEnd();
-	void SiFollow(int _seatID, int _chip, int _currentPlayer);
+	void SiFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
+	void SiSyncStart();
 
 public:
 	GameServerNet();
@@ -52,6 +53,7 @@ private:
 	void processCurrentPlayer(Packet& _packet);
 	void processTableEnd(Packet& _packet);
 	void processFollow(Packet& _packet);
+	void processSyncStart(Packet& _packet);
 	
 };
 
