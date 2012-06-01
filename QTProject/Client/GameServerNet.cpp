@@ -48,6 +48,9 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_CL_FOLLOW:
 		processFollow(_packet);
 		break;
+	case MSG_GS_CL_SYNC_START:
+		processSyncStart(_packet);
+		break;
 	default:
 		break;
 	}
@@ -168,7 +171,13 @@ void GameServerNet::processFollow( Packet& _packet )
 	int seat = 0;
 	int chip = 0;
 	int currentPlayer = 0;
-	_packet>>seat>>chip>>currentPlayer;
+	int currentBid = 0;
+	_packet>>seat>>chip>>currentPlayer>>currentBid;
 
-	emit SiFollow(seat, chip, currentPlayer);
+	emit SiFollow(seat, chip, currentPlayer, currentBid);
+}
+
+void GameServerNet::processSyncStart( Packet& _packet )
+{
+	emit SiSyncStart();
 }

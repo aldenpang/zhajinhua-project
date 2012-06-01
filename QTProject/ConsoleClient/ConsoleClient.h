@@ -53,7 +53,8 @@ private slots:
 	void stDistribute(QVector<int> _pokers);
 	void stCurrentPlayer(int _currentPlayer);
 	void stTableEnd();
-	void stFollow(int _seatID, int _chip, int _currentPlayer);
+	void stFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
+	void stSyncStart();
 
 	void stFollowByTimer();
 protected:
@@ -67,6 +68,7 @@ private:
 	int mCurrentPlayer;
 	int mMySeatID;
 	int mMyTableID;
+	bool mIsEnd;
 };
 
 #endif // ConsoleClient_h__

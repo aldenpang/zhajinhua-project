@@ -45,7 +45,8 @@ namespace SharedData
 		MSG_GS_CL_FOLLOW,
 		MSG_GS_CL_CURRENT_BID,
 
-		MSG_CL_GS_SYNC_START,		// 同步消息
+		MSG_GS_CL_SYNC_START,		// Sync request
+		MSG_CL_GS_SYNC_START,		// Sync response
 
 		// gameserver broadcast
 		MSG_GS_BC_TABLE_JOIN,

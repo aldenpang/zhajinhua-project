@@ -42,22 +42,16 @@ int Table::Join( int _seatID, ISocketInstancePtr _player )
 			mState = TS_PLAYING;
 
 			// set all player's state to not waiting
-			QMap<int, ISocketInstancePtr>::iterator itr;
-			for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
-			{
-				GSPlayerPtr p = itr.value().staticCast<GSPlayer>();
-				p->SetIsWaiting(false);
-			}
+			setAllPlaying();
 
 			startTable();
 
 		}
-		//else if ( mState == TS_PLAYING )
-		//{
-		//	// other player who join after table start to play, will let them to waiting for next time of starting
-		//	// 等待当前局结束
-
-		//}
+		else if ( mState == TS_PLAYING )
+		{
+			// other player who join after table start to play, will let them to waiting for next time of starting
+			LOG_D_INFO(QString("Player[%1] join, waiting for table restart").arg(gsp->GetNickName()));
+		}
 	}
 
 	return GS_NO_ERR;
@@ -89,6 +83,21 @@ int Table::Leave( ISocketInstancePtr _player )
 
 	return ERR_GS_PLAYER_NOT_FOUND;
 }
+
+
+void Table::setAllPlaying()
+{
+	int amount = 0;
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	{
+		GSPlayerPtr p = itr.value().staticCast<GSPlayer>();
+		p->SetIsWaiting(false);
+		amount++;
+	}
+	LOG_D_INFO(QString("CurrentPlayingPlayer[%1]").arg(amount));
+}
+
 
 bool Table::IsPlayerJoin( ISocketInstancePtr _player )
 {
@@ -166,6 +175,11 @@ void Table::startTable()
 	broadcast(&p);
 	LOG_D_INFO("Broadcast MSG_GS_CL_START_GAME");
 
+	// send sync message
+	Packet ppp;
+	ppp.SetMessage(MSG_GS_CL_SYNC_START);
+	broadcast(&ppp);
+
 	// 重置已经ready的玩家
 	mReadyAmount = 0;
 }
@@ -211,6 +225,7 @@ void Table::UpdateReadyState( int _seatID )
 	// 先只记录有多少玩家已经ready，暂时忽略是哪个座位的玩家ready
 	mReadyAmount++;
 
+	setAllPlaying();
 	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
 	if ( mReadyAmount >= players.size() )
 	{
@@ -270,17 +285,11 @@ void Table::Follow( int _seatID, int _chip )
 	mCurrentPlayer++;
 	mCurrentPlayer = mCurrentPlayer % players.size();
 
-	// 更新币值
+	// update chips
 	GSPlayerPtr currentPlayer = mPlayers[mCurrentPlayer].staticCast<GSPlayer>();
 	currentPlayer->SetCoin(currentPlayer->GetCoin()-_chip);
 
-	// 广播谁跟了多少
-	Packet p;
-	p.SetMessage(MSG_GS_CL_FOLLOW);
-	p<<_seatID<<_chip<<mCurrentPlayer;
-	broadcast(&p);
-
-	//如果当前出价超过封顶，游戏结束
+	//if mCurrentBid is higher than TOP_CHIP, then turn to game end
 	mCurrentBid += _chip;
 	LOG_D_INFO(QString("CurrentBid[%1] CurrentPlayer[%2]").arg(mCurrentBid).arg(mCurrentPlayer));
 	if ( mCurrentBid >= TOP_CHIP )
@@ -291,7 +300,20 @@ void Table::Follow( int _seatID, int _chip )
 		pp.SetMessage(MSG_GS_BC_TABLE_END);
 		broadcast(&pp);
 
+		// send sync message
+		Packet ppp;
+		ppp.SetMessage(MSG_GS_CL_SYNC_START);
+		broadcast(&ppp);
+
 		reset();
+	}
+	else
+	{
+		// broadcast who follow how much
+		Packet p;
+		p.SetMessage(MSG_GS_CL_FOLLOW);
+		p<<_seatID<<_chip<<mCurrentPlayer<<mCurrentBid;
+		broadcast(&p);
 	}
 
 }

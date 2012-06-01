@@ -81,6 +81,8 @@ private:
 
 	void reset();
 
+	void setAllPlaying();
+
 	QMap<int, ISocketInstancePtr> getPlayingPlayers();
 
 };
