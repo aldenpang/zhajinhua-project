@@ -54,6 +54,7 @@ void INetLayer::Send( Packet* _packet )
 	//int leng = _packet->GetDataLength();
 	//qint64 res = mTcpSocket.write(QByteArray::fromRawData(sendBuff, leng));
 	qint64 res = mTcpSocket.write(_packet->GetData());
+	qDebug()<<_packet->GetData().length()<<" bytes transfered";
 	return;
 }
 
@@ -81,7 +82,7 @@ void INetLayer::stRead()
 		memcpy(&sizeInt, sizeC, sizeof(int));		// get message size first
 		QByteArray temp = s->read(sizeInt);			// read bytes(exclude bytes of size)
 		QByteArray buff;
-		buff.append(sizeC);							// reconnect size and message body
+		buff.append(sizeC, 4);							// reconnect size and message body
 		buff.append(temp);
 		qDebug()<<QString("Receive Packet from %1:%2, DataSize:%3").arg(s->peerAddress().toString()).arg(s->peerPort()).arg(buff.length());
 		Packet p;
