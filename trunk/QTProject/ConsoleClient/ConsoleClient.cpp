@@ -261,6 +261,7 @@ void ConsoleClient::stFollow( int _seatID, int _chip, int _currentPlayer, int _c
 		.arg(_seatID).arg(_chip).arg(_currentPlayer).arg(_currentBid));
 	if ( _currentBid >= mCurrentTableInfo.mTopChip || mIsEnd )
 	{
+		LOG_INFO("End");
 		return;
 	}
 	stCurrentPlayer(_currentPlayer);

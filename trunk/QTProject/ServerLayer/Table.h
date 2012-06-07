@@ -75,7 +75,8 @@ private:
 
 	void startTable();
 
-	void broadcast( Packet* _p );
+	void broadcastToPlaying( Packet* _p );
+	void broadcastToAll( Packet* _p );
 
 	PokerPtr distribute();
 

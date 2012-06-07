@@ -165,26 +165,23 @@ void Table::shuffle(bool _print)
 
 void Table::startTable()
 {
-	// 洗牌
-	shuffle();
-
 	// 广播开始消息
 	Packet p;
 	p.SetMessage(MSG_GS_CL_START_GAME);
 	p<<BASE_CHIP<<TOP_CHIP<<mDealerSeat;
-	broadcast(&p);
+	broadcastToAll(&p);
 	LOG_D_INFO("Broadcast MSG_GS_CL_START_GAME");
 
 	// send sync message
 	Packet ppp;
 	ppp.SetMessage(MSG_GS_CL_SYNC_START);
-	broadcast(&ppp);
+	broadcastToAll(&ppp);
 
 	// 重置已经ready的玩家
 	mReadyAmount = 0;
 }
 
-void Table::broadcast( Packet* _p )
+void Table::broadcastToPlaying( Packet* _p )
 {
 	QMap<int, ISocketInstancePtr>::iterator itr;
 	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
@@ -194,6 +191,15 @@ void Table::broadcast( Packet* _p )
 		{
 			itr.value()->Send(_p);
 		}
+	}
+}
+
+void Table::broadcastToAll( Packet* _p )
+{
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	{
+		itr.value()->Send(_p);
 	}
 }
 
@@ -234,7 +240,7 @@ void Table::UpdateReadyState( int _seatID )
 		Packet p;
 		p.SetMessage(MSG_GS_CL_BASE_CHIP);
 		p<<baseChip;
-		broadcast(&p);
+		broadcastToPlaying(&p);
 		QMap<int, ISocketInstancePtr>::iterator itr;
 		for ( itr = players.begin(); itr != players.end(); itr++ )
 		{
@@ -263,7 +269,7 @@ void Table::UpdateReadyState( int _seatID )
 		Packet ppp;
 		ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
 		ppp<<mCurrentPlayer;
-		broadcast(&ppp);
+		broadcastToPlaying(&ppp);
 
 		mState = TS_PLAYING;
 	}
@@ -298,14 +304,11 @@ void Table::Follow( int _seatID, int _chip )
 		mState = TS_BALANCE;
 		Packet pp;
 		pp.SetMessage(MSG_GS_BC_TABLE_END);
-		broadcast(&pp);
-
-		// send sync message
-		Packet ppp;
-		ppp.SetMessage(MSG_GS_CL_SYNC_START);
-		broadcast(&ppp);
+		broadcastToPlaying(&pp);
 
 		reset();
+
+		startTable();
 	}
 	else
 	{
@@ -313,7 +316,7 @@ void Table::Follow( int _seatID, int _chip )
 		Packet p;
 		p.SetMessage(MSG_GS_CL_FOLLOW);
 		p<<_seatID<<_chip<<mCurrentPlayer<<mCurrentBid;
-		broadcast(&p);
+		broadcastToPlaying(&p);
 	}
 
 }

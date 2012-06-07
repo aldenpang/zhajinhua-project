@@ -86,7 +86,7 @@ void IServerLayer::stReadData()
 		s->read(sizeC, sizeof(int));
 		int sizeInt = 0;
 		memcpy(&sizeInt, sizeC, sizeof(int));		// get message size first
-		QByteArray temp = s->read(sizeInt);			// read bytes(exclude bytes of size)
+		QByteArray temp = s->read(sizeInt-4);			// read bytes(exclude bytes of size)
 		QByteArray buff;
 		buff.append(sizeC, 4);							// reconnect size and message body
 		buff.append(temp);
@@ -104,6 +104,9 @@ void IServerLayer::stReadData()
 		// 不同的Server拥有自己的PacketHandler()
 		PacketHandler(sockIns, p);
 
+		// if has bytes left, will re-orgonized a package
+		if ( s->bytesAvailable() )
+			stRead();
 	}
 }
 
