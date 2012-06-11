@@ -82,9 +82,8 @@ int GameServerDB::GetPlayerInfo( GSPlayerPtr _player )
 	{
 		_player->SetNickName(q.value(3).toString());
 		_player->SetGender(q.value(4).toInt());
-		_player->SetCoin(q.value(5).toInt());
-		_player->SetExp(q.value(6).toInt());
-		_player->SetPlayTime(q.value(7).toInt());
+		_player->SetExp(q.value(5).toInt());
+		_player->SetPlayTime(q.value(6).toInt());
 		
 		records++;
 		if ( records >=2 )

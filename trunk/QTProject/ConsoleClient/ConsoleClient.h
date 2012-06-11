@@ -68,6 +68,7 @@ private:
 	int mCurrentPlayer;
 	int mMySeatID;
 	int mMyTableID;
+	int mCurrentTableMinBringChip;
 	bool mIsEnd;
 };
 

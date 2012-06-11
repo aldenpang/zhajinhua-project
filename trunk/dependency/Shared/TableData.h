@@ -29,6 +29,8 @@ public:
 
 	PROPERTY(quint32,ID);
 
+	PROPERTY(int, MinBringChip);
+
 	void AddPlayer(quint32 _seatID, QString& _nickName)
 	{
 		mPlayers.insert(_seatID, _nickName);

@@ -40,7 +40,7 @@ void WalletServer::processQueryUserWallet( ISocketInstancePtr _incomeSocket, Pac
 	_p>>accID;
 
 	quint32 coin = 0;
-	int res = DB.QueryUserWallet(accID, coin);
+	int res = WalletDB.QueryUserWallet(accID, coin);
 	if ( res != WS_NO_ERR )
 	{
 		LOG_ERR(QString("QueryUserWalletError:%1").arg(res));
@@ -61,7 +61,7 @@ void WalletServer::processQueryTableWallet( ISocketInstancePtr _incomeSocket, Pa
 	_p>>roomID>>tableID>>seatID;
 
 	quint32 coin = 0;
-	int res = DB.QueryTableWallet(roomID, tableID, seatID, coin);
+	int res = WalletDB.QueryTableWallet(roomID, tableID, seatID, coin);
 	if ( res != WS_NO_ERR )
 	{
 		LOG_ERR(QString("QueryTableWalletError:%1").arg(res));
@@ -81,10 +81,10 @@ void WalletServer::processInserTableWallet( ISocketInstancePtr _incomeSocket, Pa
 
 	_p>>roomID>>tableID>>seatID>>coin;
 
-	int res = DB.InsertTableWallet(roomID, tableID, seatID);
+	int res = WalletDB.InsertTableWallet(roomID, tableID, seatID);
 	if ( res != ERR_WS_MULTI_RESULT )
 	{
-		res = DB.UpdateTableWallet(roomID, tableID, seatID, coin);
+		res = WalletDB.UpdateTableWallet(roomID, tableID, seatID, coin);
 	}
 	else
 		LOG_ERR(QString("InsertTableWalletError:%1").arg(res));

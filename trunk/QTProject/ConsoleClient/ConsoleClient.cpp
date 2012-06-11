@@ -6,6 +6,7 @@
 ConsoleClient::ConsoleClient()
 : mCurrentPlayer(0)
 , mMySeatID(0)
+, mCurrentTableMinBringChip(0)
 , mMyTableID(0)
 , mIsEnd(false)
 {
@@ -150,6 +151,7 @@ void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 			else 
 			{
 				seatID = i;
+				mCurrentTableMinBringChip = itr.value().GetMinBringChip();
 				LOG_INFO(QString("Seat[%1] in Table[%2] is not occupied").arg(seatID).arg(itr.key()));
 				goto End;
 				//break;

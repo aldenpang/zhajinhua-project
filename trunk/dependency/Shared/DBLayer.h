@@ -31,7 +31,7 @@ public:
 	DBLayer();
 	~DBLayer();
 
-	int Connect(QString _dbName);
+	int Connect(const QString& _dbPath, const QString& _dbName);
 
 protected:
 	QSqlDatabase mDb;

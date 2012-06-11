@@ -17,6 +17,7 @@
 #include "ISocketInstance.h"
 #include "HardcodeConfig.h"
 #include "Poker.h"
+#include "MyToolkits.h"
 
 enum TableState
 {
@@ -58,6 +59,9 @@ public:
 	void UpdateReadyState( int _seatID );
 
 	void Follow( int _seatID, int _chip );
+
+	PROPERTY(int, MinBringChip);
+
 protected:
 private:
 	QMap<int, ISocketInstancePtr>		mPlayers;	//<SeatID, PlayerInfo>

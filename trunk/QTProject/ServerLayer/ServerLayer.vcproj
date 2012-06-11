@@ -200,14 +200,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GameServerDB.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\GameServerDB.h"
-				>
-			</File>
-			<File
 				RelativePath=".\GSPlayer.cpp"
 				>
 			</File>
@@ -434,6 +426,26 @@
 				</File>
 				<File
 					RelativePath="..\..\dependency\Shared\SharedData.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="DB"
+				>
+				<File
+					RelativePath=".\GameServerDB.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\GameServerDB.h"
+					>
+				</File>
+				<File
+					RelativePath="..\WalletServer\WalletServerDB.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\WalletServer\WalletServerDB.h"
 					>
 				</File>
 			</Filter>

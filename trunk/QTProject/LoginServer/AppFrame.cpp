@@ -33,7 +33,7 @@ void AppFrame::InitDatabase()
 	connect(&DB, SIGNAL(SiInfo(QString)), &LOG, SLOT(StInfo(QString)));
 	connect(&DB, SIGNAL(SiError(QString)), &LOG, SLOT(StError(QString)));
 
-	DB.Connect("../../DB/db.db");
+	DB.Connect("../../DB/db.db", "LoginServerDB");
 	//DB.VerifyUser(QString("acc3"), ToMD5(QString("1234")));
 	//DB.RegUser(QString("acc4"), ToMD5(QString("1234")));
 
