@@ -35,6 +35,8 @@ public:
 	void InitDatabase();
 
 	void InitWalletServer();
+
+	void InitWalletDB();
 protected:
 private:
 	ZjhGameServer* mGameServer;

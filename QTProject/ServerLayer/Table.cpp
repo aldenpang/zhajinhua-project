@@ -12,6 +12,7 @@ Table::Table()
 , mDealerSeat(0)
 , mCurrentPlayer(0)
 , mCurrentBid(0)
+, mMinBringChip(0)
 {
 	initPokers();
 }

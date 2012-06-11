@@ -93,6 +93,7 @@ void GameServerNet::processTableInfo( Packet& _packet )
 	quint32 tableAmount = 0;
 	quint32 tableID = 0;
 	int playerAmount = 0;
+	int minBringChip = 0;
 	_packet>>tableAmount;
 	
 	for ( int i = 0; i<tableAmount; i++ )
@@ -100,7 +101,9 @@ void GameServerNet::processTableInfo( Packet& _packet )
 		TableData table;
 		_packet>>tableID;
 		_packet>>playerAmount;
+		_packet>>minBringChip;
 		table.SetID(tableID);
+		table.SetMinBringChip(minBringChip);
 		for ( int j = 0; j < playerAmount; j++ )
 		{
 			int seatID = 0;

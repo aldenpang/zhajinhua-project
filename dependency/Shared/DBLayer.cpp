@@ -14,10 +14,10 @@ DBLayer::~DBLayer()
 	}
 }
 
-int DBLayer::Connect(QString _dbName)
+int DBLayer::Connect(const QString& _dbPath, const QString& _dbName)
 {
-	mDb = QSqlDatabase::addDatabase("QSQLITE");
-	mDb.setDatabaseName(_dbName);
+	mDb = QSqlDatabase::addDatabase("QSQLITE", _dbName);
+	mDb.setDatabaseName(_dbPath);
 	if ( !mDb.open() )
 	{
 		LOG_INFO(QString("%1:db open error").arg(metaObject()->className()));

@@ -106,7 +106,7 @@ void IServerLayer::stReadData()
 
 		// if has bytes left, will re-orgonized a package
 		if ( s->bytesAvailable() )
-			stRead();
+			stReadData();
 	}
 }
 

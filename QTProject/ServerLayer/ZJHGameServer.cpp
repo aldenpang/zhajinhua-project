@@ -7,6 +7,7 @@
 #include "GSPlayer.h"
 #include "TableManager.h"
 #include "Table.h"
+#include "../WalletServer/WalletServerDB.h"
 using namespace SharedData;
 
 //------------------------------------------------------------------------------
@@ -116,6 +117,17 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 			}
 			else
 				LOG_ERR(QString("GetPlayerInfo Failed! Reason:[%1]").arg(res));
+
+			// query user wallet
+			quint32 chipcoin = 0;
+			res = WalletDB.QueryUserWallet(player->GetAccountID(), chipcoin);
+			if ( res == WS_NO_ERR )
+			{
+				LOG_INFO(QString("Player[%1] has [%2] chipcoin now").arg(player->GetAccountID()).arg(chipcoin));
+				player->SetCoin(chipcoin);
+			}
+			else
+				LOG_ERR(QString("QueryUserWallet Failed! Reason:[%1]").arg(res));
 		}
 		else
 		{
@@ -208,6 +220,7 @@ void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
 	{
 		p<<itr.key();
 		p<<itr.value()->PlayerAmount();
+		p<<itr.value()->GetMinBringChip();
 		LOG_INFO(QString("[%1] players in table [%2]").arg(itr.value()->PlayerAmount()).arg(itr.key()));
 		QMap<int, ISocketInstancePtr> players = itr.value()->GetSeatInfo();
 		QMap<int, ISocketInstancePtr>::iterator pItr;

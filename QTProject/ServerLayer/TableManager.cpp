@@ -26,6 +26,7 @@ void TableManager::AssignTables( int _amount/*=MAX_TABLE*/ )
 	for ( int i = 0; i<_amount; i++ )
 	{
 		Table* table = new Table();
+		table->SetMinBringChip(MIN_BRING_CHIP);
 		mTables.insert(i, table);
 	}
 }

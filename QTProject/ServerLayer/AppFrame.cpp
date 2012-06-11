@@ -4,7 +4,7 @@
 #include "TableManager.h"
 #include "GameServerDB.h"
 #include "LogModule.h"
-
+#include "../WalletServer/WalletServerDB.h"
 
 //------------------------------------------------------------------------------
 AppFrame::AppFrame()
@@ -15,7 +15,10 @@ AppFrame::AppFrame()
 
 	InitDatabase();
 
-	InitWalletServer();
+	//InitWalletServer();
+
+	// use sigle-thread db
+	InitWalletDB();
 
 	connect(this, SIGNAL(SiInfo(const QString&)), &LOG, SLOT(StInfo(const QString&)));
 	connect(this, SIGNAL(SiWarn(const QString&)), &LOG, SLOT(StWarn(const QString&)));
@@ -37,7 +40,7 @@ void AppFrame::InitDatabase()
 	connect(&DB, SIGNAL(SiInfo(QString)), &LOG, SLOT(StInfo(QString)));
 	connect(&DB, SIGNAL(SiError(QString)), &LOG, SLOT(StError(QString)));
 
-	DB.Connect("../../DB/db.db");
+	DB.Connect("../../DB/db.db", "GameServerDB");
 
 	int res = DB.GetRoomInfo(atoi(__argv[1]), mRoomInfo);
 	if( res != GS_NO_ERR )
@@ -73,10 +76,19 @@ void AppFrame::stWalletConnected()
 
 void AppFrame::stWalletDisconnected()
 {
-	LOG_INFO("Wallet Disonnected");
+	LOG_WARN("Wallet Disonnected");
 }
 
 void AppFrame::stWalletError(QString _err)
 {
 	LOG_ERR(QString("Wallet Connect Error:%1").arg(_err));
+}
+
+void AppFrame::InitWalletDB()
+{
+	connect(&WalletDB, SIGNAL(SiInfo(QString)), &LOG, SLOT(StInfo(QString)));
+	connect(&WalletDB, SIGNAL(SiError(QString)), &LOG, SLOT(StError(QString)));
+
+	WalletDB.Connect("../../DB/walletdb.db", "WalletDB");
+
 }

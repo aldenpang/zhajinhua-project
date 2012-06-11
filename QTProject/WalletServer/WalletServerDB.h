@@ -35,6 +35,6 @@ protected:
 private:
 };
 
-#define DB WalletServerDB::GetSingleton()
+#define WalletDB WalletServerDB::GetSingleton()
 
 #endif // WalletServerDB_h__
