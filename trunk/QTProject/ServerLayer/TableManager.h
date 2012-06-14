@@ -42,6 +42,8 @@ public:
 	
 	void Follow(quint32 _tableID, quint32 _seatID, quint32 _chip);
 
+	int GetPlayerCurrentTableInfo(ISocketInstancePtr _player, quint32& _tableID, quint32& _seatID);
+
 protected:
 private:
 	QMap<int, Table*> mTables;

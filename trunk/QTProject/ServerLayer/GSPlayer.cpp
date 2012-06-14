@@ -6,7 +6,8 @@ GSPlayer::GSPlayer(QTcpSocket* _socket)
 {
 	mNickName = "";
 	mGender = 0;
-	mCoin = 0;
+	mUserWalletMoney = 0;
+	mTableWalletMoney = 0;
 	mExp = 0;
 	mPlayTime = 0;
 	mIsWaiting = false;

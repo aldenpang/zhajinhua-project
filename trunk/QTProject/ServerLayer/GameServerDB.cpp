@@ -59,6 +59,7 @@ int GameServerDB::GetRoomInfo( int _roomID, RoomInfo& _info )
 		_info.mPort = q.value(3).toInt();
 		_info.mScore = q.value(4).toInt();
 		_info.mUnit = q.value(5).toInt();
+		_info.mRoomID = q.value(6).toInt();
 
 		records++;
 		if ( records >=2 )

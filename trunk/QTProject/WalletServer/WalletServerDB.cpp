@@ -94,3 +94,12 @@ int WalletServerDB::UpdateTableWallet( quint32 _roomID, quint32 _tableID, quint3
 
 	return WS_NO_ERR;
 }
+
+int WalletServerDB::UpdateUserWallet( quint32 _accountID, quint32 _coinAmount )
+{
+	QString sql = QString("update UserWallet set Amount=%1 where AccountID=%2")
+		.arg(_coinAmount).arg(_accountID);
+	QSqlQuery q = mDb.exec(sql);
+
+	return WS_NO_ERR;
+}

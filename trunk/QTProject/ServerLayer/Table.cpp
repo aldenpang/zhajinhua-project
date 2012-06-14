@@ -246,8 +246,8 @@ void Table::UpdateReadyState( int _seatID )
 		for ( itr = players.begin(); itr != players.end(); itr++ )
 		{
 			GSPlayerPtr player = itr.value().staticCast<GSPlayer>();
-			player->SetCoin(player->GetCoin()-baseChip);
-			LOG_D_INFO(QString("After base chip, [%1] has [%2] left").arg(player->GetNickName()).arg(player->GetCoin()));
+			player->SetTableWalletMoney(player->GetTableWalletMoney()-baseChip);
+			LOG_D_INFO(QString("After base chip, [%1] has [%2] left").arg(player->GetNickName()).arg(player->GetTableWalletMoney()));
 		}
 		// 每人发三张牌
 		for ( itr = players.begin(); itr != players.end(); itr++ )
@@ -286,6 +286,13 @@ void Table::Follow( int _seatID, int _chip )
 		LOG_D_WARN(QString("SeatID[%1] not match with mCurrentPlayer[%2]").arg(_seatID).arg(mCurrentPlayer));
 		return;
 	}
+	GSPlayerPtr currentPlayer = mPlayers[mCurrentPlayer].staticCast<GSPlayer>();
+	if ( _chip > currentPlayer->GetTableWalletMoney() )
+	{
+		LOG_D_INFO(QString("SeatID[%1] has not enough money to follow").arg(_seatID));
+		// TODO:Send deny message
+		return;
+	}
 
 	LOG_D_INFO(QString("[%1] follow by [%2] chips").arg(_seatID).arg(_chip));
 	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
@@ -293,8 +300,7 @@ void Table::Follow( int _seatID, int _chip )
 	mCurrentPlayer = mCurrentPlayer % players.size();
 
 	// update chips
-	GSPlayerPtr currentPlayer = mPlayers[mCurrentPlayer].staticCast<GSPlayer>();
-	currentPlayer->SetCoin(currentPlayer->GetCoin()-_chip);
+	currentPlayer->SetTableWalletMoney(currentPlayer->GetTableWalletMoney()-_chip);
 
 	//if mCurrentBid is higher than TOP_CHIP, then turn to game end
 	mCurrentBid += _chip;

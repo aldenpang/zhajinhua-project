@@ -9,6 +9,8 @@ ConsoleClient::ConsoleClient()
 , mCurrentTableMinBringChip(0)
 , mMyTableID(0)
 , mIsEnd(false)
+, mTempTableID(0)
+, mTempSeatID(0)
 {
 	LOG.SetModuleName(QString("Console_%1").arg(__argv[1]));
 
@@ -35,6 +37,7 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stGSLoginFailed(quint32)));
 	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
 	connect(mGameServer, SIGNAL(SiDisconnected()), this, SLOT(stGSDisconnected()));
+	connect(mGameServer, SIGNAL(SiBringMoneyRes(int)), this, SLOT(stBringMoneyRes(int)));
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
 	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32)), this, SLOT(stTableJoinRes(quint32, quint32, quint32)));
 	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(stStartGame(TableInfo)));
@@ -136,8 +139,8 @@ void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 	//return;
 
 	// TODO: 这里应该从桌子列表中选择一个有人的进入（为了快速配桌）
-	int tableID = 0; 
-	int seatID = 0;
+	mTempTableID = 0; 
+	mTempSeatID = 0;
 	QMap<int, TableData>::iterator itr;
 	for ( itr = _tables.begin(); itr != _tables.end(); itr++)
 	{
@@ -150,9 +153,10 @@ void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 			}
 			else 
 			{
-				seatID = i;
+				mTempTableID = itr.key();
+				mTempSeatID = i;
 				mCurrentTableMinBringChip = itr.value().GetMinBringChip();
-				LOG_INFO(QString("Seat[%1] in Table[%2] is not occupied").arg(seatID).arg(itr.key()));
+				LOG_INFO(QString("Seat[%1] in Table[%2] is not occupied").arg(mTempSeatID).arg(itr.key()));
 				goto End;
 				//break;
 			}
@@ -160,8 +164,9 @@ void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 		}
 	}
 End:
-	LOG_INFO(QString("Join to table[%1] seat[%2]").arg(tableID).arg(seatID));
-	mGameServer->SendJoinTable(tableID, seatID);
+	LOG_INFO(QString("BringMoney to table[%1] seat[%2]").arg(mTempTableID).arg(mTempSeatID));
+	//mGameServer->SendJoinTable(mTempTableID, mTempSeatID);
+	mGameServer->SendBringMoney(mTempTableID, mTempSeatID, mCurrentTableMinBringChip);
 	return;
 }
 
@@ -276,4 +281,16 @@ void ConsoleClient::stSyncStart()
 	Packet p;
 	p.SetMessage(MSG_CL_GS_SYNC_START);
 	mGameServer->Send(&p);
+}
+
+void ConsoleClient::stBringMoneyRes( int _res )
+{
+	if ( _res == WS_NO_ERR )
+	{
+		LOG_INFO("Bring money successful, join to table");
+		mGameServer->SendJoinTable(mTempTableID, mTempSeatID);
+	}
+	else
+		LOG_ERR(QString("BringMoneyFailed[%1]").arg(_res));
+
 }
