@@ -57,6 +57,9 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pa
 	case MSG_CL_GS_FOLLOW:
 		processFollow(_incomeSocket, _packet);
 		break;
+	case MSG_CL_GS_BRING_MONEY:
+		processBringMoney(_incomeSocket, _packet);
+		break;
 	default:
 		break;
 	}
@@ -124,10 +127,12 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 			if ( res == WS_NO_ERR )
 			{
 				LOG_INFO(QString("Player[%1] has [%2] chipcoin now").arg(player->GetAccountID()).arg(chipcoin));
-				player->SetCoin(chipcoin);
+				player->SetUserWalletMoney(chipcoin);
 			}
 			else
 				LOG_ERR(QString("QueryUserWallet Failed! Reason:[%1]").arg(res));
+
+			// TODO: send player info
 		}
 		else
 		{
@@ -148,6 +153,16 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 		// 检查桌子是否可坐 & 加入桌子
 		int res = TABLE.StJoinTable(player, tableID, seatID);
 		LOG_INFO(QString("JoinTable result[%1]").arg(res));
+
+		if ( res == GS_NO_ERR )
+		{
+			int res = WalletDB.InsertTableWallet(mRoomInfo.mRoomID, tableID, seatID);
+			if ( res != WS_NO_ERR )
+			{
+				LOG_ERR(QString("InsertTableWallet Error, roomID[%1] tableID[%2] seatID[%3] res[%4]")
+					.arg(mRoomInfo.mRoomID).arg(tableID).arg(seatID).arg(res));
+			}
+		}
 
 		// 发送加入桌子的结果
 		Packet p;
@@ -250,11 +265,55 @@ void ZjhGameServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
 	GSPlayerPtr player = findPlayer(_clientSocket);
 	if ( player != NULL )
 	{
+		quint32 tableID = 0;
+		quint32 seatID = 0;
+		int res = TABLE.GetPlayerCurrentTableInfo(player, tableID, seatID);
+		if ( res != GS_NO_ERR )
+		{
+			LOG_ERR(QString("GetPlayerCurrentTableInfo Error[%1]").arg(res));
+			return;
+		}
+		quint32 tableWalletMoney = 0;
+		res = WalletDB.QueryTableWallet(mRoomInfo.mRoomID, tableID, seatID, tableWalletMoney);
+		if ( res != WS_NO_ERR )
+		{
+			LOG_ERR(QString("QueryTableWallet Error[%1]").arg(res));
+			return;
+		}
+		quint32 userWalletMoney = 0;
+		res = WalletDB.QueryUserWallet(player->GetAccountID(), userWalletMoney);
+		if ( res != WS_NO_ERR )
+		{
+			LOG_ERR(QString("QueryUserWallet Error[%1]").arg(res));
+			return;
+		}
+		res = WalletDB.UpdateUserWallet(player->GetAccountID(), tableWalletMoney+userWalletMoney);
+		if ( res != WS_NO_ERR )
+		{
+			LOG_ERR(QString("UpdateUserWallet Error[%1]").arg(res));
+			return;
+		}
+		res = WalletDB.UpdateTableWallet(mRoomInfo.mRoomID, tableID, seatID, 0);
+		if ( res != WS_NO_ERR )
+		{
+			LOG_ERR(QString("QueryTableWallet Error[%1]").arg(res));
+			return;
+		}
+		LOG_INFO(QString("Player[%1] transfer money from tableWallet to userWallet successful, userWallet[%2]")
+			.arg(player->GetNickName()).arg(tableWalletMoney+userWalletMoney));
+
 		// leave table first
-		int res = TABLE.StLeaveTable(player);
+		res = TABLE.StLeaveTable(player);
 		LOG_INFO(QString("Player Leave from table, res[%1]").arg(res));
+		if ( res != GS_NO_ERR )
+		{
+			LOG_ERR(QString("StLeaveTable Error[%1]").arg(res));
+			return;
+		}
 		// remove player from memory
 		deletePlayer(player);
+
+		
 	}
 }
 
@@ -311,4 +370,62 @@ void ZjhGameServer::processFollow( ISocketInstancePtr _incomeSocket, Packet& _pa
 
 	TABLE.Follow(tableID, seatID, chip);
 
+}
+
+void ZjhGameServer::processBringMoney( ISocketInstancePtr _incomeSocket, Packet& _packet )
+{
+	quint32 tableID = 0;
+	quint32 seatID = 0;
+	quint32 bringMoney = 0;
+	_packet>>tableID>>seatID>>bringMoney;
+	GSPlayerPtr player = findPlayer(_incomeSocket);
+	if ( player )
+	{
+		// check user wallet to ensure money is enough
+		quint32 userWalletMoney = 0;
+		int res = WalletDB.QueryUserWallet(player->GetAccountID(), userWalletMoney);
+		if ( res != WS_NO_ERR )
+		{
+			LOG_ERR(QString("Player[%1] query wallet error[%2]").arg(player->GetAccountID()).arg(res));
+			goto SEND_RESULT;
+		}
+
+		if ( bringMoney > userWalletMoney )
+		{
+			LOG_ERR(QString("Player[%1]'s user wallet has[%1], but want bring[%2] money").arg(userWalletMoney).arg(bringMoney));
+			res = ERR_WS_USERWALLET_NOT_ENOUGH;
+			goto SEND_RESULT;
+		}
+
+		// withdraw money from user wallet to table wallet
+		res = WalletDB.UpdateTableWallet(mRoomInfo.mRoomID, tableID, seatID, bringMoney);
+		if ( res != WS_NO_ERR )
+		{
+			LOG_ERR(QString("Player[%1] withdraw from user wallet error[%2]").arg(player->GetAccountID()).arg(res));
+			goto SEND_RESULT;
+		}
+		res = WalletDB.UpdateUserWallet(player->GetAccountID(), userWalletMoney-bringMoney);
+		if ( res != WS_NO_ERR )
+		{
+			LOG_ERR(QString("Player[%1] desposit to table wallet error[%2]").arg(player->GetAccountID()).arg(res));
+			goto SEND_RESULT;
+		}
+
+		player->SetTableWalletMoney(bringMoney);
+
+		// record transaction
+
+		res = WS_NO_ERR;
+SEND_RESULT:
+		// send result
+		Packet p;
+		p.SetMessage(MSG_GS_CL_BRING_MONEY);
+		p<<res;
+		_incomeSocket->Send(&p);
+
+	}
+	else
+	{
+		
+	}
 }

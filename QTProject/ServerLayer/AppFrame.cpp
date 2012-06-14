@@ -48,6 +48,8 @@ void AppFrame::InitDatabase()
 		LOG_ERR(QString("Can not find room config in db! res[%1]").arg(res));
 	}
 
+	mGameServer->SetRoomInfo(mRoomInfo);
+
 	//quint32 acc = 0;
 	//res = DB.GetAccountID(QString("acc2"), acc);
 

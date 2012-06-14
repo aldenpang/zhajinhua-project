@@ -13,6 +13,9 @@
 #include "ISocketInstance.h"
 #include "GSPlayer.h"
 #include <QTimer>
+#include "SharedData.h"
+
+using namespace SharedData;
 
 class ZjhGameServer : public IServerLayer
 {
@@ -28,19 +31,22 @@ public:
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	virtual void ClientDisconnected(ISocketInstancePtr _clientSocket);
 
+	void SetRoomInfo(RoomInfo _info){ mRoomInfo = _info; }
+
 private:
 	void processLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processTableJoin(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processTableLeave(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processSyncStart(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processFollow(ISocketInstancePtr _incomeSocket, Packet& _packet);
-
+	void processBringMoney(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	
 private slots:
 	void stRefershTables();
 private:
 	QTimer mTimer;
 	QList<GSPlayerPtr> mPlayerList;
+	RoomInfo mRoomInfo;
 
 private:
 	void sendTableInfo(GSPlayerPtr _to);

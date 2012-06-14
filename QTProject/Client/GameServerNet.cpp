@@ -27,6 +27,9 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_CL_TABLE_INFO:
 		processTableInfo(_packet);
 		break;
+	case MSG_GS_CL_BRING_MONEY:
+		processBringMoneyRes(_packet);
+		break;
 	case MSG_GS_CL_TABLE_JOIN:
 		processTableJoin(_packet);
 		break;
@@ -84,6 +87,14 @@ void GameServerNet::SendJoinTable( quint32 _tableID, quint32 _seatID )
 	Packet p;
 	p.SetMessage(MSG_CL_GS_TABLE_JOIN);
 	p<<_tableID<<_seatID;
+	Send(&p);
+}
+
+void GameServerNet::SendBringMoney( quint32 _tableID, quint32 _seatID, quint32 _money )
+{
+	Packet p;
+	p.SetMessage(MSG_CL_GS_BRING_MONEY);
+	p<<_tableID<<_seatID<<_money;
 	Send(&p);
 }
 
@@ -184,3 +195,12 @@ void GameServerNet::processSyncStart( Packet& _packet )
 {
 	emit SiSyncStart();
 }
+
+void GameServerNet::processBringMoneyRes( Packet& _packet )
+{
+	int res = 0;
+	_packet>>res;
+
+	emit SiBringMoneyRes(res);
+}
+

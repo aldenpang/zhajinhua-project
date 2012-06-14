@@ -32,8 +32,11 @@ public:
 	// 性别 0-male 1-female
 	PROPERTY(int, Gender);
 
-	// 币值
-	PROPERTY(uint, Coin);
+	// User wallet
+	PROPERTY(uint, UserWalletMoney);
+
+	// Table wallet
+	PROPERTY(uint, TableWalletMoney);
 
 	// 经验值
 	PROPERTY(uint, Exp);
