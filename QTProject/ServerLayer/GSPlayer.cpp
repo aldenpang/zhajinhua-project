@@ -110,7 +110,7 @@ bool GSPlayer::lessThan( const PokerPtr &s1, const PokerPtr &s2 )
 
 void GSPlayer::AddPoker( quint32 _id )
 {
-	if ( mHandPoker.size() == MAX_HAND_POKER )
+	if ( mHandPoker.size() >= MAX_HAND_POKER )
 		return;
 
 	if ( _id > 51 || _id < 0 )
@@ -118,16 +118,14 @@ void GSPlayer::AddPoker( quint32 _id )
 
 	PokerPtr p = PokerPtr(new Poker(_id));
 
-	mHandPoker.append(p);
-
-	if ( mHandPoker.size() == MAX_HAND_POKER )
-	{
-		mHandPokerType = analysePokerType(mHandPoker);
-	}
+	AddPoker(p);
 }
 
 void GSPlayer::AddPoker( PokerPtr _poker )
 {
+	if ( mHandPoker.size() >= MAX_HAND_POKER )
+		return;
+
 	mHandPoker.append(_poker);
 
 	if ( mHandPoker.size() == MAX_HAND_POKER )

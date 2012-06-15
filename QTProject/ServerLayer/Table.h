@@ -62,6 +62,8 @@ public:
 
 	PROPERTY(int, MinBringChip);
 
+	GSPlayerPtr WhoWin();
+
 protected:
 private:
 	QMap<int, ISocketInstancePtr>		mPlayers;	//<SeatID, PlayerInfo>
