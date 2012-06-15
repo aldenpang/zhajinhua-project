@@ -337,3 +337,20 @@ void Table::reset()
 
 	initPokers();
 }
+
+GSPlayerPtr Table::WhoWin()
+{
+	GSPlayerPtr winPlayer;
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for ( itr == mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	{
+		GSPlayerPtr player = itr.value().staticCast<GSPlayer>();
+		PokerType type = player->GetPokerType();
+		if ( type == BAOZI )
+		{
+			winPlayer = player;
+			break;
+		}
+	}
+	
+}
