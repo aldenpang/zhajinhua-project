@@ -307,6 +307,7 @@ void Table::Follow( int _seatID, int _chip )
 	LOG_D_INFO(QString("CurrentBid[%1] CurrentPlayer[%2]").arg(mCurrentBid).arg(mCurrentPlayer));
 	if ( mCurrentBid >= TOP_CHIP )
 	{
+		//WhoWin();
 		LOG_D_INFO("###### GameEnd ######");
 		mState = TS_BALANCE;
 		Packet pp;
@@ -342,15 +343,29 @@ GSPlayerPtr Table::WhoWin()
 {
 	GSPlayerPtr winPlayer;
 	QMap<int, ISocketInstancePtr>::iterator itr;
-	for ( itr == mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
 	{
 		GSPlayerPtr player = itr.value().staticCast<GSPlayer>();
-		PokerType type = player->GetPokerType();
-		if ( type == BAOZI )
+		int pushCounter = 0;
+		QMap<int, ISocketInstancePtr>::iterator otherItr;
+		for ( otherItr = mPlayers.begin(); otherItr != mPlayers.end(); otherItr++ )
+		{
+			GSPlayerPtr otherPlayer = otherItr.value().staticCast<GSPlayer>();
+			if ( player == otherPlayer )		// if this player is same player, continue
+				continue;
+
+			PokerType playerType = player->GetPokerType();
+			QList<PokerPtr> playerPokers = player->GetPokers();
+			PokerType otherType = otherPlayer->GetPokerType();
+			QList<PokerPtr> otherPokers = otherPlayer->GetPokers();
+			if ( player->CanPush(otherPlayer->GetPokers()) )
+				pushCounter++;
+		}
+		if ( pushCounter == mPlayers.size()-1 )	// if this player' poker is bigger than other player's, then this player is winner(except himself)
 		{
 			winPlayer = player;
 			break;
 		}
 	}
-	
+	return winPlayer;
 }

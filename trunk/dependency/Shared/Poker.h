@@ -72,6 +72,16 @@ public:
 		return *this;
 	}
 
+	//const Poker operator>(const Poker &other)
+	//{
+	//	return this->mValue > other.mValue?*this:other;
+	//}
+
+	//const Poker operator<(const Poker &other)
+	//{
+	//	return this->mValue < other.mValue?*this:other;
+	//}
+
 };
 
 typedef QSharedPointer<Poker> PokerPtr;

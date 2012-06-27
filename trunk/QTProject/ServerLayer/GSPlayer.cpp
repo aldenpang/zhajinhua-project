@@ -19,32 +19,37 @@ GSPlayer::~GSPlayer()
 
 }
 
-int GSPlayer::CanPush( QList<PokerPtr>& _other )
+bool GSPlayer::CanPush( QList<PokerPtr>& _other )
 {
-	//PokerType otherType = analysePokerType(_other);
+	PokerType otherType = analysePokerType(_other);
 
-	//if ( otherType == mHandPokerType )
-	//{
-	//	if ( mHandPokerType[0] > _other[0] )
-	//	{
-	//		return 1;
-	//	}
-	//}
-	//else
-	//{
-	//	if ( mHandPokerType < otherType )
-	//	{
-	//		return 1;		// 自己能压上
-	//	}
-	//	else if ( (mHandPokerType == SANPAI235) && (otherType == BAOZI) )
-	//	{
-	//		return 1;
-	//	}
-	//	else
-	//		return 0;
-	//}
+	if ( otherType == mHandPokerType )
+	{
+		QList<PokerPtr>::iterator itr;
+		int otherIdx = 0;
+		for( itr = mHandPoker.begin(); itr != mHandPoker.end(); itr++, otherIdx++ )
+		{
+			if ( (*itr)->mValue > _other[otherIdx]->mValue)
+			{
+				return true;
+			}
+		}
+	}
+	else
+	{
+		if ( mHandPokerType < otherType )
+		{
+			return true;
+		}
+		else if ( (mHandPokerType == SANPAI235) && (otherType == BAOZI) )
+		{
+			return true;
+		}
+		else
+			return false;
+	}
 
-	return 1;
+	return false;
 }
 
 void GSPlayer::reorderPokers2toA( QList<PokerPtr>& _input )
