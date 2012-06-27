@@ -3,7 +3,9 @@
 #include "LogModule.h"
 #include <QDateTime>
 #include "Packet.h"
+#include "../WalletServer/WalletServerDB.h"
 #include "GSPlayer.h"
+#include "DataCenter.h"
 using namespace SharedData;
 
 Table::Table()
@@ -247,6 +249,7 @@ void Table::UpdateReadyState( int _seatID )
 		{
 			GSPlayerPtr player = itr.value().staticCast<GSPlayer>();
 			player->SetTableWalletMoney(player->GetTableWalletMoney()-baseChip);
+			mCurrentBid += baseChip;
 			LOG_D_INFO(QString("After base chip, [%1] has [%2] left").arg(player->GetNickName()).arg(player->GetTableWalletMoney()));
 		}
 		// 每人发三张牌
@@ -307,9 +310,28 @@ void Table::Follow( int _seatID, int _chip )
 	LOG_D_INFO(QString("CurrentBid[%1] CurrentPlayer[%2]").arg(mCurrentBid).arg(mCurrentPlayer));
 	if ( mCurrentBid >= TOP_CHIP )
 	{
-		//WhoWin();
 		LOG_D_INFO("###### GameEnd ######");
 		mState = TS_BALANCE;
+		GSPlayerPtr winner = WhoWin();
+		// transfer money from loser's table wallet to winner's table wallet, and transfer rake
+		int rake = mCurrentBid*RAKE;
+		int afterRake = mCurrentBid-rake;
+		winner->SetTableWalletMoney(winner->GetTableWalletMoney()+afterRake);
+		// write player's current money to wallet db
+		QMap<int, ISocketInstancePtr>::iterator itr;
+		for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
+		{
+			int res = WalletDB.UpdateTableWallet(DATACENTER.mRoomInfo.mRoomID, mTableID, itr.key(), itr.value().staticCast<GSPlayer>()->GetTableWalletMoney());
+			if ( res != WS_NO_ERR )
+				LOG_D_ERR(QString("Player[%1] desposit to table wallet error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
+		}
+	
+		// write rake to wallet db
+
+		
+		
+
+
 		Packet pp;
 		pp.SetMessage(MSG_GS_BC_TABLE_END);
 		broadcastToPlaying(&pp);
@@ -335,6 +357,13 @@ void Table::reset()
 	mDealerSeat = 0;
 	mCurrentPlayer = 0;
 	mCurrentBid = 0;
+
+	// clean all player's poker
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	{
+		itr.value().staticCast<GSPlayer>()->CleanPokers();
+	}
 
 	initPokers();
 }

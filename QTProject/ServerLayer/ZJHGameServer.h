@@ -31,7 +31,7 @@ public:
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	virtual void ClientDisconnected(ISocketInstancePtr _clientSocket);
 
-	void SetRoomInfo(RoomInfo _info){ mRoomInfo = _info; }
+	void SetRoomInfo(RoomInfo _info);
 
 private:
 	void processLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);

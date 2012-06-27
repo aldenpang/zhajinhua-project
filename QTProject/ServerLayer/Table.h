@@ -62,6 +62,7 @@ public:
 	void Follow( int _seatID, int _chip );
 
 	PROPERTY(int, MinBringChip);
+	PROPERTY(int, TableID);
 
 	GSPlayerPtr WhoWin();
 

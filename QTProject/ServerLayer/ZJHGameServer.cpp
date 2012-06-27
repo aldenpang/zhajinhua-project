@@ -8,6 +8,7 @@
 #include "TableManager.h"
 #include "Table.h"
 #include "../WalletServer/WalletServerDB.h"
+#include "DataCenter.h"
 using namespace SharedData;
 
 //------------------------------------------------------------------------------
@@ -428,4 +429,10 @@ SEND_RESULT:
 	{
 		
 	}
+}
+
+void ZjhGameServer::SetRoomInfo( RoomInfo _info )
+{
+	DATACENTER.mRoomInfo = _info;
+	mRoomInfo = _info; 
 }

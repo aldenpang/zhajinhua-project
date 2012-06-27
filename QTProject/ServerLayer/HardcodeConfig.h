@@ -15,7 +15,8 @@
 #define MAX_TABLE 10
 #define REFRESH_INTERVAL 10	// second
 #define BASE_CHIP 5
-#define TOP_CHIP 20
+#define TOP_CHIP 30
 #define MIN_BRING_CHIP 200
+#define RAKE 0.10		// rake is 10%
 
 #endif // HardcodeConfig_h__
