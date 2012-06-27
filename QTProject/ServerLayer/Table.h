@@ -18,6 +18,7 @@
 #include "HardcodeConfig.h"
 #include "Poker.h"
 #include "MyToolkits.h"
+#include "GSPlayer.h"
 
 enum TableState
 {

@@ -58,9 +58,12 @@ public:
 
 	// 判断别人的牌是否能够压上
 	// return value: 1=true 0=false -1=same
-	int CanPush(QList<PokerPtr>& _other);
+	bool CanPush(QList<PokerPtr>& _other);
 
 	PokerType GetPokerType(){ return mHandPokerType; }
+
+	QList<PokerPtr>& GetPokers(){ return mHandPoker;	 }
+
 protected:
 private:
 	// 保存手牌
