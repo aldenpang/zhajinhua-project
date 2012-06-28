@@ -327,11 +327,10 @@ void Table::Follow( int _seatID, int _chip )
 		}
 	
 		// write rake to wallet db
-
+		int res = WalletDB.InsertRake(DATACENTER.mRoomInfo.mRoomID, rake);
+		if ( res != WS_NO_ERR )
+			LOG_D_ERR(QString("InsertRake error[%1]").arg(res));
 		
-		
-
-
 		Packet pp;
 		pp.SetMessage(MSG_GS_BC_TABLE_END);
 		broadcastToPlaying(&pp);

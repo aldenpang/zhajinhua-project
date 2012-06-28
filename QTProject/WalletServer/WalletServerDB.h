@@ -30,8 +30,10 @@ public:
 	// 先查询有没有此TableWallet，如果有就不插入，如果没有就插入，但是不刷新CoinAmount
 	int InsertTableWallet(quint32 _roomID, quint32 _tableID, quint32 _seatID);
 
-	// 刷新CoinAmount
 	int UpdateTableWallet(quint32 _roomID, quint32 _tableID, quint32 _seatID, quint32 _coinAmount);
+
+	// Check if has room-relatived rake record in wallet db, if not, insert a new recored, if has, insert the increment of rake amount
+	int InsertRake( quint32 _roomID, quint32 _rake );
 
 protected:
 private:

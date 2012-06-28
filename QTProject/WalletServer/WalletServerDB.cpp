@@ -103,3 +103,38 @@ int WalletServerDB::UpdateUserWallet( quint32 _accountID, quint32 _coinAmount )
 
 	return WS_NO_ERR;
 }
+
+int WalletServerDB::InsertRake( quint32 _roomID, quint32 _rake )
+{
+	QString sql = QString("select * from RakeWallet where RoomID=%1 ").arg(_roomID);
+	QSqlQuery q = mDb.exec(sql);
+
+	int totalRake = 0;
+	int records = 0;
+	while (q.next()) 
+	{
+		totalRake = q.value(1).toInt();
+		records++;
+		if ( records >=2 )
+			break;
+	}
+	if( records > 1 )
+	{
+		return ERR_WS_MULTI_RESULT;
+	}
+	else if( records == 0 )
+	{
+		sql = QString("insert into RakeWallet(RoomID, Rake) values(%1,%2)").arg(_roomID).arg(_rake);
+		q = mDb.exec(sql);
+		return WS_NO_ERR;
+	}
+	else		// record == 1, means already have a record, need query rake first, and add increment
+	{
+		sql = QString("update RakeWallet set Rake=%1 where RoomID=%2").arg(totalRake + _rake).arg(_roomID);
+		q = mDb.exec(sql);
+
+		return WS_NO_ERR;
+	}
+
+
+}
