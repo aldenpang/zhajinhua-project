@@ -15,6 +15,16 @@
 #include "SharedData.h"
 using namespace SharedData;
 
+enum TransactionType
+{
+	UserToTable=0,
+	TableToTable,
+	TableToUser,
+	TableToRake,
+
+	TT_Total,
+};
+
 class WalletServerDB : public DBLayer, public Singleton<WalletServerDB>
 {
 public:
@@ -22,8 +32,10 @@ public:
 	~WalletServerDB();
 
 	int QueryUserWallet(quint32 _accountID, quint32& _coinAmount);
+	int QueryUserWalletID(quint32 _accountID, quint32& _id);
 
 	int QueryTableWallet(quint32 _roomID, quint32 _tableID, quint32 _seatID, quint32& _coinAmount);
+	int QueryTableWalletID(quint32 _roomID, quint32 _tableID, quint32 _seatID, quint32& _id);
 
 	int UpdateUserWallet(quint32 _accountID, quint32 _coinAmount);
 
@@ -34,6 +46,8 @@ public:
 
 	// Check if has room-relatived rake record in wallet db, if not, insert a new recored, if has, insert the increment of rake amount
 	int InsertRake( quint32 _roomID, quint32 _rake );
+
+	int InsertTransactionRecord( TransactionType _type, quint32 _amount, quint32 _fromID, quint32 _toID, quint32 _result );
 
 protected:
 private:
