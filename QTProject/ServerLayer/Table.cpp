@@ -324,6 +324,7 @@ void Table::Follow( int _seatID, int _chip )
 			int res = WalletDB.UpdateTableWallet(DATACENTER.mRoomInfo.mRoomID, mTableID, itr.key(), itr.value().staticCast<GSPlayer>()->GetTableWalletMoney());
 			if ( res != WS_NO_ERR )
 				LOG_D_ERR(QString("Player[%1] desposit to table wallet error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
+			//res = WalletDB.InsertTransactionRecord()
 		}
 	
 		// write rake to wallet db
@@ -331,6 +332,11 @@ void Table::Follow( int _seatID, int _chip )
 		if ( res != WS_NO_ERR )
 			LOG_D_ERR(QString("InsertRake error[%1]").arg(res));
 		
+		// record
+		res = WalletDB.InsertTransactionRecord(TableToRake, rake, winner->GetTableWalletID(), DATACENTER.mRoomInfo.mRoomID, res);
+		if ( res != WS_NO_ERR )
+			LOG_D_ERR(QString("InsertTransactionRecord error[%1]").arg(res));
+
 		Packet pp;
 		pp.SetMessage(MSG_GS_BC_TABLE_END);
 		broadcastToPlaying(&pp);

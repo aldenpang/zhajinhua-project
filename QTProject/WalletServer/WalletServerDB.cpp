@@ -138,3 +138,78 @@ int WalletServerDB::InsertRake( quint32 _roomID, quint32 _rake )
 
 
 }
+
+int WalletServerDB::InsertTransactionRecord( TransactionType _type, quint32 _amount, quint32 _fromID, quint32 _toID, quint32 _result )
+{
+	QString typeStr;
+	switch ( _type )
+	{
+	case UserToTable:
+		typeStr = "UserToTable";
+		break;
+	case TableToTable:
+		typeStr = "TableToTable";
+		break;
+	case TableToUser:
+		typeStr = "TableToUser";
+		break;
+	case TableToRake:
+		typeStr = "TableToRake";
+		break;
+	default:
+		typeStr = "UnknowTransactionType";
+		break;
+	}
+
+	QString sql = QString("insert into TransactionRecord(Type, TypeStr, Amount, FromID, ToID, Result, Time) values(%1,\"%2\",%3,%4,%5,%6,\"%7\")")
+		.arg(_type).arg(typeStr).arg(_amount).arg(_fromID).arg(_toID).arg(_result).arg(QDateTime::currentDateTime ().toString());
+	QSqlQuery q = mDb.exec(sql);
+
+	return WS_NO_ERR;
+}
+
+int WalletServerDB::QueryUserWalletID( quint32 _accountID, quint32& _id )
+{
+	QString sql = QString("select * from UserWallet where AccountID=%1").arg(_accountID);
+	QSqlQuery q = mDb.exec(sql);
+
+	int records = 0;
+	while (q.next()) 
+	{
+		_id = q.value(0).toInt();
+		records++;
+		if ( records >=2 )
+			break;
+	}
+
+	if( records == 1 )
+		return WS_NO_ERR;
+	else if(records < 1 )
+		return ERR_WS_WALLET_NOT_FOUND;
+	else
+		return ERR_WS_MULTI_RESULT;
+}
+
+int WalletServerDB::QueryTableWalletID( quint32 _roomID, quint32 _tableID, quint32 _seatID, quint32& _id )
+{
+	QString sql = QString("select * from TableWallet where RoomID=%1 and TableID=%2 and SeatID=%3").arg(_roomID).arg(_tableID).arg(_seatID);
+	QSqlQuery q = mDb.exec(sql);
+
+	int records = 0;
+	while (q.next()) 
+	{
+		_id = q.value(0).toInt();
+		records++;
+		if ( records >=2 )
+			break;
+	}
+
+	if( records == 1 )
+		return WS_NO_ERR;
+	else if(records < 1 )
+		return ERR_WS_WALLET_NOT_FOUND;
+	else
+		return ERR_WS_MULTI_RESULT;
+
+	return WS_NO_ERR;
+}

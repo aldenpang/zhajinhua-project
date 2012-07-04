@@ -35,8 +35,14 @@ public:
 	// User wallet
 	PROPERTY(uint, UserWalletMoney);
 
+	// User wallet
+	PROPERTY(uint, UserWalletID);
+
 	// Table wallet
 	PROPERTY(uint, TableWalletMoney);
+
+	// Table wallet
+	PROPERTY(uint, TableWalletID);
 
 	// æ≠—È÷µ
 	PROPERTY(uint, Exp);
