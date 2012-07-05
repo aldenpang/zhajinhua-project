@@ -12,6 +12,7 @@ GSPlayer::GSPlayer(QTcpSocket* _socket)
 	mPlayTime = 0;
 	mIsWaiting = false;
 	mHandPokerType = NONE;
+	mAlreadyFollow = 0;
 }
 
 GSPlayer::~GSPlayer()
@@ -142,4 +143,14 @@ void GSPlayer::AddPoker( PokerPtr _poker )
 void GSPlayer::CleanPokers()
 {
 	mHandPoker.clear();
+}
+
+void GSPlayer::AlreadyFollow( quint32 _alreadyFollow )
+{
+	mAlreadyFollow += _alreadyFollow;
+}
+
+void GSPlayer::CleanAlreadyFollow()
+{
+	mAlreadyFollow = 0;
 }
