@@ -56,6 +56,12 @@ public:
 	// 来源IP
 	PROPERTY(QString, IP);
 
+	// 已经跟的钱数
+	void AlreadyFollow(quint32 _alreadyFollow);
+	quint32 GetAlreadyFollow(){ return mAlreadyFollow; }
+	// 清除跟的钱数
+	void CleanAlreadyFollow();
+
 	void AddPoker(quint32 _id);
 
 	void AddPoker(PokerPtr _poker);
@@ -75,7 +81,7 @@ private:
 	// 保存手牌
 	QList<PokerPtr>	mHandPoker;
 	PokerType mHandPokerType;
-
+	quint32 mAlreadyFollow;
 private:
 	// 让扑克从小往大排序
 	void reorderPokers2toA(QList<PokerPtr>& _input);

@@ -304,6 +304,7 @@ void Table::Follow( int _seatID, int _chip )
 
 	// update chips
 	currentPlayer->SetTableWalletMoney(currentPlayer->GetTableWalletMoney()-_chip);
+	currentPlayer->AlreadyFollow(_chip);
 
 	//if mCurrentBid is higher than TOP_CHIP, then turn to game end
 	mCurrentBid += _chip;
@@ -324,7 +325,14 @@ void Table::Follow( int _seatID, int _chip )
 			int res = WalletDB.UpdateTableWallet(DATACENTER.mRoomInfo.mRoomID, mTableID, itr.key(), itr.value().staticCast<GSPlayer>()->GetTableWalletMoney());
 			if ( res != WS_NO_ERR )
 				LOG_D_ERR(QString("Player[%1] desposit to table wallet error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
-			//res = WalletDB.InsertTransactionRecord()
+
+			if ( itr.value().staticCast<GSPlayer>() != winner )
+			{
+				res = WalletDB.InsertTransactionRecord(TableToTable, itr.value().staticCast<GSPlayer>()->GetAlreadyFollow(), itr.value().staticCast<GSPlayer>()->GetTableWalletID()
+					, winner->GetTableWalletID(), res);
+				if ( res != WS_NO_ERR )
+					LOG_D_ERR(QString("InsertTransactionRecord for Player[%1] error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
+			}
 		}
 	
 		// write rake to wallet db
@@ -368,6 +376,7 @@ void Table::reset()
 	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
 	{
 		itr.value().staticCast<GSPlayer>()->CleanPokers();
+		itr.value().staticCast<GSPlayer>()->CleanAlreadyFollow();
 	}
 
 	initPokers();
