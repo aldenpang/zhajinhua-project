@@ -135,3 +135,12 @@ int TableManager::GetPlayerCurrentTableInfo( ISocketInstancePtr _player, quint32
 
 	return ERR_GS_PLAYER_NOT_FOUND;
 }
+
+void TableManager::GiveUp( quint32 _tableID, quint32 _seatID )
+{
+	QMap<int, Table*>::iterator itr = mTables.find(_tableID);
+	if ( itr != mTables.end() )
+	{
+		itr.value()->GiveUp(_seatID);
+	}
+}

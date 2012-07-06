@@ -292,8 +292,13 @@ void Table::Follow( int _seatID, int _chip )
 	GSPlayerPtr currentPlayer = mPlayers[mCurrentPlayer].staticCast<GSPlayer>();
 	if ( _chip > currentPlayer->GetTableWalletMoney() )
 	{
-		LOG_D_INFO(QString("SeatID[%1] has not enough money to follow").arg(_seatID));
+		LOG_D_WARN(QString("SeatID[%1] has not enough money to follow").arg(_seatID));
 		// TODO:Send deny message
+		return;
+	}
+	if ( currentPlayer->GetIsGiveUp() )
+	{
+		LOG_D_WARN(QString("SeatID[%1] already give up").arg(_seatID));
 		return;
 	}
 
@@ -311,45 +316,7 @@ void Table::Follow( int _seatID, int _chip )
 	LOG_D_INFO(QString("CurrentBid[%1] CurrentPlayer[%2]").arg(mCurrentBid).arg(mCurrentPlayer));
 	if ( mCurrentBid >= TOP_CHIP )
 	{
-		LOG_D_INFO("###### GameEnd ######");
-		mState = TS_BALANCE;
-		GSPlayerPtr winner = WhoWin();
-		// transfer money from loser's table wallet to winner's table wallet, and transfer rake
-		int rake = mCurrentBid*RAKE;
-		int afterRake = mCurrentBid-rake;
-		winner->SetTableWalletMoney(winner->GetTableWalletMoney()+afterRake);
-		// write player's current money to wallet db
-		QMap<int, ISocketInstancePtr>::iterator itr;
-		for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
-		{
-			int res = WalletDB.UpdateTableWallet(DATACENTER.mRoomInfo.mRoomID, mTableID, itr.key(), itr.value().staticCast<GSPlayer>()->GetTableWalletMoney());
-			if ( res != WS_NO_ERR )
-				LOG_D_ERR(QString("Player[%1] desposit to table wallet error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
-
-			if ( itr.value().staticCast<GSPlayer>() != winner )
-			{
-				res = WalletDB.InsertTransactionRecord(TableToTable, itr.value().staticCast<GSPlayer>()->GetAlreadyFollow(), itr.value().staticCast<GSPlayer>()->GetTableWalletID()
-					, winner->GetTableWalletID(), res);
-				if ( res != WS_NO_ERR )
-					LOG_D_ERR(QString("InsertTransactionRecord for Player[%1] error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
-			}
-		}
-	
-		// write rake to wallet db
-		int res = WalletDB.InsertRake(DATACENTER.mRoomInfo.mRoomID, rake);
-		if ( res != WS_NO_ERR )
-			LOG_D_ERR(QString("InsertRake error[%1]").arg(res));
-		
-		// record
-		res = WalletDB.InsertTransactionRecord(TableToRake, rake, winner->GetTableWalletID(), DATACENTER.mRoomInfo.mRoomID, res);
-		if ( res != WS_NO_ERR )
-			LOG_D_ERR(QString("InsertTransactionRecord error[%1]").arg(res));
-
-		Packet pp;
-		pp.SetMessage(MSG_GS_BC_TABLE_END);
-		broadcastToPlaying(&pp);
-
-		reset();
+		gameEnd();
 
 		startTable();
 	}
@@ -377,6 +344,7 @@ void Table::reset()
 	{
 		itr.value().staticCast<GSPlayer>()->CleanPokers();
 		itr.value().staticCast<GSPlayer>()->CleanAlreadyFollow();
+		itr.value().staticCast<GSPlayer>()->SetIsGiveUp(false);
 	}
 
 	initPokers();
@@ -411,4 +379,83 @@ GSPlayerPtr Table::WhoWin()
 		}
 	}
 	return winPlayer;
+}
+
+void Table::GiveUp( int _seatID )
+{
+	// check player amount, if less than 2, game will end, otherwise this player will end himself
+	GSPlayerPtr player = mPlayers[_seatID].staticCast<GSPlayer>();
+	player->SetIsGiveUp(true);
+
+	int notGiveUpAmount = 0;
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	{
+		if ( !itr.value().staticCast<GSPlayer>()->GetIsGiveUp() )
+		{
+			notGiveUpAmount++;
+		}
+	}
+
+	if( notGiveUpAmount == 1 )
+	{
+		gameEnd();
+		startTable();
+	}
+	// broadcast
+	Packet p;
+	p.SetMessage(MSG_GS_CL_GIVEUP);
+	p<<_seatID;
+	broadcastToPlaying(&p);
+}
+
+void Table::calculateBalance()
+{
+	GSPlayerPtr winner = WhoWin();
+	// transfer money from loser's table wallet to winner's table wallet, and transfer rake
+	int rake = mCurrentBid*RAKE;
+	int afterRake = mCurrentBid-rake;
+	winner->SetTableWalletMoney(winner->GetTableWalletMoney()+afterRake);
+	// write player's current money to wallet db
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	{
+		int res = WalletDB.UpdateTableWallet(DATACENTER.mRoomInfo.mRoomID, mTableID, itr.key(), itr.value().staticCast<GSPlayer>()->GetTableWalletMoney());
+		if ( res != WS_NO_ERR )
+			LOG_D_ERR(QString("Player[%1] desposit to table wallet error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
+
+		if ( itr.value().staticCast<GSPlayer>() != winner )
+		{
+			res = WalletDB.InsertTransactionRecord(TableToTable, itr.value().staticCast<GSPlayer>()->GetAlreadyFollow(), itr.value().staticCast<GSPlayer>()->GetTableWalletID()
+				, winner->GetTableWalletID(), res);
+			if ( res != WS_NO_ERR )
+				LOG_D_ERR(QString("InsertTransactionRecord for Player[%1] error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
+		}
+	}
+
+	// write rake to wallet db
+	int res = WalletDB.InsertRake(DATACENTER.mRoomInfo.mRoomID, rake);
+	if ( res != WS_NO_ERR )
+		LOG_D_ERR(QString("InsertRake error[%1]").arg(res));
+
+	// record
+	res = WalletDB.InsertTransactionRecord(TableToRake, rake, winner->GetTableWalletID(), DATACENTER.mRoomInfo.mRoomID, res);
+	if ( res != WS_NO_ERR )
+		LOG_D_ERR(QString("InsertTransactionRecord error[%1]").arg(res));
+
+}
+
+void Table::gameEnd()
+{
+	LOG_D_INFO("###### GameEnd ######");
+	mState = TS_BALANCE;
+
+	calculateBalance();
+
+	Packet pp;
+	pp.SetMessage(MSG_GS_BC_TABLE_END);
+	broadcastToPlaying(&pp);
+
+	reset();
+
 }

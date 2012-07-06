@@ -42,6 +42,8 @@ public:
 	
 	void Follow(quint32 _tableID, quint32 _seatID, quint32 _chip);
 
+	void GiveUp(quint32 _tableID, quint32 _seatID);
+
 	int GetPlayerCurrentTableInfo(ISocketInstancePtr _player, quint32& _tableID, quint32& _seatID);
 
 protected:

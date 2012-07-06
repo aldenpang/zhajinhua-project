@@ -13,6 +13,7 @@ GSPlayer::GSPlayer(QTcpSocket* _socket)
 	mIsWaiting = false;
 	mHandPokerType = NONE;
 	mAlreadyFollow = 0;
+	mIsGiveUp = false;
 }
 
 GSPlayer::~GSPlayer()

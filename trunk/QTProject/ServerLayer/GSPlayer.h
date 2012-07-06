@@ -53,6 +53,9 @@ public:
 	// 是否在等待进入游戏
 	PROPERTY(bool, IsWaiting);
 
+	// 是否已经放弃
+	PROPERTY(bool, IsGiveUp);
+
 	// 来源IP
 	PROPERTY(QString, IP);
 
