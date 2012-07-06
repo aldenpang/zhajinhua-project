@@ -61,6 +61,9 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pa
 	case MSG_CL_GS_BRING_MONEY:
 		processBringMoney(_incomeSocket, _packet);
 		break;
+	case MSG_CL_GS_GIVEUP:
+		processGiveUp(_incomeSocket, _packet);
+		break;
 	default:
 		break;
 	}
@@ -469,4 +472,15 @@ void ZjhGameServer::SetRoomInfo( RoomInfo _info )
 {
 	DATACENTER.mRoomInfo = _info;
 	mRoomInfo = _info; 
+}
+
+void ZjhGameServer::processGiveUp( ISocketInstancePtr _incomeSocket, Packet& _packet )
+{
+	int tableID = 0;
+	int seatID = 0;
+
+	_packet>>tableID>>seatID;
+
+	TABLE.GiveUp(tableID, seatID);
+
 }

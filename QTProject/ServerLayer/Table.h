@@ -61,6 +61,8 @@ public:
 
 	void Follow( int _seatID, int _chip );
 
+	void GiveUp( int _seatID );
+
 	PROPERTY(int, MinBringChip);
 	PROPERTY(int, TableID);
 
@@ -94,6 +96,9 @@ private:
 
 	QMap<int, ISocketInstancePtr> getPlayingPlayers();
 
+	void gameEnd();
+
+	void calculateBalance();
 };
 
 #endif // Table_h__

@@ -40,6 +40,7 @@ private:
 	void processSyncStart(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processFollow(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processBringMoney(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	void processGiveUp(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	
 private slots:
 	void stRefershTables();
