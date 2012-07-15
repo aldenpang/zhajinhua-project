@@ -14,7 +14,7 @@ LobbyUI::~LobbyUI()
 void LobbyUI::Init()
 {
 	QUiLoader uiLoader;
-	QString fileStr(":/Client/lobby.ui");
+	QString fileStr(":/Client/table.ui");
 	QFile uiFile(fileStr);
 	mMainWidget = uiLoader.load(&uiFile);
 	if ( mMainWidget )
