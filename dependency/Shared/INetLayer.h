@@ -1,5 +1,5 @@
 /********************************************************************
-	Copyright (C) 2005 by Bele Group
+	Copyright (C) 2005 by Pang Shuo
 	@date:	    2011-12-19   15:27
 	@file: 		INetLayer.h
 	@author:    Snake

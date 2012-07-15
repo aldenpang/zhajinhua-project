@@ -1,8 +1,17 @@
 <RCC>
-    <qresource prefix="/Client">
-        <file>client.ui</file>
-    </qresource>
-    <qresource prefix="/Images">
-        <file>Media/bg.png</file>
-    </qresource>
+  <qresource prefix="/Client">
+    <file>lobby.ui</file>
+    <file>client.ui</file>
+  </qresource>
+  <qresource prefix="/Images">
+    <file>Media/btn_bg.png</file>
+    <file>Media/lobby.png</file>
+    <file>Media/btn_close.png</file>
+    <file>Media/btn_min.png</file>
+    <file>Media/btn_enter.png</file>
+    <file>Media/btn_forget.png</file>
+    <file>Media/btn_reg.png</file>
+    <file>Media/bg.png</file>
+    <file>Media/btn_login.png</file>
+  </qresource>
 </RCC>

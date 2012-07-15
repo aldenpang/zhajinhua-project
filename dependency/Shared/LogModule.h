@@ -1,5 +1,5 @@
 /********************************************************************
-	Copyright (C) 2005 by Bele Group
+	Copyright (C) 2005 by Pang Shuo
 	@date:	    2012-1-20   16:03
 	@file: 		LogModule.h
 	@author:    Snake
