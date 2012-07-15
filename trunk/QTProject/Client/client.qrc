@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/Client">
+    <file>table.ui</file>
     <file>lobby.ui</file>
     <file>client.ui</file>
   </qresource>
