@@ -7,6 +7,7 @@
 #include <QResource>
 #include <QtNetwork>
 #include "SharedData.h"
+#include "MyToolkits.h"
 
 using namespace SharedData;
 
