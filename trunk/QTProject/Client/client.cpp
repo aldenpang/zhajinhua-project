@@ -64,13 +64,13 @@ void Client::initLoginServer()
 {
 	mLoginServer = new LoginServerNet();
 	mLoginServer->Init();
-	mLoginServer->Connect("localhost", 5000);
+	//mLoginServer->Connect("localhost", 5000);
 	connect(mLoginServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
 	connect(mLoginServer, SIGNAL(SiLoginOK()), this, SLOT(stLoginOK()));
 	connect(mLoginServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stLoginFailed(quint32)));
 	connect(mLoginServer, SIGNAL(SiGameList(QVector<RoomInfo>)), this, SLOT(stGameList(QVector<RoomInfo>)));
 
-	mLoginServer->SendLoginRequest(gUserName, gPassword);
+	//mLoginServer->SendLoginRequest(gUserName, gPassword);
 
 }
 

@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtUiTools4.lib QtNetwork4.lib"
+				AdditionalDependencies="qtmain.lib QtCore4.lib QtGui4.lib QtUiTools.lib QtNetwork4.lib"
 				OutputFile="..\Bin\$(ProjectName).exe"
 				AdditionalLibraryDirectories="$(QTDIR)\lib"
 				GenerateDebugInformation="false"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtUiToolsd4.lib QtNetworkd4.lib"
+				AdditionalDependencies="qtmaind.lib QtCored4.lib QtGuid4.lib QtUiToolsd.lib QtNetworkd4.lib"
 				OutputFile="..\Bin\$(ProjectName)_d.exe"
 				AdditionalLibraryDirectories="$(QTDIR)\lib"
 				GenerateDebugInformation="true"
