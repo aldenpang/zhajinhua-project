@@ -31,6 +31,8 @@ private:
 
 	void regConnections();
 
+	void initTables();
+
 };
 
 #endif

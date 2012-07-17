@@ -16,7 +16,7 @@ Client::Client(int & argc, char ** argv)
 
 	mLoginUI = new LoginUI;
 	mLoginUI->Init();
-	mLoginUI->Show();
+	//mLoginUI->Show();
 	initMouseEventFilter(mLoginUI->GetWidget());
 
 	mLobbyUI = new LobbyUI;
@@ -42,6 +42,7 @@ void Client::initMouseEventFilter(QWidget* _widget)
 void Client::regConnections()
 {
 	connect(mLoginUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
+	connect(mLobbyUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
 
 }
 //------------------------------------------------------------------------------

@@ -26,7 +26,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget[objectName=&quot;bgWidget&quot;] 
+   <string notr="true">/*QWidget[objectName=&quot;bgWidget&quot;] 
 {
 background-image: url(:/Images/Media/lobby.png);
 }
@@ -61,7 +61,7 @@ QWidget[objectName=&quot;scrollAreaWidgetContents&quot;]
 QWidget[objectName=&quot;scrollAreaWidgetContents_2&quot;]
 {
 	background-color: rgba(255, 255, 255, 0);
-}</string>
+}*/</string>
   </property>
   <widget class="QPushButton" name="btn_back">
    <property name="geometry">
@@ -82,7 +82,7 @@ QWidget[objectName=&quot;scrollAreaWidgetContents_2&quot;]
      <x>30</x>
      <y>110</y>
      <width>221</width>
-     <height>541</height>
+     <height>491</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -100,7 +100,7 @@ QWidget[objectName=&quot;scrollAreaWidgetContents_2&quot;]
       <x>0</x>
       <y>0</y>
       <width>219</width>
-      <height>539</height>
+      <height>489</height>
      </rect>
     </property>
    </widget>
@@ -148,6 +148,19 @@ QWidget[objectName=&quot;scrollAreaWidgetContents_2&quot;]
    </property>
    <property name="text">
     <string>退出</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>610</y>
+     <width>221</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
    </property>
   </widget>
  </widget>
