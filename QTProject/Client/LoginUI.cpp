@@ -3,6 +3,7 @@
 #include "LoginServerNet.h"
 #include "GameServerNet.h"
 #include "Packet.h"
+#include "Downloader.h"
 
 LoginUI::LoginUI()
 {
@@ -13,6 +14,7 @@ LoginUI::~LoginUI()
 {
 
 }
+//Downloader downloader;
 
 void LoginUI::Init()
 {
@@ -26,6 +28,7 @@ void LoginUI::Init()
 	}
 
 	regConnections();
+	//downloader.Start(QString("http://ww3.sinaimg.cn/large/97ed3185jw1duzuczkiaqj111.jpg"), QString("C:/1.jpg"));
 }
 
 void LoginUI::regConnections()
