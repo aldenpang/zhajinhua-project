@@ -4,6 +4,7 @@
 #include "MousePropagation.h"
 #include "LoginUI.h"
 #include "LobbyUI.h"
+#include "LogModule.h"
 
 QString gUserName = "acc4";
 QString gPassword = "1234";
@@ -12,6 +13,10 @@ int argcCount = 1;
 Client::Client(int & argc, char ** argv)
 	: QApplication(argcCount, argv)
 {
+	LOG.SetModuleName(QString("Client"));
+
+	LOG_D_INFO("Client Start");
+
 	QResource::registerResource(QString("media.dat"));
 
 	mLoginUI = new LoginUI;
