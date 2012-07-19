@@ -10,7 +10,7 @@
 #define LOGINUI_H
 
 #include "BaseUI.h"
-
+#include "Patcher.h"
 class LoginUI : public BaseUI
 {
 	Q_OBJECT
@@ -30,6 +30,7 @@ private slots:
 
 protected:
 private:
+	Patcher mPatcher;
 
 	void regConnections();
 
