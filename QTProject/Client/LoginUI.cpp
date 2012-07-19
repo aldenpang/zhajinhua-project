@@ -29,6 +29,8 @@ void LoginUI::Init()
 
 	regConnections();
 	//downloader.Start(QString("http://ww3.sinaimg.cn/large/97ed3185jw1duzuczkiaqj111.jpg"), QString("C:/1.jpg"));
+
+	mPatcher.Start(QString("PatchFileList.xml"));
 }
 
 void LoginUI::regConnections()
