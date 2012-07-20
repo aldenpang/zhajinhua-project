@@ -29,11 +29,15 @@ public:
 	// load PatchFileList.xml which already downloaded from remote
 	void Start(QString& _file);
 
+	// like http://www.123.com/, with connected relative path combined to be complete url
+	void SetBaseURL(QString& _url){mBaseURL = _url;}
+
 signals:
 	void SiProgress(quint64 _done, quint64 _total);
 
 private:
 	QVector<PatchItem> mPatchItems;
+	QString mBaseURL;
 
 	void parse(QString& _file);
 	// compare file's size and crc code then decide which file will be downloaded
@@ -41,7 +45,7 @@ private:
 
 	void download(QVector<PatchItem>& _items);
 
-	bool isSameFile(const QString& _file, const QString& _crc);
+	bool isSameFile(const QString& _file, const quint64 _size, const QString& _crc);
 };
 
 
