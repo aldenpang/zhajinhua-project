@@ -5,6 +5,7 @@
 #include "LoginUI.h"
 #include "LobbyUI.h"
 #include "LogModule.h"
+#include "Setting.h"
 
 QString gUserName = "acc4";
 QString gPassword = "1234";
@@ -17,6 +18,8 @@ Client::Client(int & argc, char ** argv)
 	LOG_D_INFO("Client Start");
 
 	QResource::registerResource(QString("media.dat"));
+
+	SETTINGS.Init("ClientConfig.ini");
 
 	mLoginUI = new LoginUI;
 	mLoginUI->Init();

@@ -327,6 +327,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Setting.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Setting.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ZJHGameUI.cpp"
 				>
 			</File>

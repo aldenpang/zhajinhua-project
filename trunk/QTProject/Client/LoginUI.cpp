@@ -4,6 +4,7 @@
 #include "GameServerNet.h"
 #include "Packet.h"
 #include "Downloader.h"
+#include "Setting.h"
 
 LoginUI::LoginUI()
 {
@@ -26,6 +27,10 @@ void LoginUI::Init()
 	{
 		mMainWidget->setWindowFlags(Qt::FramelessWindowHint);
 	}
+
+	// load urls
+	QString url = SETTINGS.GetLoginADURL();
+	//mMainWidget->findChild<QWebView*>("")
 
 	regConnections();
 	//downloader.Start(QString("http://ww3.sinaimg.cn/large/97ed3185jw1duzuczkiaqj111.jpg"), QString("C:/1.jpg"));
