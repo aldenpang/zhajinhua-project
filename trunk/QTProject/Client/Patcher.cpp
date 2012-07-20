@@ -63,6 +63,14 @@ QVector<PatchItem> Patcher::compareFiles( QVector<PatchItem>& _allItems )
 {
 	QVector<PatchItem> tobeDownloaded;
 
+	for ( int i = 0; i<mPatchItems.size(); i++)
+	{
+		if(!isSameFile(mPatchItems[i].mPath, mPatchItems[i].mSize, mPatchItems[i].mCRC))
+		{
+			tobeDownloaded.push_back(mPatchItems[i]);
+		}
+	}
+
 	return tobeDownloaded;
 }
 
@@ -71,7 +79,7 @@ void Patcher::download( QVector<PatchItem>& _items )
 
 }
 
-bool Patcher::isSameFile(const QString& _file, const QString& _crc)
+bool Patcher::isSameFile(const QString& _file, const quint64 _size, const QString& _crc)
 {
 	QFile file(_file);
 	if (!file.open(QIODevice::ReadOnly))
@@ -79,6 +87,8 @@ bool Patcher::isSameFile(const QString& _file, const QString& _crc)
 
 	QDataStream in(&file);
 	quint64 fileSize = file.size();
+	if ( _size != fileSize )
+		return false;
 	unsigned char* data = new unsigned char[fileSize];
 	int res = in.readRawData((char*)data, fileSize);
 	quint32 crc = crc32c_sb8(NULL, data, file.size(), 0, MODE_ALIGN);
