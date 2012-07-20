@@ -35,11 +35,11 @@ int LoginServerDB::VerifyUser( QString& _user, QString& _pwd )
 	{
 		if ( status == 0 )
 		{
-			return 0;
+			return LOGIN_OK;
 		}
 		else if ( status == 1 )		// 1 is frezze
 		{
-			return 2;
+			return ERR_LS_USER_FREEZED;
 		}
 		else
 			return -1;
@@ -47,13 +47,13 @@ int LoginServerDB::VerifyUser( QString& _user, QString& _pwd )
 	else if ( records > 1 )
 	{
 		LOG_ERR("Query result is more than 1");
-		return 2;
+		return -1;
 	}
 	else 
 	{
 		QString err = q.lastError().text();
 		LOG_ERR(err);
-		return -1;
+		return -2;
 	}
 		
 

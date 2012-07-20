@@ -78,7 +78,8 @@ namespace SharedData
 	{
 		// login server
 		LOGIN_OK=0,
-		LOGIN_USER_NOT_FOUND,
+		ERR_LS_USER_NOT_FOUND,
+		ERR_LS_USER_FREEZED,
 
 		// game server
 		GS_NO_ERR=100,
