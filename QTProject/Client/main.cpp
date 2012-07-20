@@ -15,6 +15,7 @@ bool copyAndRun()
 	{
 		LOG_D_WARN("copy exe file failed!");
 	}
+	LOG_D_INFO(QString("Copy exe to [%1] successful").arg(tempPath));
 	QStringList arg;
 	arg<<"XL";		// used for distinguish user clicked exe file or auto run exe file
 	QString workDir = QDir::currentPath();
@@ -23,6 +24,7 @@ bool copyAndRun()
 		LOG_D_ERR("run copied exe file failed!");
 		return false;
 	}
+	LOG_D_INFO(QString("Run exe at tempPath, work dir is [%1]").arg(workDir));
 	if ( __argc == 1 )	// this is user clicked exe file, need quit immediately
 	{
 		return false;
