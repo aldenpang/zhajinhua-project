@@ -13,7 +13,6 @@ int argcCount = 1;
 Client::Client(int & argc, char ** argv)
 	: QApplication(argcCount, argv)
 {
-	LOG.SetModuleName(QString("Client"));
 
 	LOG_D_INFO("Client Start");
 
