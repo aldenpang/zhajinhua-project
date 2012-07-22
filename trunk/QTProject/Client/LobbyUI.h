@@ -10,6 +10,7 @@
 #define LOBBYUI_H
 
 #include "BaseUI.h"
+#include "Table.h"
 
 class LobbyUI : public BaseUI
 {
@@ -28,10 +29,11 @@ private slots:
 
 protected:
 private:
+	QMap<quint32, Table*> mTableList;
 
 	void regConnections();
 
-	void initTables();
+	void initTables(quint32 _amount);
 
 };
 

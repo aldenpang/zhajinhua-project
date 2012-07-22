@@ -8,7 +8,12 @@ LobbyUI::LobbyUI()
 
 LobbyUI::~LobbyUI()
 {
-
+	QMap<quint32, Table*>::iterator itr;
+	for ( itr = mTableList.begin(); itr != mTableList.end(); itr++ )
+	{
+		SAFE_DELETE(itr.value());
+	}
+	mTableList.clear();
 }
 
 void LobbyUI::Init()
@@ -22,7 +27,14 @@ void LobbyUI::Init()
 		mMainWidget->setWindowFlags(Qt::FramelessWindowHint);
 	}
 
-	initTables();
+	QScrollArea* tableScroll = mMainWidget->findChild<QScrollArea*>("tableList");
+	tableScroll->verticalScrollBar()->setRange(0, 1000);
+	//tableScroll->verticalScrollBar()->setMinimum(0);
+	//tableScroll->verticalScrollBar()->setMaximum(1000);
+	tableScroll->widget()->resize(1000, 1000);
+	bool sss = tableScroll->verticalScrollBar()->isEnabled();
+
+	initTables(20);
 
 	regConnections();
 }
@@ -32,24 +44,40 @@ void LobbyUI::regConnections()
 	connect(mMainWidget->findChild<QPushButton*>("btn_quit"), SIGNAL(clicked()), this, SIGNAL(SiQuit()));
 }
 
-void LobbyUI::initTables()
+void LobbyUI::initTables(quint32 _amount)
 {
 	QUiLoader uiLoader;
 	QString fileStr(":/Client/table.ui");
-	QFile uiFile(fileStr);
-	QWidget* tableWidget = uiLoader.load(&uiFile);
-	if ( tableWidget )
-	{
-		QScrollArea* tableScroll = mMainWidget->findChild<QScrollArea*>("tableList");
-		tableWidget->setParent(tableScroll->widget());
-	}
 
-	QFile uiFile2(fileStr);
-	QWidget* tableWidget2 = uiLoader.load(&uiFile2);
-	if ( tableWidget2 )
+	int xGap = 145;
+	int yGap = 150;
+	int tablesPreRow = 5;
+
+	int tempY = 0;int tempX = 0;
+	for ( int i = 0; i<_amount; i++ )
 	{
-		QScrollArea* tableScroll = mMainWidget->findChild<QScrollArea*>("tableList");
-		tableWidget2->setParent(tableScroll->widget());
-		tableWidget2->move(100, 0);
+		tempX = (i%tablesPreRow)*xGap;
+		if ( i != 0 && (i % tablesPreRow == 0) )
+			tempY += yGap;
+		
+		QFile uiFile(fileStr);
+		QWidget* tableWidget = uiLoader.load(&uiFile);
+		if ( tableWidget )
+		{
+			QScrollArea* tableScroll = mMainWidget->findChild<QScrollArea*>("tableList");
+			tableWidget->setParent(tableScroll);
+			tableWidget->move(tempX, tempY);
+
+			//QGraphicsView* graphicsView = mMainWidget->findChild<QGraphicsView*>("graphicsView");
+			//tableWidget->setParent(graphicsView);
+			//tableWidget->move(tempX, tempY);
+
+			// create table instance
+			Table* t = new Table;
+			t->SetWidget(tableWidget);
+			t->SetID(i+1);
+			t->Init();
+			mTableList.insert(i+1, t);
+		}
 	}
 }
