@@ -8,6 +8,7 @@ class LoginServerNet;
 class GameServerNet;
 class LoginUI;
 class LobbyUI;
+class ZJHGameUI;
 class Client : public QApplication
 {
 	Q_OBJECT
@@ -29,6 +30,7 @@ private:
 
 	LoginUI* mLoginUI;
 	LobbyUI* mLobbyUI;
+	ZJHGameUI* mZjhUI;
 	MouseEventFilter* mMouseEventFilter;
 
 	void initMouseEventFilter(QWidget* _widget);

@@ -4,6 +4,7 @@
 #include "MousePropagation.h"
 #include "LoginUI.h"
 #include "LobbyUI.h"
+#include "ZJHGameUI.h"
 #include "LogModule.h"
 #include "Setting.h"
 
@@ -28,9 +29,13 @@ Client::Client(int & argc, char ** argv)
 
 	mLobbyUI = new LobbyUI;
 	mLobbyUI->Init();
-	mLobbyUI->Show();
+	//mLobbyUI->Show();
 	initMouseEventFilter(mLobbyUI->GetWidget());
 
+	mZjhUI = new ZJHGameUI;
+	mZjhUI->Init();
+	mZjhUI->Show();
+	initMouseEventFilter(mZjhUI->GetWidget());
 
 	regConnections();
 }
@@ -50,7 +55,7 @@ void Client::regConnections()
 {
 	connect(mLoginUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
 	connect(mLobbyUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
-
+	connect(mZjhUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
 }
 //------------------------------------------------------------------------------
 void Client::stQuit()
