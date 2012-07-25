@@ -800,7 +800,47 @@
 			ParseFiles="false"
 			>
 			<File
+				RelativePath=".\Media\Pokers\back.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\Media\bg.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Media\btn_bg.png"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -920,6 +960,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Media\btn_quickJoin.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\Media\btn_reg.png"
 				>
 				<FileConfiguration
@@ -949,7 +1009,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\GeneratedFiles\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\table.ui;.\lobby.ui;.\client.ui;.\Media\lobby.png;.\Media\btn_close.png;.\Media\btn_min.png;.\Media\btn_enter.png;.\Media\btn_forget.png;.\Media\btn_reg.png;.\Media\bg.png;.\Media\btn_login.png"
+						AdditionalDependencies="$(InputPath);.\table.ui;.\lobby.ui;.\client.ui;.\Media\btn_quickJoin.png;.\Media\nobodyImage.png;.\Media\table.png;.\Media\seat.png;.\Media\btn_bg.png;.\Media\lobby.png;.\Media\btn_close.png;.\Media\btn_min.png;.\Media\btn_enter.png;.\Media\btn_forget.png;.\Media\btn_reg.png;.\Media\bg.png;.\Media\btn_login.png;.\Media\Pokers\back.png"
 						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -960,7 +1020,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\GeneratedFiles\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\table.ui;.\lobby.ui;.\client.ui;.\Media\lobby.png;.\Media\btn_close.png;.\Media\btn_min.png;.\Media\btn_enter.png;.\Media\btn_forget.png;.\Media\btn_reg.png;.\Media\bg.png;.\Media\btn_login.png"
+						AdditionalDependencies="$(InputPath);.\table.ui;.\lobby.ui;.\client.ui;.\Media\btn_quickJoin.png;.\Media\nobodyImage.png;.\Media\table.png;.\Media\seat.png;.\Media\btn_bg.png;.\Media\lobby.png;.\Media\btn_close.png;.\Media\btn_min.png;.\Media\btn_enter.png;.\Media\btn_forget.png;.\Media\btn_reg.png;.\Media\bg.png;.\Media\btn_login.png;.\Media\Pokers\back.png"
 						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1030,6 +1090,66 @@
 						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\GeneratedFiles\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
 						Outputs="&quot;.\GeneratedFiles\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Media\nobodyImage.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Media\seat.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Media\table.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 			</File>
