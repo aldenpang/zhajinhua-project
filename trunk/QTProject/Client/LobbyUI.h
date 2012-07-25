@@ -30,6 +30,7 @@ private slots:
 protected:
 private:
 	QMap<quint32, Table*> mTableList;
+	QGraphicsScene* mScene;
 
 	void regConnections();
 

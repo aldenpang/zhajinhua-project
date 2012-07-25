@@ -27,14 +27,12 @@ void LobbyUI::Init()
 		mMainWidget->setWindowFlags(Qt::FramelessWindowHint);
 	}
 
-	QScrollArea* tableScroll = mMainWidget->findChild<QScrollArea*>("tableList");
-	tableScroll->verticalScrollBar()->setRange(0, 1000);
-	//tableScroll->verticalScrollBar()->setMinimum(0);
-	//tableScroll->verticalScrollBar()->setMaximum(1000);
-	tableScroll->widget()->resize(1000, 1000);
-	bool sss = tableScroll->verticalScrollBar()->isEnabled();
+	QGraphicsView* tableList = mMainWidget->findChild<QGraphicsView*>("tableList");
+	mScene = new QGraphicsScene(0, 0, tableList->size().width()-100, 2000);
+	tableList->setScene(mScene);
 
-	initTables(20);
+
+	initTables(50);
 
 	regConnections();
 }
@@ -64,20 +62,24 @@ void LobbyUI::initTables(quint32 _amount)
 		QWidget* tableWidget = uiLoader.load(&uiFile);
 		if ( tableWidget )
 		{
-			QScrollArea* tableScroll = mMainWidget->findChild<QScrollArea*>("tableList");
-			tableWidget->setParent(tableScroll);
+			//mScene->addWidget(tableWidget);
 			tableWidget->move(tempX, tempY);
-
-			//QGraphicsView* graphicsView = mMainWidget->findChild<QGraphicsView*>("graphicsView");
-			//tableWidget->setParent(graphicsView);
-			//tableWidget->move(tempX, tempY);
 
 			// create table instance
 			Table* t = new Table;
 			t->SetWidget(tableWidget);
-			t->SetID(i+1);
+			t->SetID(i);
 			t->Init();
-			mTableList.insert(i+1, t);
+			mTableList.insert(i, t);
 		}
 	}
+	QGraphicsView* tableList = mMainWidget->findChild<QGraphicsView*>("tableList");
+	//tableList->verticalScrollBar()->setMinimum(0);
+	//tableList->verticalScrollBar()->setMaximum(100);
+	//tableList->verticalScrollBar()->setSliderPosition(0);
+	int ss = tableList->horizontalScrollBar()->sliderPosition();
+	tableList->verticalScrollBar()->setRange(0, 1000);
+	int sds = tableList->verticalScrollBar()->sliderPosition();
+
+	return;
 }
