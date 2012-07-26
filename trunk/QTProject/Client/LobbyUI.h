@@ -12,6 +12,7 @@
 #include "BaseUI.h"
 #include "Table.h"
 
+class GameList;
 class LobbyUI : public BaseUI
 {
 	Q_OBJECT
@@ -31,6 +32,7 @@ protected:
 private:
 	QMap<quint32, Table*> mTableList;
 	QGraphicsScene* mScene;
+	GameList* mGameList;
 
 	void regConnections();
 
