@@ -51,7 +51,11 @@ void LoginServerNet::processGameList( Packet& _packet )
 	for(int i = 0; i<size; i++)
 	{
 		RoomInfo info;
-		_packet>>info.mRoomID>>info.mName>>info.mType>>info.mIP>>info.mPort>>info.mScore>>info.mUnit;
+		int roomType = 0;
+		int moneyType = 0;
+		_packet>>info.mRoomID>>info.mName>>roomType>>info.mIP>>info.mPort>>info.mScore>>moneyType;
+		info.mType = (RoomType)roomType;
+		info.mMoneyType = (MoneyType)moneyType;
 		gameList.push_back(info);
 	}
 

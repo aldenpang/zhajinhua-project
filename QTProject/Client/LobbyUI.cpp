@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "LobbyUI.h"
+#include "GameList.h"
 
 LobbyUI::LobbyUI()
 {
@@ -31,6 +32,35 @@ void LobbyUI::Init()
 	mScene = new QGraphicsScene(0, 0, tableList->size().width()-100, 2000);
 	tableList->setScene(mScene);
 
+	QTreeWidget* gameList = mMainWidget->findChild<QTreeWidget*>("gameList");
+	mGameList = new GameList(gameList);
+
+	//QVector<RoomInfo> rooms;
+	//RoomInfo info;
+	//info.mName = "silverroom0";
+	//info.mMoneyType = SILVER_COIN;
+	//info.mType = ZJH;
+	//rooms.push_back(info);
+
+	//RoomInfo info1;
+	//info1.mName = "silverroom1";
+	//info1.mMoneyType = SILVER_COIN;
+	//info1.mType = ZJH;
+	//rooms.push_back(info1);
+
+	//RoomInfo info2;
+	//info2.mName = "goldroom0";
+	//info2.mMoneyType = GOLD_COIN;
+	//info2.mType = ZJH;
+	//rooms.push_back(info2);
+
+	//RoomInfo info3;
+	//info3.mName = "goldroom1";
+	//info3.mMoneyType = GOLD_COIN;
+	//info3.mType = ZJH;
+	//rooms.push_back(info3);
+
+	//mGameList->Update(rooms);
 
 	initTables(50);
 
@@ -73,13 +103,13 @@ void LobbyUI::initTables(quint32 _amount)
 			mTableList.insert(i, t);
 		}
 	}
-	QGraphicsView* tableList = mMainWidget->findChild<QGraphicsView*>("tableList");
+	//QGraphicsView* tableList = mMainWidget->findChild<QGraphicsView*>("tableList");
 	//tableList->verticalScrollBar()->setMinimum(0);
 	//tableList->verticalScrollBar()->setMaximum(100);
 	//tableList->verticalScrollBar()->setSliderPosition(0);
-	int ss = tableList->horizontalScrollBar()->sliderPosition();
-	tableList->verticalScrollBar()->setRange(0, 1000);
-	int sds = tableList->verticalScrollBar()->sliderPosition();
+	//int ss = tableList->horizontalScrollBar()->sliderPosition();
+	//tableList->verticalScrollBar()->setRange(0, 1000);
+	//int sds = tableList->verticalScrollBar()->sliderPosition();
 
 	return;
 }

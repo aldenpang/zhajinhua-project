@@ -99,16 +99,29 @@ namespace SharedData
 
 	};
 
+	enum RoomType
+	{
+		ZJH=0,
+		DIABLO3,
+	};
+
+	enum MoneyType
+	{
+		SILVER_COIN=0,
+		GOLD_COIN,
+	};
+
 	struct RoomInfo 
 	{
 		quint32 mRoomID;	//在DB中设定，自动增量
 		QString mName;
-		quint32 mType;
+		RoomType mType;
 		QString mIP;
 		quint32 mPort;
 		quint32 mScore;
-		quint32 mUnit; // 0 - silver; 1 - gold
+		MoneyType mMoneyType; // 0 - silver; 1 - gold
 	};
+
 
 #define MIN_PLAYER 2
 #define MAX_PLAYER 4
