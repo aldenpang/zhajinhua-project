@@ -35,33 +35,6 @@ void LobbyUI::Init()
 	QTreeWidget* gameList = mMainWidget->findChild<QTreeWidget*>("gameList");
 	mGameList = new GameList(gameList);
 
-	//QVector<RoomInfo> rooms;
-	//RoomInfo info;
-	//info.mName = "silverroom0";
-	//info.mMoneyType = SILVER_COIN;
-	//info.mType = ZJH;
-	//rooms.push_back(info);
-
-	//RoomInfo info1;
-	//info1.mName = "silverroom1";
-	//info1.mMoneyType = SILVER_COIN;
-	//info1.mType = ZJH;
-	//rooms.push_back(info1);
-
-	//RoomInfo info2;
-	//info2.mName = "goldroom0";
-	//info2.mMoneyType = GOLD_COIN;
-	//info2.mType = ZJH;
-	//rooms.push_back(info2);
-
-	//RoomInfo info3;
-	//info3.mName = "goldroom1";
-	//info3.mMoneyType = GOLD_COIN;
-	//info3.mType = ZJH;
-	//rooms.push_back(info3);
-
-	//mGameList->Update(rooms);
-
 	initTables(50);
 
 	regConnections();
@@ -112,4 +85,10 @@ void LobbyUI::initTables(quint32 _amount)
 	//int sds = tableList->verticalScrollBar()->sliderPosition();
 
 	return;
+}
+
+void LobbyUI::StShowLobby( QVector<RoomInfo> _gameList )
+{
+	Show();
+	mGameList->Update(_gameList);
 }

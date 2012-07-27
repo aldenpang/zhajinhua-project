@@ -21,9 +21,13 @@ public:
 
 	void Update(QVector<RoomInfo>& _roomVec);
 
-protected:
+private slots:
+	void stRoomClicked(QTreeWidgetItem *_roomItem, int _column);
 private:
 	QTreeWidget* mTree;
+	QVector<RoomInfo> mCurrentRoomInfos;
+
+	void regConnections();
 };
 
 #endif // GameList_h__

@@ -73,7 +73,7 @@ void LoginUI::initLoginServer()
 
 void LoginUI::stLoginOK()
 {
-	mLoginServer->RequestGameList(0);
+	mLoginServer->RequestGameList(ZJH);
 	return;
 }
 
@@ -92,6 +92,5 @@ void LoginUI::stGameList( QVector<RoomInfo> _gameList )
 	int size = _gameList.size();
 	qDebug()<<__FUNCTION__<<"GameList size:"<<size;
 
-	//emit siConnectGS(_gameList[0].mIP, _gameList[0].mPort);
-	//stConnectGS(_gameList[0].mIP, _gameList[0].mPort);
+	emit SiShowLobby(_gameList);
 }

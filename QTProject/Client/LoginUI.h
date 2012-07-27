@@ -23,6 +23,7 @@ public:
 
 signals:
 	void SiQuit();
+	void SiShowLobby(QVector<RoomInfo> _gameList);
 private slots:
 	void stLoginOK();
 	void stNetError(QString _err);
