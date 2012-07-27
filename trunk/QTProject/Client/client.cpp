@@ -54,8 +54,11 @@ void Client::initMouseEventFilter(QWidget* _widget)
 void Client::regConnections()
 {
 	connect(mLoginUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
+	connect(mLoginUI, SIGNAL(SiShowLobby(QVector<RoomInfo>)), mLobbyUI, SLOT(StShowLobby(QVector<RoomInfo>)));
+
 	connect(mLobbyUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
 	connect(mZjhUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
+
 }
 //------------------------------------------------------------------------------
 void Client::stQuit()

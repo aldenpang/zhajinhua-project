@@ -111,8 +111,9 @@ namespace SharedData
 		GOLD_COIN,
 	};
 
-	struct RoomInfo 
+	class RoomInfo 
 	{
+	public:
 		quint32 mRoomID;	//在DB中设定，自动增量
 		QString mName;
 		RoomType mType;
@@ -120,8 +121,25 @@ namespace SharedData
 		quint32 mPort;
 		quint32 mScore;
 		MoneyType mMoneyType; // 0 - silver; 1 - gold
-	};
+		RoomInfo()
+		{
 
+		}
+		RoomInfo(RoomInfo* _in)
+		{
+			mRoomID = _in->mRoomID;
+			mName = _in->mName;
+			mType = _in->mType;
+			mIP = _in->mIP;
+			mPort = _in->mPort;
+			mScore = _in->mScore;
+			mMoneyType = _in->mMoneyType;
+		}
+		~RoomInfo()
+		{
+
+		}
+	};
 
 #define MIN_PLAYER 2
 #define MAX_PLAYER 4
@@ -130,5 +148,6 @@ namespace SharedData
 
 
 }
+Q_DECLARE_METATYPE(SharedData::RoomInfo*);
 
 #endif // sharedData_h__

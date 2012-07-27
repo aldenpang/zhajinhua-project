@@ -25,8 +25,8 @@ public:
 
 signals:
 	void SiQuit();
-private slots:
-
+public slots:
+	void StShowLobby(QVector<RoomInfo> _gameList);
 
 protected:
 private:
