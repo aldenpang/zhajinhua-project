@@ -32,55 +32,66 @@ void LoginUI::Init()
 	QString url = SETTINGS.GetLoginADURL();
 	//mMainWidget->findChild<QWebView*>("")
 
+	initLoginServer();
+
 	regConnections();
 	//downloader.Start(QString("http://ww3.sinaimg.cn/large/97ed3185jw1duzuczkiaqj111.jpg"), QString("C:/1.jpg"));
 
-	mPatcher.Start(QString("PatchFileList.xml"));
+	//mPatcher.Start(QString("PatchFileList.xml"));
 }
 
 void LoginUI::regConnections()
 {
- 	QPushButton* quitBtn = mMainWidget->findChild<QPushButton*>("btn_quit");
-	if ( quitBtn )
- 		connect(quitBtn, SIGNAL(clicked()), this, SIGNAL(SiQuit()));
+ 	QPushButton* btn_quit = mMainWidget->findChild<QPushButton*>("btn_quit");
+ 	connect(btn_quit, SIGNAL(clicked()), this, SIGNAL(SiQuit()));
+
+	QPushButton* btn_login = mMainWidget->findChild<QPushButton*>("btn_login");
+	connect(btn_login, SIGNAL(clicked()), this, SLOT(stLogin()));
+
 }
 
-////------------------------------------------------------------------------------
-//void Client::initLoginServer()
-//{
-//	mLoginServer = new LoginServerNet();
-//	mLoginServer->Init();
-//	//mLoginServer->Connect("localhost", 5000);
-//	connect(mLoginServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
-//	connect(mLoginServer, SIGNAL(SiLoginOK()), this, SLOT(stLoginOK()));
-//	connect(mLoginServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stLoginFailed(quint32)));
-//	connect(mLoginServer, SIGNAL(SiGameList(QVector<RoomInfo>)), this, SLOT(stGameList(QVector<RoomInfo>)));
-//
-//	//mLoginServer->SendLoginRequest(gUserName, gPassword);
-//
-//}
+void LoginUI::stLogin()
+{
+	mLoginServer->Connect(SETTINGS.GetIP(), SETTINGS.GetPort());
 
-//void Client::stLoginOK()
-//{
-//	mLoginServer->RequestGameList(0);
-//}
+	QString userName = mMainWidget->findChild<QLineEdit*>("edit_username")->text();
+	QString password = mMainWidget->findChild<QLineEdit*>("edit_password")->text();
+
+	mLoginServer->SendLoginRequest(userName, password);
+}
+
+//------------------------------------------------------------------------------
+void LoginUI::initLoginServer()
+{
+	mLoginServer = new LoginServerNet();
+	mLoginServer->Init();
+	connect(mLoginServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
+	connect(mLoginServer, SIGNAL(SiLoginOK()), this, SLOT(stLoginOK()));
+	connect(mLoginServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stLoginFailed(quint32)));
+	connect(mLoginServer, SIGNAL(SiGameList(QVector<RoomInfo>)), this, SLOT(stGameList(QVector<RoomInfo>)));
+}
+
+void LoginUI::stLoginOK()
+{
+	mLoginServer->RequestGameList(0);
+	return;
+}
+
+void LoginUI::stNetError( QString _err )
+{
+	qDebug()<<__FUNCTION__<<":"<<_err;
+}
 //
-//void Client::stNetError( QString _err )
-//{
-//	qDebug()<<__FUNCTION__<<":"<<_err;
-//}
-//
-//void Client::stLoginFailed( quint32 _errorCode )
-//{
-//	qDebug()<<__FUNCTION__<<":"<<_errorCode;
-//}
-//
-//void Client::stGameList( QVector<RoomInfo> _gameList )
-//{
-//	int size = _gameList.size();
-//	qDebug()<<__FUNCTION__<<"GameList size:"<<size;
-//
-//	//emit siConnectGS(_gameList[0].mIP, _gameList[0].mPort);
-//	stConnectGS(_gameList[0].mIP, _gameList[0].mPort);
-//}
-//
+void LoginUI::stLoginFailed( quint32 _errorCode )
+{
+	qDebug()<<__FUNCTION__<<":"<<_errorCode;
+}
+
+void LoginUI::stGameList( QVector<RoomInfo> _gameList )
+{
+	int size = _gameList.size();
+	qDebug()<<__FUNCTION__<<"GameList size:"<<size;
+
+	//emit siConnectGS(_gameList[0].mIP, _gameList[0].mPort);
+	//stConnectGS(_gameList[0].mIP, _gameList[0].mPort);
+}

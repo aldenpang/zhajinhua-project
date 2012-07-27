@@ -24,12 +24,12 @@ Client::Client(int & argc, char ** argv)
 
 	mLoginUI = new LoginUI;
 	mLoginUI->Init();
-	//mLoginUI->Show();
+	mLoginUI->Show();
 	initMouseEventFilter(mLoginUI->GetWidget());
 
 	mLobbyUI = new LobbyUI;
 	mLobbyUI->Init();
-	mLobbyUI->Show();
+	//mLobbyUI->Show();
 	initMouseEventFilter(mLobbyUI->GetWidget());
 
 	mZjhUI = new ZJHGameUI;
