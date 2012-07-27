@@ -11,6 +11,7 @@
 
 #include "BaseUI.h"
 #include "Patcher.h"
+class LoginServerNet;
 class LoginUI : public BaseUI
 {
 	Q_OBJECT
@@ -23,18 +24,20 @@ public:
 signals:
 	void SiQuit();
 private slots:
-	//void stLoginOK();
-	//void stNetError(QString _err);
-	//void stLoginFailed(quint32 _errorCode);
-	//void stGameList(QVector<RoomInfo> _gameList);
+	void stLoginOK();
+	void stNetError(QString _err);
+	void stLoginFailed(quint32 _errorCode);
+	void stGameList(QVector<RoomInfo> _gameList);
 
+	void stLogin();
 protected:
 private:
 	Patcher mPatcher;
+	LoginServerNet* mLoginServer;
 
 	void regConnections();
 
-	//void initLoginServer();
+	void initLoginServer();
 };
 
 #endif
