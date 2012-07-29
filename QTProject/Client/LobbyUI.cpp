@@ -29,8 +29,11 @@ void LobbyUI::Init()
 	}
 
 	QGraphicsView* tableList = mMainWidget->findChild<QGraphicsView*>("tableList");
-	mScene = new QGraphicsScene(0, 0, tableList->size().width()-100, 2000);
+	mScene = new QGraphicsScene(0, 0, tableList->size().width()-tableList->verticalScrollBar()->size().width(), 2000);
 	tableList->setScene(mScene);
+	int min = tableList->verticalScrollBar()->minimum();
+	int max = tableList->verticalScrollBar()->maximum();
+	tableList->verticalScrollBar()->setValue(min+1);		// if set 0, thumb will stay at middle of scrollbar...WTF
 
 	QTreeWidget* gameList = mMainWidget->findChild<QTreeWidget*>("gameList");
 	mGameList = new GameList(gameList);
@@ -50,7 +53,7 @@ void LobbyUI::initTables(quint32 _amount)
 	QUiLoader uiLoader;
 	QString fileStr(":/Client/table.ui");
 
-	int xGap = 145;
+	int xGap = 140;
 	int yGap = 150;
 	int tablesPreRow = 5;
 
@@ -65,7 +68,7 @@ void LobbyUI::initTables(quint32 _amount)
 		QWidget* tableWidget = uiLoader.load(&uiFile);
 		if ( tableWidget )
 		{
-			//mScene->addWidget(tableWidget);
+			mScene->addWidget(tableWidget);
 			tableWidget->move(tempX, tempY);
 
 			// create table instance

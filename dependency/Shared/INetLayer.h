@@ -26,6 +26,8 @@ public:
 	void Disconnect();
 
 	virtual void PacketHandler(Packet& _packet)=0;
+
+	bool IsValid(){ return mTcpSocket.isValid(); }
 signals:
 	void SiConnected();
 	void SiDisconnected();

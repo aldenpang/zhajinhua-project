@@ -52,8 +52,10 @@ void LoginUI::regConnections()
 
 void LoginUI::stLogin()
 {
-	mLoginServer->Connect(SETTINGS.GetIP(), SETTINGS.GetPort());
-
+	if ( !mLoginServer->IsValid() )
+	{
+		mLoginServer->Connect(SETTINGS.GetIP(), SETTINGS.GetPort());
+	}
 	QString userName = mMainWidget->findChild<QLineEdit*>("edit_username")->text();
 	QString password = mMainWidget->findChild<QLineEdit*>("edit_password")->text();
 
@@ -65,6 +67,7 @@ void LoginUI::initLoginServer()
 {
 	mLoginServer = new LoginServerNet();
 	mLoginServer->Init();
+	
 	connect(mLoginServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
 	connect(mLoginServer, SIGNAL(SiLoginOK()), this, SLOT(stLoginOK()));
 	connect(mLoginServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stLoginFailed(quint32)));
@@ -74,17 +77,20 @@ void LoginUI::initLoginServer()
 void LoginUI::stLoginOK()
 {
 	mLoginServer->RequestGameList(ZJH);
+	LOG_D_INFO("LoginOK, Request Game List");
 	return;
 }
 
 void LoginUI::stNetError( QString _err )
 {
-	qDebug()<<__FUNCTION__<<":"<<_err;
+	//qDebug()<<__FUNCTION__<<":"<<_err;
+	LOG_D_ERR(_err);
 }
 //
 void LoginUI::stLoginFailed( quint32 _errorCode )
 {
-	qDebug()<<__FUNCTION__<<":"<<_errorCode;
+	//qDebug()<<__FUNCTION__<<":"<<_errorCode;
+	LOG_D_ERR(QString("ErrorCode:%1").arg(_errorCode));
 }
 
 void LoginUI::stGameList( QVector<RoomInfo> _gameList )
