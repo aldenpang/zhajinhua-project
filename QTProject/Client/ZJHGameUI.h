@@ -24,11 +24,12 @@ public:
 signals:
 	void SiQuit();
 private slots:
-
+	void stUpdate();
 
 protected:
 private:
-
+	QTimer mTimer;
+	QGraphicsScene* mScene;
 	void regConnections();
 
 };
