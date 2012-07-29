@@ -43,14 +43,14 @@ void GameList::Update( QVector<RoomInfo>& _roomVec )
 			if ( r.mMoneyType == SILVER_COIN )
 			{
 				QTreeWidgetItem* room = new QTreeWidgetItem(zjhRoot1);
-				room->setIcon(0, QIcon(":/Images/Media/nobodyImage.png"));
+				room->setIcon(0, QIcon(":/Images/Media/silverCoin.png"));
 				room->setText(0, r.mName);
 				room->setData(0, Qt::UserRole, var);
 			}
 			else if ( r.mMoneyType == GOLD_COIN )
 			{
 				QTreeWidgetItem* room = new QTreeWidgetItem(zjhRoot0);
-				room->setIcon(0, QIcon(":/Images/Media/nobodyImage.png"));
+				room->setIcon(0, QIcon(":/Images/Media/goldCoin.png"));
 				room->setText(0, r.mName);
 				room->setData(0, Qt::UserRole, var);
 			}

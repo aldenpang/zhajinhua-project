@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>bgWidget</class>
+ <widget class="QWidget" name="bgWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1024</width>
+    <height>700</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1024</width>
+    <height>700</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget[objectName=&quot;bgWidget&quot;] 
+{
+background-image: url(:/Images/Media/lobby.png);
+}
+
+QLabel
+{
+	color:rgb(255,255,255);
+}
+
+QPushButton[objectName=&quot;btn_back&quot;] 
+{
+border-image: url(:/Images/Media/btn_bg)0 312 0 0;
+color: rgb(255, 255, 255);
+}
+QPushButton[objectName=&quot;btn_back&quot;]::hover
+{ 
+border-image: url(:/Images/Media/btn_bg)0 156 0 156;
+color: rgb(255, 255, 255);
+}
+QPushButton[objectName=&quot;btn_back&quot;]::pressed
+{ 
+border-image: url(:/Images/Media/btn_bg)0 0 0 312;
+color: rgb(255, 255, 255);
+}
+
+QPushButton[objectName=&quot;btn_quit&quot;] 
+{
+border-image: url(:/Images/Media/btn_bg)0 312 0 0;
+color: rgb(255, 255, 255);
+}
+QPushButton[objectName=&quot;btn_quit&quot;]::hover
+{ 
+border-image: url(:/Images/Media/btn_bg)0 156 0 156;
+color: rgb(255, 255, 255);
+}
+QPushButton[objectName=&quot;btn_quit&quot;]::pressed
+{ 
+border-image: url(:/Images/Media/btn_bg)0 0 0 312;
+color: rgb(255, 255, 255);
+}
+
+QGraphicsView
+{
+	background-color: rgb(80, 0, 1);
+}
+
+</string>
+  </property>
+  <widget class="QPushButton" name="btn_back">
+   <property name="geometry">
+    <rect>
+     <x>880</x>
+     <y>60</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>返回</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_quit">
+   <property name="geometry">
+    <rect>
+     <x>880</x>
+     <y>35</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="playerImage">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>30</y>
+     <width>60</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/nobodyImage.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickName">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>30</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>昵称：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="level">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>50</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>等级：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoin">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>70</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>金币：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickNameText">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>30</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="levelText">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>50</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoinText">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>70</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="graphicsView">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>110</y>
+     <width>891</width>
+     <height>551</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="playerImage_0">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>590</y>
+     <width>60</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/nobodyImage.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="playerImage_1">
+   <property name="geometry">
+    <rect>
+     <x>720</x>
+     <y>350</y>
+     <width>60</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/nobodyImage.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="playerImage_2">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>120</y>
+     <width>60</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/nobodyImage.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="playerImage_3">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>350</y>
+     <width>60</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/nobodyImage.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickName_2">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>120</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>昵称：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoinText_2">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>160</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoin_2">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>160</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>金币：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickNameText_2">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>120</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="levelText_2">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>140</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="level_2">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>140</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>等级：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoin_1">
+   <property name="geometry">
+    <rect>
+     <x>790</x>
+     <y>390</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>金币：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickName_1">
+   <property name="geometry">
+    <rect>
+     <x>790</x>
+     <y>350</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>昵称：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="level_1">
+   <property name="geometry">
+    <rect>
+     <x>790</x>
+     <y>370</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>等级：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickNameText_1">
+   <property name="geometry">
+    <rect>
+     <x>830</x>
+     <y>350</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="levelText_1">
+   <property name="geometry">
+    <rect>
+     <x>830</x>
+     <y>370</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoinText_1">
+   <property name="geometry">
+    <rect>
+     <x>830</x>
+     <y>390</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoin_3">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>390</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>金币：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickName_3">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>350</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>昵称：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="level_3">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>370</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>等级：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickNameText_3">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>350</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="levelText_3">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>370</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoinText_3">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>390</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoin_0">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>630</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>金币：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickName_0">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>590</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>昵称：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="level_0">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>610</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>等级：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nickNameText_0">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>590</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="levelText_0">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>610</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="goldCoinText_0">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>630</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker2_0">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>180</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker2_1">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>180</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker2_2">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>180</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker3_0">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>350</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker3_1">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>350</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker3_2">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>350</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker0_2">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>510</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker0_0">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>510</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker0_1">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>510</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker1_2">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>350</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker1_0">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>350</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="poker1_1">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>350</y>
+     <width>60</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Pokers/Media/Pokers/back.png</pixmap>
+   </property>
+  </widget>
+  <zorder>btn_back</zorder>
+  <zorder>btn_quit</zorder>
+  <zorder>playerImage</zorder>
+  <zorder>nickName</zorder>
+  <zorder>level</zorder>
+  <zorder>goldCoin</zorder>
+  <zorder>nickNameText</zorder>
+  <zorder>levelText</zorder>
+  <zorder>goldCoinText</zorder>
+  <zorder>graphicsView</zorder>
+  <zorder>playerImage_0</zorder>
+  <zorder>playerImage_1</zorder>
+  <zorder>playerImage_2</zorder>
+  <zorder>playerImage_3</zorder>
+  <zorder>nickName_2</zorder>
+  <zorder>goldCoinText_2</zorder>
+  <zorder>goldCoin_2</zorder>
+  <zorder>nickNameText_2</zorder>
+  <zorder>levelText_2</zorder>
+  <zorder>level_2</zorder>
+  <zorder>goldCoin_1</zorder>
+  <zorder>nickName_1</zorder>
+  <zorder>level_1</zorder>
+  <zorder>nickNameText_1</zorder>
+  <zorder>levelText_1</zorder>
+  <zorder>goldCoinText_1</zorder>
+  <zorder>goldCoin_3</zorder>
+  <zorder>nickName_3</zorder>
+  <zorder>level_3</zorder>
+  <zorder>nickNameText_3</zorder>
+  <zorder>levelText_3</zorder>
+  <zorder>goldCoinText_3</zorder>
+  <zorder>goldCoin_0</zorder>
+  <zorder>nickName_0</zorder>
+  <zorder>level_0</zorder>
+  <zorder>nickNameText_0</zorder>
+  <zorder>levelText_0</zorder>
+  <zorder>goldCoinText_0</zorder>
+  <zorder>poker2_0</zorder>
+  <zorder>poker2_1</zorder>
+  <zorder>poker2_2</zorder>
+  <zorder>poker3_0</zorder>
+  <zorder>poker3_1</zorder>
+  <zorder>poker3_2</zorder>
+  <zorder>poker0_0</zorder>
+  <zorder>poker0_1</zorder>
+  <zorder>poker0_2</zorder>
+  <zorder>poker1_0</zorder>
+  <zorder>poker1_1</zorder>
+  <zorder>poker1_2</zorder>
+ </widget>
+ <resources>
+  <include location="client.qrc"/>
+ </resources>
+ <connections/>
+</ui>

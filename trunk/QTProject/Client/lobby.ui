@@ -26,19 +26,9 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/*QWidget[objectName=&quot;bgWidget&quot;] 
+   <string notr="true">QWidget[objectName=&quot;bgWidget&quot;] 
 {
 background-image: url(:/Images/Media/lobby.png);
-}
-
-QScrollArea[objectName=&quot;gameList&quot;]
-{
-	background-color: rgba(255, 255, 0, 20);
-}
-
-QScrollArea[objectName=&quot;tableList&quot;]
-{
-	background-color: rgba(255, 255, 0, 20);
 }
 
 QLabel
@@ -46,14 +36,21 @@ QLabel
 	color:rgb(255,255,255);
 }
 
-QWidget[objectName=&quot;scrollAreaWidgetContents&quot;]
+QTreeWidget
 {
-	background-color: rgba(255, 255, 255, 0);
+	background-color: rgba(182, 16, 27,100);
+	font: 12pt &quot;新宋体&quot;;
+	color:rgb(255,255,255);
 }
 
-QWidget[objectName=&quot;scrollAreaWidgetContents_2&quot;]
+QScrollBar
 {
-	background-color: rgba(255, 255, 255, 0);
+	background-color: rgba(182, 16, 27,255);
+}
+
+QGraphicsView
+{
+	background-color: rgba(182, 16, 27,100);
 }
 
 QPushButton[objectName=&quot;btn_back&quot;] 
@@ -224,7 +221,7 @@ border-image: url(:/Images/Media/btn_quickJoin)0 0 0 140;
   <widget class="QPushButton" name="btn_quickJoin">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>170</x>
      <y>130</y>
      <width>70</width>
      <height>23</height>
@@ -265,9 +262,12 @@ border-image: url(:/Images/Media/btn_quickJoin)0 0 0 140;
     <rect>
      <x>260</x>
      <y>100</y>
-     <width>741</width>
+     <width>731</width>
      <height>551</height>
     </rect>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOn</enum>
    </property>
    <property name="horizontalScrollBarPolicy">
     <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -276,11 +276,17 @@ border-image: url(:/Images/Media/btn_quickJoin)0 0 0 140;
   <widget class="QTreeWidget" name="gameList">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>30</x>
      <y>170</y>
-     <width>221</width>
+     <width>211</width>
      <height>481</height>
     </rect>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <property name="animated">
+    <bool>true</bool>
    </property>
    <property name="headerHidden">
     <bool>true</bool>
