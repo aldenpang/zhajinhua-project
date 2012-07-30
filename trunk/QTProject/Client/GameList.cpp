@@ -39,7 +39,7 @@ void GameList::Update( QVector<RoomInfo>& _roomVec )
 		if ( r.mType == ZJH )
 		{
 			QVariant var;
-			var.setValue(&r);
+			var.setValue(r);
 			if ( r.mMoneyType == SILVER_COIN )
 			{
 				QTreeWidgetItem* room = new QTreeWidgetItem(zjhRoot1);
@@ -71,7 +71,8 @@ void GameList::regConnections()
 
 void GameList::stRoomClicked( QTreeWidgetItem *_roomItem, int _column )
 {
-	RoomInfo* roomInfo = _roomItem->data(0, Qt::UserRole).value<RoomInfo*>();
+	RoomInfo roomInfo = _roomItem->data(0, Qt::UserRole).value<RoomInfo>();
+	int sss = mCurrentRoomInfos.size();
 
 	return;
 }

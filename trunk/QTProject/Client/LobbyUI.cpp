@@ -38,7 +38,7 @@ void LobbyUI::Init()
 	QTreeWidget* gameList = mMainWidget->findChild<QTreeWidget*>("gameList");
 	mGameList = new GameList(gameList);
 
-	initTables(50);
+	//initTables(50);
 
 	regConnections();
 }
