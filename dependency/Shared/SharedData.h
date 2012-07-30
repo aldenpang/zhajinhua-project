@@ -148,6 +148,6 @@ namespace SharedData
 
 
 }
-Q_DECLARE_METATYPE(SharedData::RoomInfo*);
+Q_DECLARE_METATYPE(SharedData::RoomInfo);
 
 #endif // sharedData_h__
