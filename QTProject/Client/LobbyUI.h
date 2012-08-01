@@ -11,8 +11,10 @@
 
 #include "BaseUI.h"
 #include "Table.h"
+#include "TableData.h"
 
 class GameList;
+class GameServerNet;
 class LobbyUI : public BaseUI
 {
 	Q_OBJECT
@@ -27,16 +29,27 @@ signals:
 	void SiQuit();
 public slots:
 	void StShowLobby(QVector<RoomInfo> _gameList);
-
+private slots:
+	void stTableJoin(quint32 _tableID, quint32 _seatID);
+	void stConnectGS(QString _ip, quint32 _port);
+	void stNetError(QString _err);
+	void stGSConnected();
+	void stGSLoginOK();
+	void stGSLoginFailed(quint32 _errCode);
+	void stTableJoinResult(quint32 _res, quint32 _tableID, quint32 _seatID);
+	void stTableList(QMap<int, TableData> _tableData);
 protected:
 private:
 	QMap<quint32, Table*> mTableList;
 	QGraphicsScene* mScene;
 	GameList* mGameList;
+	GameServerNet* mGameServer;
 
 	void regConnections();
 
 	void initTables(quint32 _amount);
+
+	void initGameServer();
 
 };
 

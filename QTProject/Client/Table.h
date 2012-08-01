@@ -16,7 +16,7 @@ class Table : public QObject
 {
 	Q_OBJECT
 signals:
-	void SiSit(quint32 _tableID, quint32 _seatID, quint32 _accountID);
+	void SiSit(quint32 _tableID, quint32 _seatID);
 
 public:
 	Table();
@@ -30,9 +30,15 @@ public:
 
 public slots:
 	void StSit(quint32 _tableID, quint32 _seatID, quint32 _accountID);
+private slots:
+	void stClickSeat();
 
 protected:
 private:
+	QPushButton*	mSeat[MAX_PLAYER];
+
+
+	void regConnect();
 
 };
 
