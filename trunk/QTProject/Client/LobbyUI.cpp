@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "LobbyUI.h"
 #include "GameList.h"
+#include "GameServerNet.h"
 
 LobbyUI::LobbyUI()
 {
@@ -38,7 +39,9 @@ void LobbyUI::Init()
 	QTreeWidget* gameList = mMainWidget->findChild<QTreeWidget*>("gameList");
 	mGameList = new GameList(gameList);
 
-	//initTables(50);
+	initTables(50);
+
+	initGameServer();
 
 	regConnections();
 }
@@ -46,6 +49,21 @@ void LobbyUI::Init()
 void LobbyUI::regConnections()
 {
 	connect(mMainWidget->findChild<QPushButton*>("btn_quit"), SIGNAL(clicked()), this, SIGNAL(SiQuit()));
+	QMap<quint32, Table*>::iterator itr;
+	for ( itr = mTableList.begin(); itr != mTableList.end(); itr++)
+	{
+		connect(*itr, SIGNAL(SiSit(quint32, quint32)), this, SLOT(stTableJoin(quint32, quint32)));
+	}
+
+	connect(mGameList, SIGNAL(SiConnectGS(QString, quint32)), this, SLOT(stConnectGS(QString, quint32)));
+
+	connect(mGameServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
+	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
+	connect(mGameServer, SIGNAL(SiLoginOK()), this, SLOT(stGSLoginOK()));
+	connect(mGameServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stGSLoginFailed(quint32)));
+	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
+	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32)), this, SLOT(stTableJoinResult(quint32, quint32, quint32)));
+
 }
 
 void LobbyUI::initTables(quint32 _amount)
@@ -79,13 +97,6 @@ void LobbyUI::initTables(quint32 _amount)
 			mTableList.insert(i, t);
 		}
 	}
-	//QGraphicsView* tableList = mMainWidget->findChild<QGraphicsView*>("tableList");
-	//tableList->verticalScrollBar()->setMinimum(0);
-	//tableList->verticalScrollBar()->setMaximum(100);
-	//tableList->verticalScrollBar()->setSliderPosition(0);
-	//int ss = tableList->horizontalScrollBar()->sliderPosition();
-	//tableList->verticalScrollBar()->setRange(0, 1000);
-	//int sds = tableList->verticalScrollBar()->sliderPosition();
 
 	return;
 }
@@ -94,4 +105,51 @@ void LobbyUI::StShowLobby( QVector<RoomInfo> _gameList )
 {
 	Show();
 	mGameList->Update(_gameList);
+}
+
+void LobbyUI::stTableJoin( quint32 _tableID, quint32 _seatID )
+{
+	mGameServer->SendJoinTable(_tableID, _seatID);
+}
+
+void LobbyUI::stConnectGS( QString _ip, quint32 _port )
+{
+	mGameServer->Connect(_ip, _port);
+}
+
+void LobbyUI::initGameServer()
+{
+	mGameServer = new GameServerNet();
+	mGameServer->Init();
+}
+
+void LobbyUI::stNetError( QString _err )
+{
+	LOG_D_ERR(_err);
+}
+
+void LobbyUI::stGSConnected()
+{
+	LOG_D_INFO("Game Server Connected");
+	//mGameServer->SendLoginGS(gUserName, gPassword);
+}
+
+void LobbyUI::stGSLoginOK()
+{
+	LOG_D_INFO("Game Server Logined");
+}
+
+void LobbyUI::stGSLoginFailed( quint32 _errCode )
+{
+	LOG_D_ERR(QString("ErrorCode[%1]").arg(_errCode));
+}
+
+void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID )
+{
+	LOG_D_INFO(QString("Player joined table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
+}
+
+void LobbyUI::stTableList( QMap<int, TableData> _tableData )
+{
+	// update tables
 }

@@ -20,6 +20,8 @@ public:
 	~GameList();
 
 	void Update(QVector<RoomInfo>& _roomVec);
+signals:
+	void SiConnectGS(QString _ip, quint32 _port);
 
 private slots:
 	void stRoomClicked(QTreeWidgetItem *_roomItem, int _column);

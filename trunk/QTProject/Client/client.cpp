@@ -66,41 +66,4 @@ void Client::stQuit()
 	QApplication::quit();
 }
 
-//void Client::initGameServer()
-//{
-//	mGameServer = new GameServerNet();
-//	mGameServer->Init();
-//
-//	//connect(this, SIGNAL(siConnectGS(QString&, quint32)), mGameServer, SLOT(stConnectGS(QString&, quint32)));
-//	connect(mGameServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
-//	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
-//	connect(mGameServer, SIGNAL(SiLoginOK()), this, SLOT(stGSLoginOK()));
-//	connect(mGameServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stGSLoginFailed(quint32)));
-//}
-//
-//void Client::stConnectGS( QString& _ip, quint32 _port )
-//{
-//	if ( mGameServer )
-//	{
-//		mGameServer->Connect(_ip, _port);
-//	}
-//
-//}
-//
-//void Client::stGSConnected()
-//{
-//	mGameServer->SendLoginGS(gUserName, gPassword);
-//
-//	return;
-//}
-//
-//void Client::stGSLoginOK()
-//{
-//	mGameServer->SendJoinTable(0, 0);
-//	return;
-//}
-//
-//void Client::stGSLoginFailed( quint32 _errCode )
-//{
-//	qDebug()<<__FUNCTION__<<":"<<_errCode;
-//}
+
