@@ -119,9 +119,9 @@ void GameServerNet::processTableInfo( Packet& _packet )
 		{
 			int seatID = 0;
 			_packet>>seatID;
-			QString nickName;
-			_packet>>nickName;
-			table.AddPlayer(seatID, nickName);
+			TablePlayer p;
+			_packet>>p.mNickName>>p.mProtraitID;
+			table.AddPlayer(seatID, p);
 		}
 		tables.insert(i, table);
 	}

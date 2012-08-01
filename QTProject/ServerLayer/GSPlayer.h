@@ -59,6 +59,9 @@ public:
 	// 来源IP
 	PROPERTY(QString, IP);
 
+	// 头像ID
+	PROPERTY(quint32, ProtraitID);
+
 	// 已经跟的钱数
 	void AlreadyFollow(quint32 _alreadyFollow);
 	quint32 GetAlreadyFollow(){ return mAlreadyFollow; }

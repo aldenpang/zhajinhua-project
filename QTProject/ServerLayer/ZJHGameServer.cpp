@@ -264,6 +264,7 @@ void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
 				if ( player )
 				{
 					p<<player->GetNickName();
+					p<<player->GetProtraitID();
 					LOG_INFO(QString("Player[%1] seat at [%2]").arg(player->GetNickName()).arg(pItr.key()));
 				}
 			}		

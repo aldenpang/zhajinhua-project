@@ -11,6 +11,7 @@
 
 #include <QObject>
 #include "MyToolkits.h"
+#include "TableData.h"
 
 class Table : public QObject
 {
@@ -29,16 +30,16 @@ public:
 	void Init();
 
 public slots:
-	void StSit(quint32 _tableID, quint32 _seatID, quint32 _accountID);
+	void StSit(quint32 _tableID, TableData _data);
 private slots:
 	void stClickSeat();
 
 protected:
 private:
 	QPushButton*	mSeat[MAX_PLAYER];
+	QTextEdit*		mNameLabel[MAX_PLAYER];
 
-
-	void regConnect();
+	void regConnection();
 
 };
 
