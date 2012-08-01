@@ -8,8 +8,6 @@
 #include "LogModule.h"
 #include "Setting.h"
 
-QString gUserName = "acc4";
-QString gPassword = "1234";
 
 int argcCount = 1;
 Client::Client(int & argc, char ** argv)

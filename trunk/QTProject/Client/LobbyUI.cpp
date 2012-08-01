@@ -3,6 +3,9 @@
 #include "GameList.h"
 #include "GameServerNet.h"
 
+QString gUserName = "acc1";
+QString gPassword = "1234";
+
 LobbyUI::LobbyUI()
 {
 
@@ -131,7 +134,7 @@ void LobbyUI::stNetError( QString _err )
 void LobbyUI::stGSConnected()
 {
 	LOG_D_INFO("Game Server Connected");
-	//mGameServer->SendLoginGS(gUserName, gPassword);
+	mGameServer->SendLoginGS(gUserName, gPassword);
 }
 
 void LobbyUI::stGSLoginOK()
@@ -152,4 +155,15 @@ void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID
 void LobbyUI::stTableList( QMap<int, TableData> _tableData )
 {
 	// update tables
+	QMap<int, TableData>::iterator itr;
+	int index = 0;
+	for ( itr = _tableData.begin(); itr != _tableData.end(); itr++, index++)
+	{
+		if ( index >= mTableList.size() )
+			break;
+		
+		mTableList[index]->StSit(itr.key(), *itr);
+	}
+
+	return;
 }

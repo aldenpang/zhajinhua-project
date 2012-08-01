@@ -16,6 +16,19 @@
 #include "LogModule.h"
 #include "SharedData.h"
 
+#define EMPTY_SEAT "EmptySeat"
+
+struct TablePlayer
+{
+	quint32 mProtraitID;
+	QString mNickName;
+	TablePlayer()
+	{
+		mProtraitID = 0;
+		mNickName = EMPTY_SEAT;
+	}
+};
+
 class TableData
 {
 public:
@@ -23,7 +36,8 @@ public:
 	{
 		for ( int i = 0; i <MAX_PLAYER; i++ )
 		{
-			mPlayers.insert(i, "EmptySeat");
+			TablePlayer emptyPlayer;
+			mPlayers.insert(i, emptyPlayer);
 		}
 	}
 
@@ -31,18 +45,18 @@ public:
 
 	PROPERTY(int, MinBringChip);
 
-	void AddPlayer(quint32 _seatID, QString& _nickName)
+	void AddPlayer(quint32 _seatID, TablePlayer _player)
 	{
-		mPlayers.insert(_seatID, _nickName);
+		mPlayers.insert(_seatID, _player);
 	}
 
 	bool isSeatOccupied( quint32 _seatID )
 	{
-		QMap<int, QString>::iterator itr = mPlayers.find(_seatID);
+		QMap<int, TablePlayer>::iterator itr = mPlayers.find(_seatID);
 		if ( itr != mPlayers.end() )
 		{
-			LOG_D_INFO(QString("[%1] is on seatID[%2]").arg(itr.value()).arg(itr.key()));
-			if ( itr.value() == QString("EmptySeat") )
+			LOG_D_INFO(QString("[%1] is on seatID[%2]").arg(itr.value().mNickName).arg(itr.key()));
+			if ( itr.value().mNickName == QString(EMPTY_SEAT) )
 				return false;
 			else
 				return true;
@@ -52,10 +66,10 @@ public:
 		return false;
 	}
 
-	QMap<int, QString>& GetPlayers(){return mPlayers;}
+	QMap<int, TablePlayer>& GetPlayers(){return mPlayers;}
 protected:
 private:
-	QMap<int, QString> mPlayers;
+	QMap<int, TablePlayer> mPlayers;
 
 };
 
