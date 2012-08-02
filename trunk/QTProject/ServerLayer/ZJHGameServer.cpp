@@ -165,8 +165,19 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 	GSPlayerPtr player = findPlayer(_incomeSocket);
 	if ( player )
 	{
-		// 检查桌子是否可坐 & 加入桌子
-		int res = TABLE.StJoinTable(player, tableID, seatID);
+		// leave player if he sit in other table
+		quint32 leaveFrom = 0;
+		int res = TABLE.StLeaveTable(player, leaveFrom);
+		if ( res == GS_NO_ERR )
+		{
+			Packet p;
+			p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
+			p<<res<<leaveFrom<<player->GetNickName()<<player->GetProtraitID();
+			Broadcast(&p);
+		}
+
+		// check if this table is availble, then sit
+		res = TABLE.StJoinTable(player, tableID, seatID);
 		LOG_INFO(QString("JoinTable result[%1]").arg(res));
 
 		if ( res == GS_NO_ERR )
@@ -179,19 +190,13 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 			}
 		}
 
-		// 发送加入桌子的结果
+		// send the result of join table
 		Packet p;
-		p.SetMessage(MSG_GS_CL_TABLE_JOIN);
-		p<<res<<tableID<<seatID;
-		_incomeSocket->Send(&p);
+		p.SetMessage(MSG_GS_BC_TABLE_JOIN);
+		p<<res<<tableID<<seatID<<player->GetNickName()<<player->GetProtraitID();
+		//_incomeSocket->Send(&p);
+		Broadcast(&p);
 		return;
-
-
-		//广播此玩家加入桌子的消息
-		//Packet p;
-		//p.SetMessage(MSG_GS_BC_TABLE_JOIN);
-		//p.Put(who)
-		//Broadcast(&p);
 	}
 	else
 	{
@@ -229,7 +234,7 @@ void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet&
 		//广播此玩家离开桌子的消息
 		Packet p;
 		p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
-		//p.Put(who)
+		p<<res<<tableID<<player->GetNickName()<<player->GetProtraitID();
 		Broadcast(&p);
 	}
 	else
@@ -325,11 +330,12 @@ void ZjhGameServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
 		}
 
 		// leave table first
-		res = TABLE.StLeaveTable(player);
-		LOG_INFO(QString("Player Leave from table, res[%1]").arg(res));
+		quint32 from = 0;
+		res = TABLE.StLeaveTable(player, from);
+		LOG_INFO(QString("Player Leave from table[%1], res[%2]").arg(from).arg(res));
 		if ( res != GS_NO_ERR )
 		{
-			LOG_WARN(QString("StLeaveTable Error[%1]").arg(res));
+			LOG_WARN(QString("StLeaveTable[%1] Error[%2]").arg(from).arg(res));
 		}
 		// remove player from memory
 		deletePlayer(player);

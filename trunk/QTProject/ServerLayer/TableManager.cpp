@@ -59,29 +59,19 @@ int TableManager::StJoinTable( ISocketInstancePtr _player, uint _tableID, uint _
 	return GS_NO_ERR;
 }
 
-int TableManager::StLeaveTable( ISocketInstancePtr _player, uint _tableID )
-{
-	Table* table = mTables.value(_tableID);
-	if ( table )
-	{
-		int res = table->Leave(_player);
-
-		return res;
-	}
-
-	return ERR_GS_TABLE_NOT_FOUND;
-}
-
-int TableManager::StLeaveTable( ISocketInstancePtr _player )
+int TableManager::StLeaveTable( ISocketInstancePtr _player, quint32& _leaveFrom )
 {
 	QMap<int, Table*>::iterator itr;
 	for ( itr = mTables.begin();itr != mTables.end(); itr++ )
 	{
 		if ( itr.value()->IsPlayerJoin(_player) )
 		{
-			int res = StLeaveTable(_player, itr.key());
+			int res = itr.value()->Leave(_player);
 			if ( res == GS_NO_ERR )
+			{
+				_leaveFrom = itr.key();
 				LOG_D_INFO(QString("Player[%1:%2] leave from table[%3]").arg(_player->IP()).arg(_player->Port()).arg(itr.key()));
+			}
 			else
 				LOG_D_ERR(QString("Player[%1:%2] leave from table[%3], errCode:%4").arg(_player->IP()).arg(_player->Port()).arg(itr.key()).arg(res));
 			return res;

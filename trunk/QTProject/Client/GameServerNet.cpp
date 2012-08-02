@@ -30,8 +30,11 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_CL_BRING_MONEY:
 		processBringMoneyRes(_packet);
 		break;
-	case MSG_GS_CL_TABLE_JOIN:
+	case MSG_GS_BC_TABLE_JOIN:
 		processTableJoin(_packet);
+		break;
+	case MSG_GS_BC_TABLE_LEAVE:
+		processTableLeave(_packet);
 		break;
 	case MSG_GS_CL_START_GAME:
 		processStartGame(_packet);
@@ -134,9 +137,20 @@ void GameServerNet::processTableJoin( Packet& _packet )
 	quint32 res = 0;
 	quint32 seatID = 0;
 	quint32 tableID = 0;
-	_packet>>res>>tableID>>seatID;
+	TablePlayer tablePlayer;
+	_packet>>res>>tableID>>seatID>>tablePlayer.mNickName>>tablePlayer.mProtraitID;
 
-	emit SiTableJoinResult(res, tableID, seatID);
+	emit SiTableJoinResult(res, tableID, seatID, tablePlayer);
+}
+
+void GameServerNet::processTableLeave( Packet& _packet )
+{
+	quint32 res = 0;
+	quint32 tableID = 0;
+	TablePlayer tablePlayer;
+	_packet>>res>>tableID>>tablePlayer.mNickName>>tablePlayer.mProtraitID;
+
+	emit SiTableLeaveResult(res, tableID, tablePlayer);
 }
 
 void GameServerNet::processStartGame( Packet& _packet )

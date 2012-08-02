@@ -65,7 +65,8 @@ void LobbyUI::regConnections()
 	connect(mGameServer, SIGNAL(SiLoginOK()), this, SLOT(stGSLoginOK()));
 	connect(mGameServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stGSLoginFailed(quint32)));
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
-	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32)), this, SLOT(stTableJoinResult(quint32, quint32, quint32)));
+	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32, TablePlayer)), this, SLOT(stTableJoinResult(quint32, quint32, quint32, TablePlayer)));
+	connect(mGameServer, SIGNAL(SiTableLeaveResult(quint32, quint32, TablePlayer)), this, SLOT(stTableLeaveResult(quint32, quint32, TablePlayer)));
 
 }
 
@@ -147,9 +148,24 @@ void LobbyUI::stGSLoginFailed( quint32 _errCode )
 	LOG_D_ERR(QString("ErrorCode[%1]").arg(_errCode));
 }
 
-void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID )
+void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player )
 {
-	LOG_D_INFO(QString("Player joined table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
+	if ( _res == GS_NO_ERR )
+	{
+		LOG_D_INFO(QString("Player joined table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
+		QMap<quint32, Table*>::iterator itr = mTableList.find(_tableID);
+		if ( itr != mTableList.end() )
+		{
+			itr.value()->UpdatePlayer(_seatID, _player);
+		}
+		else
+			LOG_D_ERR(QString("Can not find table id[%1]").arg(_tableID));
+	}
+	else
+	{
+		LOG_D_WARN(QString("Player join table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
+
+	}
 }
 
 void LobbyUI::stTableList( QMap<int, TableData> _tableData )
@@ -162,8 +178,28 @@ void LobbyUI::stTableList( QMap<int, TableData> _tableData )
 		if ( index >= mTableList.size() )
 			break;
 		
-		mTableList[index]->StSit(itr.key(), *itr);
+		mTableList[index]->UpdateTableInfo(itr.key(), *itr);
 	}
 
 	return;
+}
+
+void LobbyUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer _player )
+{
+	if ( _res == GS_NO_ERR )
+	{
+		LOG_D_INFO(QString("Player leave table[%1], seat[%2], res[%3]").arg(_tableID).arg(_res));
+		QMap<quint32, Table*>::iterator itr = mTableList.find(_tableID);
+		if ( itr != mTableList.end() )
+		{
+			itr.value()->PlayerLeave(_player);
+		}
+		else
+			LOG_D_ERR(QString("Can not find table id[%1]").arg(_tableID));
+	}
+	else
+	{
+		LOG_D_WARN(QString("Player leave table[%1], seat[%2], res[%3]").arg(_tableID).arg(_res));
+
+	}
 }
