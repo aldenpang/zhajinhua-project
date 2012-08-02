@@ -29,11 +29,12 @@ void Table::Init()
 	mNameLabel[2] = mWidget->findChild<QTextEdit*>("name2");
 	mNameLabel[3] = mWidget->findChild<QTextEdit*>("name3");
 
+	QString ddd = mNameLabel[0]->toPlainText();
 
 	regConnection();
 }
 
-void Table::StSit( quint32 _tableID, TableData _data)
+void Table::UpdateTableInfo( quint32 _tableID, TableData _data)
 {
 	if ( _tableID != mID )
 	{
@@ -86,4 +87,31 @@ void Table::stClickSeat()
 		LOG_D_INFO(QString("Player click on seatID[%1]").arg(seatID));
 		emit SiSit(mID, seatID);
 	}
+}
+
+void Table::UpdatePlayer( quint32 _seatID, TablePlayer _player )
+{
+	if ( _seatID < 0 || _seatID >3 )
+	{
+		LOG_D_ERR(QString("Invaild seatID[%1]").arg(_seatID));
+		return;
+	}
+	if ( _player.mNickName != EMPTY_SEAT )
+	{
+		mNameLabel[_seatID]->setText(_player.mNickName);
+	}
+}
+
+void Table::PlayerLeave(TablePlayer _player)
+{
+	quint32 selfTableID = mID;
+	for ( int i = 0; i<MAX_PLAYER; i++ )
+	{
+		QString ddd = mNameLabel[i]->toPlainText();
+		if ( mNameLabel[i]->toPlainText() == _player.mNickName )
+		{
+			mNameLabel[i]->setText(EMPTY_SEAT);
+		}
+	}
+	
 }

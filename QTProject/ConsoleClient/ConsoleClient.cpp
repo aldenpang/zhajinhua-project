@@ -39,7 +39,7 @@ ConsoleClient::ConsoleClient()
 	connect(mGameServer, SIGNAL(SiDisconnected()), this, SLOT(stGSDisconnected()));
 	connect(mGameServer, SIGNAL(SiBringMoneyRes(int)), this, SLOT(stBringMoneyRes(int)));
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
-	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32)), this, SLOT(stTableJoinRes(quint32, quint32, quint32)));
+	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32, TablePlayer)), this, SLOT(stTableJoinRes(quint32, quint32, quint32, TablePlayer)));
 	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(stStartGame(TableInfo)));
 	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
@@ -170,7 +170,7 @@ End:
 	return;
 }
 
-void ConsoleClient::stTableJoinRes( quint32 _res, quint32 _tableID, quint32 _seatID )
+void ConsoleClient::stTableJoinRes( quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player )
 {
 	if ( _res == GS_NO_ERR )
 	{

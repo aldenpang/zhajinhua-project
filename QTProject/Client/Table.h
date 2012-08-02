@@ -29,8 +29,13 @@ public:
 
 	void Init();
 
+	void UpdatePlayer(quint32 _seatID, TablePlayer _player);
+	void UpdateTableInfo(quint32 _tableID, TableData _data);
+
+	void PlayerLeave(TablePlayer _player);
+
 public slots:
-	void StSit(quint32 _tableID, TableData _data);
+	
 private slots:
 	void stClickSeat();
 

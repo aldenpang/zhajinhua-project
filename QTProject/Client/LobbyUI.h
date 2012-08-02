@@ -36,7 +36,8 @@ private slots:
 	void stGSConnected();
 	void stGSLoginOK();
 	void stGSLoginFailed(quint32 _errCode);
-	void stTableJoinResult(quint32 _res, quint32 _tableID, quint32 _seatID);
+	void stTableJoinResult(quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player);
+	void stTableLeaveResult(quint32 _res, quint32 _tableID, TablePlayer _player);
 	void stTableList(QMap<int, TableData> _tableData);
 protected:
 private:
