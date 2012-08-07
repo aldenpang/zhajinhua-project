@@ -42,7 +42,7 @@ void ZJHGameUI::Init()
 
 	PokerItem* item = new PokerItem(0);
 	item->toBack();
-	item->moveBy(gTableCenter.x(), gTableCenter.y());
+	//item->moveBy(gTableCenter.x(), gTableCenter.y());
 	mScene->addItem(item);
 
 }
