@@ -12,7 +12,7 @@
 #ifndef MyToolkits_h__
 #define MyToolkits_h__
 
-#define PROPERTY(x, y) public: inline void Set##y(x t){m##y=t;};inline x Get##y(){return m##y;};private: x m##y;public:
+#define PROPERTY(x, y) public: inline void Set##y(x t){m##y=t;};inline x Get##y(){return m##y;};protected: x m##y;public:
 
 #define SAFE_DELETE(p) {if(p){delete p; p=NULL;}}
 

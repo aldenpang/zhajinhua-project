@@ -12,6 +12,7 @@
 #ifndef LoginServerNet_h__
 #define LoginServerNet_h__
 #include "INetLayer.h"
+#include "CommonPlayer.h"
 #include "SharedData.h"
 using namespace SharedData;
 
@@ -32,11 +33,13 @@ signals:
 	void SiLoginOK();
 	void SiLoginFailed(quint32 _errorCode);
 	void SiGameList(QVector<RoomInfo> _gameList);
+	void SiPlayerInfo(CommonPlayer _player);
 
 protected:
 private:
 	void processLogin(Packet& _packet);
 	void processGameList(Packet& _packet);
+	void processPlayerInfo(Packet& _packet);
 
 };
 #endif // LoginServerNet_h__

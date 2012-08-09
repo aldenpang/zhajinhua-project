@@ -4,17 +4,10 @@
 GSPlayer::GSPlayer(QTcpSocket* _socket)
 : ISocketInstance(_socket)
 {
-	mNickName = "";
-	mGender = 0;
-	mUserWalletMoney = 0;
-	mTableWalletMoney = 0;
-	mExp = 0;
-	mPlayTime = 0;
 	mIsWaiting = false;
 	mHandPokerType = NONE;
 	mAlreadyFollow = 0;
 	mIsGiveUp = false;
-	mProtraitID = 0;
 }
 
 GSPlayer::~GSPlayer()

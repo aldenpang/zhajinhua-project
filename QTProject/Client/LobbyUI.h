@@ -12,6 +12,7 @@
 #include "BaseUI.h"
 #include "Table.h"
 #include "TableData.h"
+#include "CommonPlayer.h"
 
 class GameList;
 class GameServerNet;
@@ -29,6 +30,7 @@ signals:
 	void SiQuit();
 public slots:
 	void StShowLobby(QVector<RoomInfo> _gameList);
+	void StUpdatePlayerInfo(CommonPlayer _player);
 private slots:
 	void stTableJoin(quint32 _tableID, quint32 _seatID);
 	void stConnectGS(QString _ip, quint32 _port);

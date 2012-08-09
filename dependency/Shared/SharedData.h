@@ -21,8 +21,10 @@ namespace SharedData
 		//////////////////////////////////////////////
 		MSG_CL_LS_LOGIN = 0,
 		MSG_LS_CL_LOGIN,
+		MSG_LS_CL_PLAYERINFO,
 		MSG_CL_LS_GAMELIST,
 		MSG_LS_CL_GAMELIST,
+		MSG_CL_LS_LOGIN_ANONYMOUS,
 
 		//////////////////////////////////////////////
 		// messages between client and game server

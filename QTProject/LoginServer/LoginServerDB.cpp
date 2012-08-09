@@ -1,5 +1,5 @@
 #include "LoginServerDB.h"
-
+#include "CommonPlayer.h"
 
 LoginServerDB::LoginServerDB()
 {
@@ -11,7 +11,7 @@ LoginServerDB::~LoginServerDB()
 
 }
 
-int LoginServerDB::VerifyUser( QString& _user, QString& _pwd )
+int LoginServerDB::VerifyUser( QString& _user, QString& _pwd, CommonPlayer* _player )
 {
 	QString sql = QString("select * from Accounts where UserName like \"%1\" and Password like \"%2\"").arg(_user).arg(_pwd);
 	QSqlQuery q = mDb.exec(sql);
@@ -20,7 +20,14 @@ int LoginServerDB::VerifyUser( QString& _user, QString& _pwd )
 	int records = 0;
  	while (q.next()) 
  	{
+		_player->SetAccountID(q.value(2).toInt());
+		_player->SetNickName(q.value(3).toString());
+		_player->SetGender(q.value(4).toInt());
+		_player->SetExp(q.value(5).toInt());
+		_player->SetPlayTime(q.value(6).toInt());
  		status = q.value(8).toInt();		// get player's status
+		_player->SetProtraitID(q.value(9).toInt());
+
  		records++;
 		if ( records >=2 )
 			break;

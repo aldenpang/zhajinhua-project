@@ -203,3 +203,9 @@ void LobbyUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer _p
 
 	}
 }
+
+void LobbyUI::StUpdatePlayerInfo( CommonPlayer _player )
+{
+	QLabel* nickNameLabel = mMainWidget->findChild<QLabel*>("nickNameText");
+	nickNameLabel->setText(_player.GetNickName());
+}
