@@ -72,6 +72,7 @@ void LoginUI::initLoginServer()
 	connect(mLoginServer, SIGNAL(SiLoginOK()), this, SLOT(stLoginOK()));
 	connect(mLoginServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stLoginFailed(quint32)));
 	connect(mLoginServer, SIGNAL(SiGameList(QVector<RoomInfo>)), this, SLOT(stGameList(QVector<RoomInfo>)));
+	connect(mLoginServer, SIGNAL(SiPlayerInfo(CommonPlayer)), this, SIGNAL(SiPlayerInfo(CommonPlayer)));
 }
 
 void LoginUI::stLoginOK()

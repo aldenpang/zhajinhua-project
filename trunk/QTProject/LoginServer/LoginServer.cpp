@@ -4,6 +4,7 @@
 #include "SharedData.h"
 #include "LoginServerDB.h"
 #include "LogModule.h"
+#include "CommonPlayer.h"
 using namespace SharedData;
 
 void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _packet )
@@ -18,6 +19,9 @@ void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pack
 		break;
 	case MSG_CL_LS_GAMELIST:
 		processClientReqGameList(_incomeSocket, _packet);
+		break;
+	case MSG_CL_LS_LOGIN_ANONYMOUS:
+		processClientLoginAnonymous(_incomeSocket, _packet);
 		break;
 	default:
 		LOG_ERR(QString("Wrong Message[%1] from %2:%3").arg(msg).arg(_incomeSocket->GetSocket()->peerAddress().toString()).arg(_incomeSocket->GetSocket()->peerPort()));
@@ -35,7 +39,9 @@ void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet& 
 
 	LOG_INFO(QString("[%1]wants to login, pwd is[%2]").arg(userName).arg(pwd));
 
-	int res = DB.VerifyUser(userName, pwd);
+	CommonPlayer player;
+
+	int res = DB.VerifyUser(userName, pwd, &player);
 
 	if ( res != LOGIN_OK )
 		LOG_ERR(QString("LoginFailed! Reason:[%1]").arg(res));
@@ -47,6 +53,15 @@ void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet& 
 	p.SetMessage(MSG_LS_CL_LOGIN);
 	p<<(quint32)res;
 	_incomeSocket->Send(&p);
+
+	if ( res == LOGIN_OK )
+	{
+		// send player info
+		Packet p;
+		p.SetMessage(MSG_LS_CL_PLAYERINFO);
+		player.ToPacket(p);
+		_incomeSocket->Send(&p);
+	}
 
 	return;
 }
@@ -83,5 +98,17 @@ void LoginServer::sendGameList( int _gameType, ISocketInstancePtr _toSocket )
 
 void LoginServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
 {
+
+}
+
+void LoginServer::processClientLoginAnonymous( ISocketInstancePtr _incomeSocket, Packet& _packet )
+{
+	// createa a temp player in memory, doesn't need write to db
+
+	// send login result
+	Packet p;
+	p.SetMessage(MSG_LS_CL_LOGIN);
+	p<<(quint32)LOGIN_OK;
+	_incomeSocket->Send(&p);
 
 }

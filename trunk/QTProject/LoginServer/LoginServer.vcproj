@@ -199,6 +199,10 @@
 			Name="Shared"
 			>
 			<File
+				RelativePath="..\..\dependency\Shared\CommonPlayer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\dependency\Shared\DBLayer.cpp"
 				>
 			</File>

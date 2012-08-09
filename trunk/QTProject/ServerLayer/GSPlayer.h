@@ -16,39 +16,13 @@
 #include "MyToolkits.h"
 #include "SharedData.h"
 #include "Poker.h"
+#include "CommonPlayer.h"
 
-class GSPlayer : public ISocketInstance
+class GSPlayer : public CommonPlayer, public ISocketInstance
 {
 public:
 	GSPlayer(QTcpSocket* _socket);
 	~GSPlayer();
-
-	// Account ID
-	PROPERTY(quint32, AccountID);
-
-	// 昵称
-	PROPERTY(QString, NickName);
-
-	// 性别 0-male 1-female
-	PROPERTY(int, Gender);
-
-	// User wallet
-	PROPERTY(uint, UserWalletMoney);
-
-	// User wallet
-	PROPERTY(uint, UserWalletID);
-
-	// Table wallet
-	PROPERTY(uint, TableWalletMoney);
-
-	// Table wallet
-	PROPERTY(uint, TableWalletID);
-
-	// 经验值
-	PROPERTY(uint, Exp);
-
-	// 在线时长
-	PROPERTY(uint, PlayTime);
 
 	// 是否在等待进入游戏
 	PROPERTY(bool, IsWaiting);
@@ -56,11 +30,6 @@ public:
 	// 是否已经放弃
 	PROPERTY(bool, IsGiveUp);
 
-	// 来源IP
-	PROPERTY(QString, IP);
-
-	// 头像ID
-	PROPERTY(quint32, ProtraitID);
 
 	// 已经跟的钱数
 	void AlreadyFollow(quint32 _alreadyFollow);

@@ -22,6 +22,7 @@ public:
 protected:
 private:
 	void processClientLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	void processClientLoginAnonymous(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processClientReqGameList(ISocketInstancePtr _incomeSocket, Packet& _packet);
 
 	void sendGameList(int _gameType, ISocketInstancePtr _toSocket);

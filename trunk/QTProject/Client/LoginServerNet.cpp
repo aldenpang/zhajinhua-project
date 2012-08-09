@@ -1,5 +1,6 @@
 #include "LoginServerNet.h"
 #include "MD5.h"
+#include "CommonPlayer.h"
 #include "SharedData.h"
 using namespace SharedData;
 
@@ -25,6 +26,9 @@ void LoginServerNet::PacketHandler( Packet& _packet )
 		break;
 	case MSG_LS_CL_GAMELIST:
 		processGameList(_packet);
+		break;
+	case MSG_LS_CL_PLAYERINFO:
+		processPlayerInfo(_packet);
 		break;
 	default:
 		break;
@@ -79,4 +83,13 @@ void LoginServerNet::SendLoginRequest( QString& _userName, QString& _pwd )
 	QString md5pwd = ToMD5(_pwd);
 	p<<userName<<md5pwd;
 	Send(&p);
+}
+
+void LoginServerNet::processPlayerInfo( Packet& _packet )
+{
+	CommonPlayer player;
+	player.FromPacket(_packet);
+
+	emit SiPlayerInfo(player);
+	return;
 }

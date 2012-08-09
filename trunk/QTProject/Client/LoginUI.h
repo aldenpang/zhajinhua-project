@@ -11,6 +11,8 @@
 
 #include "BaseUI.h"
 #include "Patcher.h"
+#include "CommonPlayer.h"
+
 class LoginServerNet;
 class LoginUI : public BaseUI
 {
@@ -24,6 +26,8 @@ public:
 signals:
 	void SiQuit();
 	void SiShowLobby(QVector<RoomInfo> _gameList);
+	void SiPlayerInfo(CommonPlayer _player);
+
 private slots:
 	void stLoginOK();
 	void stNetError(QString _err);
