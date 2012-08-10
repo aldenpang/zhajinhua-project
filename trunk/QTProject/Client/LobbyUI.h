@@ -47,6 +47,8 @@ private:
 	QGraphicsScene* mScene;
 	GameList* mGameList;
 	GameServerNet* mGameServer;
+	QLabel* mSelectNotice;
+	QGraphicsView* mTableListView;
 
 	void regConnections();
 
