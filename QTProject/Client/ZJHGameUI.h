@@ -28,10 +28,13 @@ public:
 
 	void ShowPreShuffleAni();
 
+	
+
 signals:
 	void SiQuit();
 private slots:
 	void stUpdate();
+	void stMoveLeftPokers();
 
 protected:
 private:
@@ -40,7 +43,9 @@ private:
 	void regConnections();
 	QLabel* mShuffleLabel;
 	QMovie* mShuffleAni;
+
 	QVector<PokerItem*> mPokers;
+	QVector<PokerItem*> mLeftPokers;
 };
 
 #endif

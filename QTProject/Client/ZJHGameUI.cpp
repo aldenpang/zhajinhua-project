@@ -8,6 +8,8 @@ QPoint gPokerPos[MAX_PLAYER][MAX_PLAYER] = {{QPoint(300, 360), QPoint(550, 220),
 											{QPoint(300, 60), QPoint(110, 220), QPoint(300, 360), QPoint(550, 220)}, 
 											{QPoint(110, 220), QPoint(300, 360), QPoint(550, 220), QPoint(300, 60)}};
 quint32 gPokerGap = 20;
+QPoint gLeftPoker = QPoint(20, 20);
+
 
 ZJHGameUI::ZJHGameUI()
 {
@@ -32,6 +34,7 @@ void ZJHGameUI::Init()
 
 	regConnections();
 
+	mTimer.setSingleShot(true);
 	mTimer.start(5000);
 
 	QGraphicsView* view = mMainWidget->findChild<QGraphicsView*>("graphicsView");
@@ -59,7 +62,17 @@ void ZJHGameUI::Init()
 		mPokers.push_back(item);
 	}
 
-	ShowDistributeAni(0);
+	for ( int i = 0; i<amount; i++ )
+	{
+		PokerItem* last = new PokerItem(0);	// last poker as background
+		last->setZValue(0);
+		last->setPos(gTableCenter);
+		last->ToBack();
+		mScene->addItem(last);
+		mLeftPokers.push_back(last);
+	}
+
+	ShowDistributeAni(0, 1);
 }
 
 void ZJHGameUI::regConnections()
@@ -94,13 +107,23 @@ void ZJHGameUI::HideShuffleAni()
 void ZJHGameUI::ShowDistributeAni( quint32 _dealerIdx, quint32 _absentIdx1/*=-1*/, quint32 _absentIdx2/*=-1*/ )
 {
 	if ( _dealerIdx >= MAX_PLAYER || _dealerIdx < 0 )
-	 return;
+		return;
 
+	if ( _absentIdx1 == 0 || _absentIdx2 == 0 )
+		return;
+	
 	QPoint* pos = gPokerPos[_dealerIdx];
 	int posIdx = 0;
 	int gap = 0;
 	for ( int i = 0; i<mPokers.size(); i++, posIdx++ )
 	{
+		// 如果当前发牌的player不在，就跳到下一家发牌，本来发给他的牌要push到mLeftPokers中等待收走
+		if ( posIdx == _absentIdx1 || posIdx == _absentIdx2 )
+		{
+			mLeftPokers.push_back(mPokers[i]);
+			continue;
+		}
+		
 		if ( i != 0 && i %  MAX_PLAYER == 0 )
 		{
 			gap++;
@@ -109,7 +132,8 @@ void ZJHGameUI::ShowDistributeAni( quint32 _dealerIdx, quint32 _absentIdx1/*=-1*
 
 		mPokers[i]->Move(150*i, 1000, QPoint(pos[posIdx].x()+gPokerGap*gap, pos[posIdx].y()));
 	}
-
+	
+	QTimer::singleShot(150*MAX_PLAYER*MAX_HAND_POKER, this, SLOT(stMoveLeftPokers()));
 }
 
 void ZJHGameUI::ShowPreShuffleAni()
@@ -117,5 +141,17 @@ void ZJHGameUI::ShowPreShuffleAni()
 	for ( int i = 0; i<mPokers.size(); i++ )
 	{
 		mPokers[i]->Move(50*i, 1000, gTableCenter);
+	}
+	for ( int i = 0; i<mLeftPokers.size(); i++ )
+	{
+		mLeftPokers[i]->Move(50*i, 1000, gTableCenter);
+	}
+}
+
+void ZJHGameUI::stMoveLeftPokers()
+{
+	for ( int i = 0; i<mLeftPokers.size(); i++ )
+	{
+		mLeftPokers[i]->Move(50*i, 1000, gLeftPoker);
 	}
 }
