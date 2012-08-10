@@ -11,6 +11,7 @@
 
 #include "BaseUI.h"
 
+class PokerItem;
 class ZJHGameUI : public BaseUI
 {
 	Q_OBJECT
@@ -20,6 +21,12 @@ public:
 
 	void Init();
 
+	void ShowShuffleAni();
+	void HideShuffleAni();
+
+	void ShowDistributeAni(quint32 _dealerIdx, quint32 _absentIdx1=-1, quint32 _absentIdx2=-1);
+
+	void ShowPreShuffleAni();
 
 signals:
 	void SiQuit();
@@ -31,7 +38,9 @@ private:
 	QTimer mTimer;
 	QGraphicsScene* mScene;
 	void regConnections();
-
+	QLabel* mShuffleLabel;
+	QMovie* mShuffleAni;
+	QVector<PokerItem*> mPokers;
 };
 
 #endif

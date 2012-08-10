@@ -17,10 +17,13 @@ public:
 	PokerItem(quint32 _id);
 	~PokerItem();
 
-	void toBack();
+	void ToBack();
+
+	void ToFront();
 
 protected:
 private:
+	QString mImagePath;
 };
 
 #endif // PokerItem_h__
