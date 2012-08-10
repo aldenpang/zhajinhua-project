@@ -6,6 +6,7 @@
     <file>client.ui</file>
   </qresource>
   <qresource prefix="/Images">
+    <file>Media/selectRoom.png</file>
     <file>Media/shuffle.gif</file>
     <file>Media/silverCoin.png</file>
     <file>Media/goldCoin.png</file>

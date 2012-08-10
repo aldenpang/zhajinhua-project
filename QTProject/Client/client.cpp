@@ -22,7 +22,7 @@ Client::Client(int & argc, char ** argv)
 
 	mLoginUI = new LoginUI;
 	mLoginUI->Init();
-	//mLoginUI->Show();
+	mLoginUI->Show();
 	initMouseEventFilter(mLoginUI->GetWidget());
 
 	mLobbyUI = new LobbyUI;
@@ -32,7 +32,7 @@ Client::Client(int & argc, char ** argv)
 
 	mZjhUI = new ZJHGameUI;
 	mZjhUI->Init();
-	mZjhUI->Show();
+	//mZjhUI->Show();
 	initMouseEventFilter(mZjhUI->GetWidget());
 
 	regConnections();

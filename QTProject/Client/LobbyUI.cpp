@@ -32,15 +32,20 @@ void LobbyUI::Init()
 		mMainWidget->setWindowFlags(Qt::FramelessWindowHint);
 	}
 
-	QGraphicsView* tableList = mMainWidget->findChild<QGraphicsView*>("tableList");
-	mScene = new QGraphicsScene(0, 0, tableList->size().width()-tableList->verticalScrollBar()->size().width(), 2000);
-	tableList->setScene(mScene);
-	int min = tableList->verticalScrollBar()->minimum();
-	int max = tableList->verticalScrollBar()->maximum();
-	tableList->verticalScrollBar()->setValue(min+1);		// if set 0, thumb will stay at middle of scrollbar...WTF
+	mTableListView = mMainWidget->findChild<QGraphicsView*>("tableList");
+	mScene = new QGraphicsScene(0, 0, mTableListView->size().width()-mTableListView->verticalScrollBar()->size().width(), 2000);
+	mTableListView->setScene(mScene);
+	int min = mTableListView->verticalScrollBar()->minimum();
+	int max = mTableListView->verticalScrollBar()->maximum();
+	mTableListView->verticalScrollBar()->setValue(min+1);		// if set 0, thumb will stay at middle of scrollbar...WTF
+	mTableListView->hide();
 
 	QTreeWidget* gameList = mMainWidget->findChild<QTreeWidget*>("gameList");
 	mGameList = new GameList(gameList);
+
+	mSelectNotice = new QLabel(mMainWidget);
+	mSelectNotice->move(270, 200);
+	mSelectNotice->setPixmap(QPixmap(":/Images/Media/selectRoom.png"));
 
 	initTables(50);
 
@@ -67,7 +72,6 @@ void LobbyUI::regConnections()
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
 	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32, TablePlayer)), this, SLOT(stTableJoinResult(quint32, quint32, quint32, TablePlayer)));
 	connect(mGameServer, SIGNAL(SiTableLeaveResult(quint32, quint32, TablePlayer)), this, SLOT(stTableLeaveResult(quint32, quint32, TablePlayer)));
-
 }
 
 void LobbyUI::initTables(quint32 _amount)
@@ -141,6 +145,8 @@ void LobbyUI::stGSConnected()
 void LobbyUI::stGSLoginOK()
 {
 	LOG_D_INFO("Game Server Logined");
+	mTableListView->show();
+	mSelectNotice->hide();
 }
 
 void LobbyUI::stGSLoginFailed( quint32 _errCode )
