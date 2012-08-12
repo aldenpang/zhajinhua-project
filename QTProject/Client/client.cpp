@@ -30,7 +30,7 @@ Client::Client(int & argc, char ** argv)
 	mLobbyUI->Show();
 	initMouseEventFilter(mLobbyUI->GetWidget());
 
-	mZjhUI = new ZJHGameUI;
+	mZjhUI = new ZJHGameUI(mLobbyUI->GetGameServerNet());
 	mZjhUI->Init();
 	mZjhUI->Show();
 	initMouseEventFilter(mZjhUI->GetWidget());
@@ -54,6 +54,7 @@ void Client::regConnections()
 	connect(mLoginUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
 	connect(mLoginUI, SIGNAL(SiShowLobby(QVector<RoomInfo>)), mLobbyUI, SLOT(StShowLobby(QVector<RoomInfo>)));
 	connect(mLoginUI, SIGNAL(SiPlayerInfo(CommonPlayer)), mLobbyUI, SLOT(StUpdatePlayerInfo(CommonPlayer)));
+	connect(mLoginUI, SIGNAL(SiLoginOK(QString, QString)), mLobbyUI, SLOT(StGetLoginInfo(QString, QString)));
 
 	connect(mLobbyUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
 	connect(mZjhUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));

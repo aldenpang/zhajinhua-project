@@ -27,6 +27,7 @@ signals:
 	void SiQuit();
 	void SiShowLobby(QVector<RoomInfo> _gameList);
 	void SiPlayerInfo(CommonPlayer _player);
+	void SiLoginOK(QString _username, QString _pwd);
 
 private slots:
 	void stLoginOK();
@@ -39,6 +40,8 @@ protected:
 private:
 	Patcher mPatcher;
 	LoginServerNet* mLoginServer;
+	QLineEdit* mUserName;
+	QLineEdit* mPassword;
 
 	void regConnections();
 

@@ -11,7 +11,8 @@ quint32 gPokerGap = 20;
 QPoint gLeftPoker = QPoint(20, 20);
 
 
-ZJHGameUI::ZJHGameUI()
+ZJHGameUI::ZJHGameUI(GameServerNet* _gameServerNet)
+: mGameServer(_gameServerNet)
 {
 	mTimer.setInterval(50);
 }
@@ -79,6 +80,8 @@ void ZJHGameUI::regConnections()
 {
 	connect(mMainWidget->findChild<QPushButton*>("btn_quit"), SIGNAL(clicked()), this, SIGNAL(SiQuit()));
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stUpdate()));
+
+
 }
 
 void ZJHGameUI::stUpdate()

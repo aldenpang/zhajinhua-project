@@ -28,6 +28,9 @@ void LoginUI::Init()
 		mMainWidget->setWindowFlags(Qt::FramelessWindowHint);
 	}
 
+	mUserName = mMainWidget->findChild<QLineEdit*>("edit_username");
+	mPassword = mMainWidget->findChild<QLineEdit*>("edit_password");
+
 	// load urls
 	QString url = SETTINGS.GetLoginADURL();
 	//mMainWidget->findChild<QWebView*>("")
@@ -56,8 +59,8 @@ void LoginUI::stLogin()
 	{
 		mLoginServer->Connect(SETTINGS.GetIP(), SETTINGS.GetPort());
 	}
-	QString userName = mMainWidget->findChild<QLineEdit*>("edit_username")->text();
-	QString password = mMainWidget->findChild<QLineEdit*>("edit_password")->text();
+	QString userName = mUserName->text();
+	QString password = mPassword->text();
 
 	mLoginServer->SendLoginRequest(userName, password);
 }
@@ -79,6 +82,13 @@ void LoginUI::stLoginOK()
 {
 	mLoginServer->RequestGameList(ZJH);
 	LOG_D_INFO("LoginOK, Request Game List");
+
+	QString userName = mUserName->text();
+	QString password = mPassword->text();
+
+	mPassword->setText("");
+
+	emit SiLoginOK(userName, password);
 	return;
 }
 
