@@ -980,6 +980,106 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Media\Portrait\100.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Media\Portrait\101.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Media\Portrait\102.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Media\Portrait\103.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Media\Portrait\104.png"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\Media\Pokers\11.png"
 				>
 				<FileConfiguration
@@ -1400,7 +1500,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Media\Pokers\3.png"
+				RelativePath=".\Media\Portrait\3.png"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1420,7 +1520,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Media\Portrait\3.png"
+				RelativePath=".\Media\Pokers\3.png"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1640,7 +1740,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Media\Pokers\4.png"
+				RelativePath=".\Media\Portrait\4.png"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1660,7 +1760,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Media\Portrait\4.png"
+				RelativePath=".\Media\Pokers\4.png"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2229,7 +2329,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\GeneratedFiles\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\zjh.ui;.\table.ui;.\lobby.ui;.\client.ui;.\Media\selectRoom.png;.\Media\shuffle.gif;.\Media\silverCoin.png;.\Media\goldCoin.png;.\Media\btn_quickJoin.png;.\Media\nobodyImage.png;.\Media\table.png;.\Media\seat.png;.\Media\btn_bg.png;.\Media\lobby.png;.\Media\btn_close.png;.\Media\btn_min.png;.\Media\btn_enter.png;.\Media\btn_forget.png;.\Media\btn_reg.png;.\Media\bg.png;.\Media\btn_login.png;.\Media\Pokers\0.png;.\Media\Pokers\1.png;.\Media\Pokers\2.png;.\Media\Pokers\3.png;.\Media\Pokers\4.png;.\Media\Pokers\5.png;.\Media\Pokers\6.png;.\Media\Pokers\7.png;.\Media\Pokers\8.png;.\Media\Pokers\9.png;.\Media\Pokers\10.png;.\Media\Pokers\11.png;.\Media\Pokers\12.png;.\Media\Pokers\13.png;.\Media\Pokers\14.png;.\Media\Pokers\15.png;.\Media\Pokers\16.png;.\Media\Pokers\17.png;.\Media\Pokers\18.png;.\Media\Pokers\19.png;.\Media\Pokers\20.png;.\Media\Pokers\21.png;.\Media\Pokers\22.png;.\Media\Pokers\23.png;.\Media\Pokers\24.png;.\Media\Pokers\25.png;.\Media\Pokers\26.png;.\Media\Pokers\27.png;.\Media\Pokers\28.png;.\Media\Pokers\29.png;.\Media\Pokers\30.png;.\Media\Pokers\31.png;.\Media\Pokers\32.png;.\Media\Pokers\33.png;.\Media\Pokers\34.png;.\Media\Pokers\35.png;.\Media\Pokers\36.png;.\Media\Pokers\37.png;.\Media\Pokers\38.png;.\Media\Pokers\39.png;.\Media\Pokers\40.png;.\Media\Pokers\41.png;.\Media\Pokers\42.png;.\Media\Pokers\43.png;.\Media\Pokers\44.png;.\Media\Pokers\45.png;.\Media\Pokers\46.png;.\Media\Pokers\47.png;.\Media\Pokers\48.png;.\Media\Pokers\49.png;.\Media\Pokers\50.png;.\Media\Pokers\51.png;.\Media\Pokers\back.png;.\Media\Portrait\0.png;.\Media\Portrait\1.png;.\Media\Portrait\2.png;.\Media\Portrait\3.png;.\Media\Portrait\4.png"
+						AdditionalDependencies="$(InputPath);.\zjh.ui;.\table.ui;.\lobby.ui;.\client.ui;.\Media\selectRoom.png;.\Media\shuffle.gif;.\Media\silverCoin.png;.\Media\goldCoin.png;.\Media\btn_quickJoin.png;.\Media\nobodyImage.png;.\Media\table.png;.\Media\seat.png;.\Media\btn_bg.png;.\Media\lobby.png;.\Media\btn_close.png;.\Media\btn_min.png;.\Media\btn_enter.png;.\Media\btn_forget.png;.\Media\btn_reg.png;.\Media\bg.png;.\Media\btn_login.png;.\Media\Pokers\0.png;.\Media\Pokers\1.png;.\Media\Pokers\2.png;.\Media\Pokers\3.png;.\Media\Pokers\4.png;.\Media\Pokers\5.png;.\Media\Pokers\6.png;.\Media\Pokers\7.png;.\Media\Pokers\8.png;.\Media\Pokers\9.png;.\Media\Pokers\10.png;.\Media\Pokers\11.png;.\Media\Pokers\12.png;.\Media\Pokers\13.png;.\Media\Pokers\14.png;.\Media\Pokers\15.png;.\Media\Pokers\16.png;.\Media\Pokers\17.png;.\Media\Pokers\18.png;.\Media\Pokers\19.png;.\Media\Pokers\20.png;.\Media\Pokers\21.png;.\Media\Pokers\22.png;.\Media\Pokers\23.png;.\Media\Pokers\24.png;.\Media\Pokers\25.png;.\Media\Pokers\26.png;.\Media\Pokers\27.png;.\Media\Pokers\28.png;.\Media\Pokers\29.png;.\Media\Pokers\30.png;.\Media\Pokers\31.png;.\Media\Pokers\32.png;.\Media\Pokers\33.png;.\Media\Pokers\34.png;.\Media\Pokers\35.png;.\Media\Pokers\36.png;.\Media\Pokers\37.png;.\Media\Pokers\38.png;.\Media\Pokers\39.png;.\Media\Pokers\40.png;.\Media\Pokers\41.png;.\Media\Pokers\42.png;.\Media\Pokers\43.png;.\Media\Pokers\44.png;.\Media\Pokers\45.png;.\Media\Pokers\46.png;.\Media\Pokers\47.png;.\Media\Pokers\48.png;.\Media\Pokers\49.png;.\Media\Pokers\50.png;.\Media\Pokers\51.png;.\Media\Pokers\back.png;.\Media\Portrait\0.png;.\Media\Portrait\1.png;.\Media\Portrait\2.png;.\Media\Portrait\3.png;.\Media\Portrait\4.png;.\Media\Portrait\100.png;.\Media\Portrait\101.png;.\Media\Portrait\102.png;.\Media\Portrait\103.png;.\Media\Portrait\104.png"
 						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -2240,7 +2340,7 @@
 						Name="VCCustomBuildTool"
 						Description="Rcc&apos;ing $(InputFileName)..."
 						CommandLine="&quot;$(QTDIR)\bin\rcc.exe&quot; -name &quot;$(InputName)&quot; -no-compress &quot;$(InputPath)&quot; -o .\GeneratedFiles\qrc_$(InputName).cpp&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath);.\zjh.ui;.\table.ui;.\lobby.ui;.\client.ui;.\Media\selectRoom.png;.\Media\shuffle.gif;.\Media\silverCoin.png;.\Media\goldCoin.png;.\Media\btn_quickJoin.png;.\Media\nobodyImage.png;.\Media\table.png;.\Media\seat.png;.\Media\btn_bg.png;.\Media\lobby.png;.\Media\btn_close.png;.\Media\btn_min.png;.\Media\btn_enter.png;.\Media\btn_forget.png;.\Media\btn_reg.png;.\Media\bg.png;.\Media\btn_login.png;.\Media\Pokers\0.png;.\Media\Pokers\1.png;.\Media\Pokers\2.png;.\Media\Pokers\3.png;.\Media\Pokers\4.png;.\Media\Pokers\5.png;.\Media\Pokers\6.png;.\Media\Pokers\7.png;.\Media\Pokers\8.png;.\Media\Pokers\9.png;.\Media\Pokers\10.png;.\Media\Pokers\11.png;.\Media\Pokers\12.png;.\Media\Pokers\13.png;.\Media\Pokers\14.png;.\Media\Pokers\15.png;.\Media\Pokers\16.png;.\Media\Pokers\17.png;.\Media\Pokers\18.png;.\Media\Pokers\19.png;.\Media\Pokers\20.png;.\Media\Pokers\21.png;.\Media\Pokers\22.png;.\Media\Pokers\23.png;.\Media\Pokers\24.png;.\Media\Pokers\25.png;.\Media\Pokers\26.png;.\Media\Pokers\27.png;.\Media\Pokers\28.png;.\Media\Pokers\29.png;.\Media\Pokers\30.png;.\Media\Pokers\31.png;.\Media\Pokers\32.png;.\Media\Pokers\33.png;.\Media\Pokers\34.png;.\Media\Pokers\35.png;.\Media\Pokers\36.png;.\Media\Pokers\37.png;.\Media\Pokers\38.png;.\Media\Pokers\39.png;.\Media\Pokers\40.png;.\Media\Pokers\41.png;.\Media\Pokers\42.png;.\Media\Pokers\43.png;.\Media\Pokers\44.png;.\Media\Pokers\45.png;.\Media\Pokers\46.png;.\Media\Pokers\47.png;.\Media\Pokers\48.png;.\Media\Pokers\49.png;.\Media\Pokers\50.png;.\Media\Pokers\51.png;.\Media\Pokers\back.png;.\Media\Portrait\0.png;.\Media\Portrait\1.png;.\Media\Portrait\2.png;.\Media\Portrait\3.png;.\Media\Portrait\4.png"
+						AdditionalDependencies="$(InputPath);.\zjh.ui;.\table.ui;.\lobby.ui;.\client.ui;.\Media\selectRoom.png;.\Media\shuffle.gif;.\Media\silverCoin.png;.\Media\goldCoin.png;.\Media\btn_quickJoin.png;.\Media\nobodyImage.png;.\Media\table.png;.\Media\seat.png;.\Media\btn_bg.png;.\Media\lobby.png;.\Media\btn_close.png;.\Media\btn_min.png;.\Media\btn_enter.png;.\Media\btn_forget.png;.\Media\btn_reg.png;.\Media\bg.png;.\Media\btn_login.png;.\Media\Pokers\0.png;.\Media\Pokers\1.png;.\Media\Pokers\2.png;.\Media\Pokers\3.png;.\Media\Pokers\4.png;.\Media\Pokers\5.png;.\Media\Pokers\6.png;.\Media\Pokers\7.png;.\Media\Pokers\8.png;.\Media\Pokers\9.png;.\Media\Pokers\10.png;.\Media\Pokers\11.png;.\Media\Pokers\12.png;.\Media\Pokers\13.png;.\Media\Pokers\14.png;.\Media\Pokers\15.png;.\Media\Pokers\16.png;.\Media\Pokers\17.png;.\Media\Pokers\18.png;.\Media\Pokers\19.png;.\Media\Pokers\20.png;.\Media\Pokers\21.png;.\Media\Pokers\22.png;.\Media\Pokers\23.png;.\Media\Pokers\24.png;.\Media\Pokers\25.png;.\Media\Pokers\26.png;.\Media\Pokers\27.png;.\Media\Pokers\28.png;.\Media\Pokers\29.png;.\Media\Pokers\30.png;.\Media\Pokers\31.png;.\Media\Pokers\32.png;.\Media\Pokers\33.png;.\Media\Pokers\34.png;.\Media\Pokers\35.png;.\Media\Pokers\36.png;.\Media\Pokers\37.png;.\Media\Pokers\38.png;.\Media\Pokers\39.png;.\Media\Pokers\40.png;.\Media\Pokers\41.png;.\Media\Pokers\42.png;.\Media\Pokers\43.png;.\Media\Pokers\44.png;.\Media\Pokers\45.png;.\Media\Pokers\46.png;.\Media\Pokers\47.png;.\Media\Pokers\48.png;.\Media\Pokers\49.png;.\Media\Pokers\50.png;.\Media\Pokers\51.png;.\Media\Pokers\back.png;.\Media\Portrait\0.png;.\Media\Portrait\1.png;.\Media\Portrait\2.png;.\Media\Portrait\3.png;.\Media\Portrait\4.png;.\Media\Portrait\100.png;.\Media\Portrait\101.png;.\Media\Portrait\102.png;.\Media\Portrait\103.png;.\Media\Portrait\104.png"
 						Outputs=".\GeneratedFiles\qrc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
