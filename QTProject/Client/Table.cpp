@@ -24,12 +24,15 @@ void Table::Init()
 	mSeat[2] = mWidget->findChild<QPushButton*>("seat2");
 	mSeat[3] = mWidget->findChild<QPushButton*>("seat3");
 
+	for ( int i = 0; i<MAX_PLAYER; i++ )
+	{
+		mSeat[i]->setIconSize(mSeat[i]->size());
+	}
+
 	mNameLabel[0] = mWidget->findChild<QTextEdit*>("name0");
 	mNameLabel[1] = mWidget->findChild<QTextEdit*>("name1");
 	mNameLabel[2] = mWidget->findChild<QTextEdit*>("name2");
 	mNameLabel[3] = mWidget->findChild<QTextEdit*>("name3");
-
-	QString ddd = mNameLabel[0]->toPlainText();
 
 	regConnection();
 }
@@ -99,6 +102,7 @@ void Table::UpdatePlayer( quint32 _seatID, TablePlayer _player )
 	if ( _player.mNickName != EMPTY_SEAT )
 	{
 		mNameLabel[_seatID]->setText(_player.mNickName);
+		mSeat[_seatID]->setIcon(QIcon(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.mProtraitID)));
 	}
 }
 
@@ -111,6 +115,7 @@ void Table::PlayerLeave(TablePlayer _player)
 		if ( mNameLabel[i]->toPlainText() == _player.mNickName )
 		{
 			mNameLabel[i]->setText(EMPTY_SEAT);
+			mSeat[i]->setIcon(QIcon());
 		}
 	}
 	
