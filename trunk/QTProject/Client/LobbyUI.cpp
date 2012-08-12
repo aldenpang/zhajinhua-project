@@ -38,7 +38,7 @@ void LobbyUI::Init()
 	int min = mTableListView->verticalScrollBar()->minimum();
 	int max = mTableListView->verticalScrollBar()->maximum();
 	mTableListView->verticalScrollBar()->setValue(min+1);		// if set 0, thumb will stay at middle of scrollbar...WTF
-	mTableListView->hide();
+	
 
 	QTreeWidget* gameList = mMainWidget->findChild<QTreeWidget*>("gameList");
 	mGameList = new GameList(gameList);
@@ -46,6 +46,11 @@ void LobbyUI::Init()
 	mSelectNotice = new QLabel(mMainWidget);
 	mSelectNotice->move(270, 200);
 	mSelectNotice->setPixmap(QPixmap(":/Images/Media/selectRoom.png"));
+
+#ifdef NDEBUG
+	mSelectNotice->show();
+	mTableListView->hide();
+#endif
 
 	initTables(50);
 
