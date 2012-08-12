@@ -36,7 +36,7 @@ public slots:
 
 private slots:
 	void stTableJoin(quint32 _tableID, quint32 _seatID);
-	void stConnectGS(QString _ip, quint32 _port);
+	void stConnectGS(RoomInfo _roomInfo);
 	void stNetError(QString _err);
 	void stGSConnected();
 	void stGSLoginOK();
@@ -54,6 +54,7 @@ private:
 	QGraphicsView* mTableListView;
 	QString mUserName;
 	QString mPassword;
+	RoomInfo mRoomInfo;
 
 	void regConnections();
 

@@ -16,6 +16,9 @@ Table::~Table()
 
 void Table::Init()
 {
+	mBringMoneyDlg = mWidget->findChild<QWidget*>("bringMoney");
+	mBringMoneyDlg->hide();
+
 	QLabel* tableID = mWidget->findChild<QLabel*>("tableID");
 	tableID->setText(QString("%1").arg(mID+1));
 
@@ -66,7 +69,20 @@ void Table::UpdateTableInfo( quint32 _tableID, TableData _data)
 void Table::regConnection()
 {
 	for ( int i = 0; i<MAX_PLAYER; i++ )
-		connect(mSeat[i], SIGNAL(clicked()), this, SLOT(stClickSeat()));
+		connect(mSeat[i], SIGNAL(clicked()), mBringMoneyDlg, SLOT(show()));
+
+	QPushButton* btn0 = mWidget->findChild<QPushButton*>("bringMoneyBtn0");
+	connect(btn0, SIGNAL(clicked()), this, SLOT(stClickSeat()));
+
+	QPushButton* btn1 = mWidget->findChild<QPushButton*>("bringMoneyBtn1");
+	connect(btn1, SIGNAL(clicked()), this, SLOT(stClickSeat()));
+
+	QPushButton* btn2 = mWidget->findChild<QPushButton*>("bringMoneyBtn2");
+	connect(btn2, SIGNAL(clicked()), this, SLOT(stClickSeat()));
+
+	QPushButton* btn3 = mWidget->findChild<QPushButton*>("bringMoneyBtn3");
+	connect(btn3, SIGNAL(clicked()), this, SLOT(stClickSeat()));
+
 }
 
 void Table::stClickSeat()

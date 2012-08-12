@@ -21,7 +21,7 @@ public:
 
 	void Update(QVector<RoomInfo>& _roomVec);
 signals:
-	void SiConnectGS(QString _ip, quint32 _port);
+	void SiConnectGS(RoomInfo _info);
 
 private slots:
 	void stRoomClicked(QTreeWidgetItem *_roomItem, int _column);

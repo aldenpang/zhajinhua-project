@@ -43,6 +43,7 @@ protected:
 private:
 	QPushButton*	mSeat[MAX_PLAYER];
 	QTextEdit*		mNameLabel[MAX_PLAYER];
+	QWidget*		mBringMoneyDlg;
 
 	void regConnection();
 

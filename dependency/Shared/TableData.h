@@ -16,7 +16,7 @@
 #include "LogModule.h"
 #include "SharedData.h"
 
-#define EMPTY_SEAT "EmptySeat"
+#define EMPTY_SEAT ""
 
 struct TablePlayer
 {

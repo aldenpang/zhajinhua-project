@@ -47,6 +47,9 @@ void LobbyUI::Init()
 #ifdef NDEBUG
 	mSelectNotice->show();
 	mTableListView->hide();
+#else
+	mSelectNotice->hide();
+	mTableListView->show();
 #endif
 
 	initTables(50);
@@ -65,7 +68,7 @@ void LobbyUI::regConnections()
 		connect(*itr, SIGNAL(SiSit(quint32, quint32)), this, SLOT(stTableJoin(quint32, quint32)));
 	}
 
-	connect(mGameList, SIGNAL(SiConnectGS(QString, quint32)), this, SLOT(stConnectGS(QString, quint32)));
+	connect(mGameList, SIGNAL(SiConnectGS(RoomInfo)), this, SLOT(stConnectGS(RoomInfo)));
 
 	connect(mGameServer, SIGNAL(SiError(QString)), this, SLOT(stNetError(QString)));
 	connect(mGameServer, SIGNAL(SiConnected()), this, SLOT(stGSConnected()));
@@ -122,9 +125,10 @@ void LobbyUI::stTableJoin( quint32 _tableID, quint32 _seatID )
 	mGameServer->SendJoinTable(_tableID, _seatID);
 }
 
-void LobbyUI::stConnectGS( QString _ip, quint32 _port )
+void LobbyUI::stConnectGS( RoomInfo _roomInfo )
 {
-	mGameServer->Connect(_ip, _port);
+	mGameServer->Connect(_roomInfo.mIP, _roomInfo.mPort);
+	mRoomInfo = _roomInfo;
 }
 
 void LobbyUI::initGameServer()
@@ -149,6 +153,8 @@ void LobbyUI::stGSLoginOK()
 	LOG_D_INFO("Game Server Logined");
 	mTableListView->show();
 	mSelectNotice->hide();
+
+	QString roomName = mRoomInfo.mName;
 }
 
 void LobbyUI::stGSLoginFailed( quint32 _errCode )
