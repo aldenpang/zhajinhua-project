@@ -85,5 +85,10 @@
         <file>Media/Portrait/2.png</file>
         <file>Media/Portrait/3.png</file>
         <file>Media/Portrait/4.png</file>
+        <file>Media/Portrait/100.png</file>
+        <file>Media/Portrait/101.png</file>
+        <file>Media/Portrait/102.png</file>
+        <file>Media/Portrait/103.png</file>
+        <file>Media/Portrait/104.png</file>
     </qresource>
 </RCC>

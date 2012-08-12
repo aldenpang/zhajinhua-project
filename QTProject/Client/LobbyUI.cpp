@@ -216,6 +216,10 @@ void LobbyUI::StUpdatePlayerInfo( CommonPlayer _player )
 {
 	QLabel* nickNameLabel = mMainWidget->findChild<QLabel*>("nickNameText");
 	nickNameLabel->setText(_player.GetNickName());
+
+	QLabel* imageLabel = mMainWidget->findChild<QLabel*>("playerImage");
+	imageLabel->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.GetProtraitID())));
+
 }
 
 void LobbyUI::StGetLoginInfo( QString _username, QString _pwd )
