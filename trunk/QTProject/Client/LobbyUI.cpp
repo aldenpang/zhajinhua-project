@@ -3,9 +3,6 @@
 #include "GameList.h"
 #include "GameServerNet.h"
 
-QString gUserName = "acc1";
-QString gPassword = "1234";
-
 LobbyUI::LobbyUI()
 {
 
@@ -144,7 +141,7 @@ void LobbyUI::stNetError( QString _err )
 void LobbyUI::stGSConnected()
 {
 	LOG_D_INFO("Game Server Connected");
-	mGameServer->SendLoginGS(gUserName, gPassword);
+	mGameServer->SendLoginGS(mUserName, mPassword);
 }
 
 void LobbyUI::stGSLoginOK()
@@ -219,4 +216,10 @@ void LobbyUI::StUpdatePlayerInfo( CommonPlayer _player )
 {
 	QLabel* nickNameLabel = mMainWidget->findChild<QLabel*>("nickNameText");
 	nickNameLabel->setText(_player.GetNickName());
+}
+
+void LobbyUI::StGetLoginInfo( QString _username, QString _pwd )
+{
+	mUserName = _username;
+	mPassword = _pwd;
 }

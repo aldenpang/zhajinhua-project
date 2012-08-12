@@ -12,11 +12,12 @@
 #include "BaseUI.h"
 
 class PokerItem;
+class GameServerNet;
 class ZJHGameUI : public BaseUI
 {
 	Q_OBJECT
 public:
-	ZJHGameUI();
+	ZJHGameUI(GameServerNet* _gameServerNet);
 	~ZJHGameUI();
 
 	void Init();
@@ -28,8 +29,6 @@ public:
 
 	void ShowPreShuffleAni();
 
-	
-
 signals:
 	void SiQuit();
 private slots:
@@ -38,6 +37,7 @@ private slots:
 
 protected:
 private:
+	GameServerNet* mGameServer;
 	QTimer mTimer;
 	QGraphicsScene* mScene;
 	void regConnections();

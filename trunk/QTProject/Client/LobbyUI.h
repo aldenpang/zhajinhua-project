@@ -25,12 +25,15 @@ public:
 
 	void Init();
 
+	GameServerNet* GetGameServerNet(){return mGameServer;}
 
 signals:
 	void SiQuit();
 public slots:
 	void StShowLobby(QVector<RoomInfo> _gameList);
 	void StUpdatePlayerInfo(CommonPlayer _player);
+	void StGetLoginInfo(QString _username, QString _pwd);
+
 private slots:
 	void stTableJoin(quint32 _tableID, quint32 _seatID);
 	void stConnectGS(QString _ip, quint32 _port);
@@ -49,6 +52,8 @@ private:
 	GameServerNet* mGameServer;
 	QLabel* mSelectNotice;
 	QGraphicsView* mTableListView;
+	QString mUserName;
+	QString mPassword;
 
 	void regConnections();
 
