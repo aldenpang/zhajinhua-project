@@ -74,6 +74,6 @@ void GameList::stRoomClicked( QTreeWidgetItem *_roomItem, int _column )
 	RoomInfo roomInfo = _roomItem->data(0, Qt::UserRole).value<RoomInfo>();
 	//int sss = mCurrentRoomInfos.size();
 
-	emit SiConnectGS(roomInfo.mIP, roomInfo.mPort);
+	emit SiConnectGS(roomInfo);
 	return;
 }
