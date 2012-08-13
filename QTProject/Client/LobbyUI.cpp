@@ -2,6 +2,7 @@
 #include "LobbyUI.h"
 #include "GameList.h"
 #include "GameServerNet.h"
+#include "Setting.h"
 
 LobbyUI::LobbyUI()
 {
@@ -128,7 +129,7 @@ void LobbyUI::stTableJoin( quint32 _tableID, quint32 _seatID )
 void LobbyUI::stConnectGS( RoomInfo _roomInfo )
 {
 	mGameServer->Connect(_roomInfo.mIP, _roomInfo.mPort);
-	mRoomInfo = _roomInfo;
+	SETTINGS.SetRoomInfo(_roomInfo);
 }
 
 void LobbyUI::initGameServer()
@@ -154,7 +155,7 @@ void LobbyUI::stGSLoginOK()
 	mTableListView->show();
 	mSelectNotice->hide();
 
-	QString roomName = mRoomInfo.mName;
+	QString roomName = SETTINGS.GetRoomInfo().mName;
 }
 
 void LobbyUI::stGSLoginFailed( quint32 _errCode )

@@ -57,7 +57,7 @@ int GameServerDB::GetRoomInfo( int _roomID, RoomInfo& _info )
 		_info.mType = (RoomType)(q.value(1).toInt());
 		_info.mIP = q.value(2).toString();
 		_info.mPort = q.value(3).toInt();
-		_info.mScore = q.value(4).toInt();
+		_info.mMinMoney = q.value(4).toInt();
 		_info.mMoneyType = (MoneyType)(q.value(5).toInt());
 		_info.mRoomID = q.value(6).toInt();
 

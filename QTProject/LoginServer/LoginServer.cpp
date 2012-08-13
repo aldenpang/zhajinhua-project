@@ -91,7 +91,7 @@ void LoginServer::sendGameList( int _gameType, ISocketInstancePtr _toSocket )
 	p<<(quint32)info.size();
 	for ( int i = 0; i<info.size(); i++ )
 	{
-		p<<info[i].mRoomID<<info[i].mName<<info[i].mType<<info[i].mIP<<info[i].mPort<<info[i].mScore<<(quint32)info[i].mMoneyType;
+		p<<info[i].mRoomID<<info[i].mName<<info[i].mType<<info[i].mIP<<info[i].mPort<<info[i].mMinMoney<<(quint32)info[i].mMoneyType;
 	}
 	_toSocket->Send(&p);
 }

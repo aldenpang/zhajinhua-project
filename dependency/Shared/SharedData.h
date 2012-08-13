@@ -121,7 +121,7 @@ namespace SharedData
 		RoomType mType;
 		QString mIP;
 		quint32 mPort;
-		quint32 mScore;
+		quint32 mMinMoney;
 		MoneyType mMoneyType; // 0 - silver; 1 - gold
 		RoomInfo()
 		{
@@ -134,7 +134,7 @@ namespace SharedData
 			mType = _in->mType;
 			mIP = _in->mIP;
 			mPort = _in->mPort;
-			mScore = _in->mScore;
+			mMinMoney = _in->mMinMoney;
 			mMoneyType = _in->mMoneyType;
 		}
 		~RoomInfo()

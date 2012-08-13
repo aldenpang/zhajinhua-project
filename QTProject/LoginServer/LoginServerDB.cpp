@@ -106,7 +106,7 @@ int LoginServerDB::GetRoomConfig( int _gameType, QVector<RoomInfo>& _info )
 		info.mType = (RoomType)(q.value(1).toInt());
 		info.mIP = q.value(2).toString();
 		info.mPort  = q.value(3).toInt();
-		info.mScore = q.value(4).toInt();
+		info.mMinMoney = q.value(4).toInt();
 		info.mMoneyType = (MoneyType)(q.value(5).toInt());
 		info.mRoomID = q.value(6).toInt();
 		_info.push_back(info);

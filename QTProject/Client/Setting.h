@@ -11,6 +11,7 @@
 #define Setting_h__
 
 #include <QString>
+#include "SharedData.h"
 #include "MyToolkits.h"
 
 class QSettings;
@@ -25,7 +26,7 @@ public:
 	PROPERTY(uint, Port);
 	PROPERTY(QString, LoginADURL);
 	PROPERTY(QString, LoginNewsURL);
-
+	PROPERTY(RoomInfo, RoomInfo);
 
 protected:
 private:
