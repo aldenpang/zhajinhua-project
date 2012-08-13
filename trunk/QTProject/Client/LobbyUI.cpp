@@ -3,6 +3,7 @@
 #include "GameList.h"
 #include "GameServerNet.h"
 #include "Setting.h"
+#include "BaseDialog.h"
 
 LobbyUI::LobbyUI()
 {

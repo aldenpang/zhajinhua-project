@@ -5,6 +5,7 @@
 #include "Packet.h"
 #include "Downloader.h"
 #include "Setting.h"
+#include "BaseDialog.h"
 
 LoginUI::LoginUI()
 {
