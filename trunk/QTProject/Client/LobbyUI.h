@@ -54,7 +54,6 @@ private:
 	QGraphicsView* mTableListView;
 	QString mUserName;
 	QString mPassword;
-	RoomInfo mRoomInfo;
 
 	void regConnections();
 
