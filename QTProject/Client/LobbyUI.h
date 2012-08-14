@@ -45,6 +45,7 @@ private slots:
 	void stTableLeaveResult(quint32 _res, quint32 _tableID, TablePlayer _player);
 	void stTableList(QMap<int, TableData> _tableData);
 	void stBringMoney(quint32 _tableID, quint32 _seatID, quint32 _amount);
+	void stUpdateMoney(quint32 _goldCoin, quint32 _silverCoin);
 protected:
 private:
 	QMap<quint32, Table*> mTableList;
@@ -62,6 +63,7 @@ private:
 
 	void initGameServer();
 
+	void updateMoney();
 };
 
 #endif

@@ -80,6 +80,8 @@ void LobbyUI::regConnections()
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
 	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32, TablePlayer)), this, SLOT(stTableJoinResult(quint32, quint32, quint32, TablePlayer)));
 	connect(mGameServer, SIGNAL(SiTableLeaveResult(quint32, quint32, TablePlayer)), this, SLOT(stTableLeaveResult(quint32, quint32, TablePlayer)));
+	connect(mGameServer, SIGNAL(SiUpdateMoney(quint32, quint32)), this, SLOT(stUpdateMoney(quint32, quint32)));
+
 }
 
 void LobbyUI::initTables(quint32 _amount)
@@ -231,6 +233,7 @@ void LobbyUI::StUpdatePlayerInfo( CommonPlayer _player )
 	QLabel* imageLabel = mMainWidget->findChild<QLabel*>("playerImage");
 	imageLabel->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.GetProtraitID())));
 
+	updateMoney();
 }
 
 void LobbyUI::StGetLoginInfo( QString _username, QString _pwd )
@@ -246,4 +249,18 @@ void LobbyUI::stBringMoney( quint32 _tableID, quint32 _seatID, quint32 _amount )
 	{
 		mGameServer->SendBringMoney(_tableID, _seatID, _amount);
 	}
+}
+
+void LobbyUI::stUpdateMoney( quint32 _goldCoin, quint32 _silverCoin )
+{
+	mMainWidget->findChild<QLabel*>("goldCoinText")->setText(QString("%1").arg(_goldCoin));
+}
+
+void LobbyUI::updateMoney()
+{
+	// query money
+	Packet p;
+	p.SetMessage(MSG_CL_GS_QUERY_MONEY);
+	mGameServer->Send(&p);
+
 }

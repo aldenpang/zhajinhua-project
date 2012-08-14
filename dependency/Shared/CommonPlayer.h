@@ -37,6 +37,9 @@ public:
 	// Table wallet id
 	PROPERTY(quint32, TableWalletID);
 
+	// silver coin
+	PROPERTY(quint32, SilverCoin);
+
 	// æ≠—È÷µ
 	PROPERTY(quint32, Exp);
 

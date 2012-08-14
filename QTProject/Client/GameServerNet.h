@@ -33,6 +33,7 @@ signals:
 	void SiTableEnd();
 	void SiFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
 	void SiSyncStart();
+	void SiUpdateMoney(quint32 _goldCoin, quint32 _silverCoin);
 
 public:
 	GameServerNet();
@@ -60,7 +61,7 @@ private:
 	void processTableEnd(Packet& _packet);
 	void processFollow(Packet& _packet);
 	void processSyncStart(Packet& _packet);
-	
+	void processQueryMoney(Packet& _packet);
 };
 
 #endif // GameServerNet_h__

@@ -57,6 +57,9 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_CL_SYNC_START:
 		processSyncStart(_packet);
 		break;
+	case MSG_GS_CL_QUERY_MONEY:
+		processQueryMoney(_packet);
+		break;
 	default:
 		break;
 	}
@@ -216,5 +219,13 @@ void GameServerNet::processBringMoneyRes( Packet& _packet )
 	_packet>>res;
 
 	emit SiBringMoneyRes(res);
+}
+
+void GameServerNet::processQueryMoney( Packet& _packet )
+{
+	quint32 goldCoin = 0;
+	quint32 silverCoin = 0;
+	_packet>>goldCoin>>silverCoin;
+	emit SiUpdateMoney(goldCoin, silverCoin);
 }
 
