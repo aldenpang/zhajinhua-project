@@ -420,6 +420,14 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\MessageLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MessageLoader.h"
+					>
+				</File>
+				<File
 					RelativePath=".\MouseEventFilter.cpp"
 					>
 				</File>
@@ -1451,26 +1459,6 @@
 				Name="pokers"
 				>
 				<File
-					RelativePath=".\Media\Pokers\0.png"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath=".\Media\Portrait\0.png"
 					>
 					<FileConfiguration
@@ -1491,7 +1479,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\Media\Portrait\1.png"
+					RelativePath=".\Media\Pokers\0.png"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -1512,6 +1500,26 @@
 				</File>
 				<File
 					RelativePath=".\Media\Pokers\1.png"
+					>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Media\Portrait\1.png"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -1831,7 +1839,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\Media\Portrait\2.png"
+					RelativePath=".\Media\Pokers\2.png"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -1851,7 +1859,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\Media\Pokers\2.png"
+					RelativePath=".\Media\Portrait\2.png"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -2311,7 +2319,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\Media\Pokers\4.png"
+					RelativePath=".\Media\Portrait\4.png"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -2331,7 +2339,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\Media\Portrait\4.png"
+					RelativePath=".\Media\Pokers\4.png"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
