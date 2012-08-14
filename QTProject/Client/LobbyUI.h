@@ -56,14 +56,14 @@ private:
 	QGraphicsView* mTableListView;
 	QString mUserName;
 	QString mPassword;
+	QVector<quint32> mLevels;
 
 	void regConnections();
-
 	void initTables(quint32 _amount);
-
 	void initGameServer();
-
 	void updateMoney();
+	void initLevels();
+	quint32 getLevel(quint32 _exp);
 };
 
 #endif

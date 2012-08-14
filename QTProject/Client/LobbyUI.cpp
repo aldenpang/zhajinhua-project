@@ -54,6 +54,8 @@ void LobbyUI::Init()
 	mTableListView->show();
 #endif
 
+	initLevels();
+
 	initTables(50);
 
 	initGameServer();
@@ -235,6 +237,9 @@ void LobbyUI::StUpdatePlayerInfo( CommonPlayer _player )
 	QLabel* imageLabel = mMainWidget->findChild<QLabel*>("playerImage");
 	imageLabel->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.GetProtraitID())));
 
+	QLabel* levelLabel = mMainWidget->findChild<QLabel*>("levelText");
+	levelLabel->setText(QString("Lv.%1").arg(getLevel(_player.GetExp())));
+
 	
 }
 
@@ -266,4 +271,27 @@ void LobbyUI::updateMoney()
 	p.SetMessage(MSG_CL_GS_QUERY_MONEY);
 	mGameServer->Send(&p);
 
+}
+
+quint32 LobbyUI::getLevel( quint32 _exp )
+{
+	quint32 level = 0;
+	for ( int i = 0; i<mLevels.size(); i++ )
+	{
+		if ( _exp < mLevels[i] )
+		{
+			level = i+1;
+			break;
+		}
+	}
+	return level;
+}
+
+void LobbyUI::initLevels()
+{
+	// the maxmimum level is 60
+	for ( int i = 0; i<60; i++ )
+	{
+		mLevels.push_back(i*i*100+100);
+	}
 }
