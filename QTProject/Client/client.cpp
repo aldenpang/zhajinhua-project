@@ -7,6 +7,7 @@
 #include "ZJHGameUI.h"
 #include "LogModule.h"
 #include "Setting.h"
+#include "MessageLoader.h"
 
 
 int argcCount = 1;
@@ -34,6 +35,8 @@ Client::Client(int & argc, char ** argv)
 	mZjhUI->Init();
 	mZjhUI->Show();
 	initMouseEventFilter(mZjhUI->GetWidget());
+
+	MSGLOADER.Load(QString("ClientMessages.txt"));
 
 	regConnections();
 }
