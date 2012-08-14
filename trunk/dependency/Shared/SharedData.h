@@ -55,6 +55,9 @@ namespace SharedData
 		MSG_GS_CL_SYNC_START,		// Sync request
 		MSG_CL_GS_SYNC_START,		// Sync response
 
+		MSG_CL_GS_QUERY_MONEY,
+		MSG_GS_CL_QUERY_MONEY,
+
 		// gameserver broadcast
 		MSG_GS_BC_TABLE_JOIN,
 		MSG_GS_BC_TABLE_LEAVE,

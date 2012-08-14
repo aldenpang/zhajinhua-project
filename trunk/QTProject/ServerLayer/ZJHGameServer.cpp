@@ -64,6 +64,9 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pa
 	case MSG_CL_GS_GIVEUP:
 		processGiveUp(_incomeSocket, _packet);
 		break;
+	case MSG_CL_GS_QUERY_MONEY:
+		processQueryMoney(_incomeSocket, _packet);
+		break;
 	default:
 		break;
 	}
@@ -146,6 +149,8 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 			}
 			else
 				LOG_ERR(QString("QueryUserWalletID Failed! Reason:[%1]").arg(res));
+
+			player->SetSilverCoin(1000);
 
 			// TODO: send player info
 		}
@@ -489,5 +494,22 @@ void ZjhGameServer::processGiveUp( ISocketInstancePtr _incomeSocket, Packet& _pa
 	_packet>>tableID>>seatID;
 
 	TABLE.GiveUp(tableID, seatID);
+
+}
+
+void ZjhGameServer::processQueryMoney( ISocketInstancePtr _incomeSocket, Packet& _packet )
+{
+	GSPlayerPtr player = findPlayer(_incomeSocket);
+	if ( player )
+	{
+		quint32 goldCoin = player->GetUserWalletMoney();
+		quint32 silverCoin = player->GetSilverCoin();
+
+		Packet p;
+		p.SetMessage(MSG_GS_CL_QUERY_MONEY);
+		p<<goldCoin<<silverCoin;
+		_incomeSocket->Send(&p);
+	}
+
 
 }
