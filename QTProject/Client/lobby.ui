@@ -157,7 +157,7 @@ border-image: url(:/Images/Media/btn_quickJoin)0 0 0 140;
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>50</y>
+     <y>45</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -170,7 +170,7 @@ border-image: url(:/Images/Media/btn_quickJoin)0 0 0 140;
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>70</y>
+     <y>60</y>
      <width>31</width>
      <height>16</height>
     </rect>
@@ -189,33 +189,42 @@ border-image: url(:/Images/Media/btn_quickJoin)0 0 0 140;
     </rect>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string>Unknown</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="levelText">
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>50</y>
+     <y>45</y>
      <width>54</width>
      <height>12</height>
     </rect>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string>0</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="goldCoinText">
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>70</y>
+     <y>60</y>
      <width>54</width>
      <height>12</height>
     </rect>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string>0</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_quickJoin">
@@ -296,6 +305,35 @@ border-image: url(:/Images/Media/btn_quickJoin)0 0 0 140;
      <string notr="true">1</string>
     </property>
    </column>
+  </widget>
+  <widget class="QLabel" name="silverCoin">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>75</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>银币：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="silverCoinText">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>75</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
   </widget>
  </widget>
  <resources>

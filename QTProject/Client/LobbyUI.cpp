@@ -160,6 +160,8 @@ void LobbyUI::stGSLoginOK()
 	mSelectNotice->hide();
 
 	QString roomName = SETTINGS.GetRoomInfo().mName;
+
+	updateMoney();
 }
 
 void LobbyUI::stGSLoginFailed( quint32 _errCode )
@@ -233,7 +235,7 @@ void LobbyUI::StUpdatePlayerInfo( CommonPlayer _player )
 	QLabel* imageLabel = mMainWidget->findChild<QLabel*>("playerImage");
 	imageLabel->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.GetProtraitID())));
 
-	updateMoney();
+	
 }
 
 void LobbyUI::StGetLoginInfo( QString _username, QString _pwd )
@@ -254,6 +256,7 @@ void LobbyUI::stBringMoney( quint32 _tableID, quint32 _seatID, quint32 _amount )
 void LobbyUI::stUpdateMoney( quint32 _goldCoin, quint32 _silverCoin )
 {
 	mMainWidget->findChild<QLabel*>("goldCoinText")->setText(QString("%1").arg(_goldCoin));
+	mMainWidget->findChild<QLabel*>("silverCoinText")->setText(QString("%1").arg(_silverCoin));
 }
 
 void LobbyUI::updateMoney()
