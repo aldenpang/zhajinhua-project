@@ -44,6 +44,7 @@ private slots:
 	void stTableJoinResult(quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player);
 	void stTableLeaveResult(quint32 _res, quint32 _tableID, TablePlayer _player);
 	void stTableList(QMap<int, TableData> _tableData);
+	void stBringMoney(quint32 _tableID, quint32 _seatID, quint32 _amount);
 protected:
 private:
 	QMap<quint32, Table*> mTableList;

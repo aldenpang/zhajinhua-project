@@ -18,7 +18,7 @@ class Table : public QObject
 	Q_OBJECT
 signals:
 	void SiSit(quint32 _tableID, quint32 _seatID);
-
+	void SiBringMoney(quint32 _tableID, quint32 _seatID, quint32 _amount);
 public:
 	Table();
 	~Table();
@@ -37,13 +37,17 @@ public:
 public slots:
 	
 private slots:
-	void stClickSeat();
+	void stSit();
+	void stBringMoney();
+	void stBringMoneyInput();
+	void stShowBringMoneyDlg();
 
 protected:
 private:
 	QPushButton*	mSeat[MAX_PLAYER];
 	QTextEdit*		mNameLabel[MAX_PLAYER];
 	QWidget*		mBringMoneyDlg;
+	quint32			mCurrentSeatID;
 
 	void regConnection();
 
