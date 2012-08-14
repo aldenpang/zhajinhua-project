@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "Table.h"
 #include "LogModule.h"
+#include "Setting.h"
 
 Table::Table()
 // : QObject(NULL)
 : mID(0)
+, mCurrentSeatID(0)
 {
 
 }
@@ -69,23 +71,49 @@ void Table::UpdateTableInfo( quint32 _tableID, TableData _data)
 void Table::regConnection()
 {
 	for ( int i = 0; i<MAX_PLAYER; i++ )
-		connect(mSeat[i], SIGNAL(clicked()), mBringMoneyDlg, SLOT(show()));
+		connect(mSeat[i], SIGNAL(clicked()), this, SLOT(stSit()));
 
 	QPushButton* btn0 = mWidget->findChild<QPushButton*>("bringMoneyBtn0");
-	connect(btn0, SIGNAL(clicked()), this, SLOT(stClickSeat()));
+	connect(btn0, SIGNAL(clicked()), this, SLOT(stBringMoney()));
 
 	QPushButton* btn1 = mWidget->findChild<QPushButton*>("bringMoneyBtn1");
-	connect(btn1, SIGNAL(clicked()), this, SLOT(stClickSeat()));
+	connect(btn1, SIGNAL(clicked()), this, SLOT(stBringMoney()));
 
 	QPushButton* btn2 = mWidget->findChild<QPushButton*>("bringMoneyBtn2");
-	connect(btn2, SIGNAL(clicked()), this, SLOT(stClickSeat()));
+	connect(btn2, SIGNAL(clicked()), this, SLOT(stBringMoney()));
 
 	QPushButton* btn3 = mWidget->findChild<QPushButton*>("bringMoneyBtn3");
-	connect(btn3, SIGNAL(clicked()), this, SLOT(stClickSeat()));
+	connect(btn3, SIGNAL(clicked()), this, SLOT(stBringMoneyInput()));
 
 }
 
-void Table::stClickSeat()
+void Table::stShowBringMoneyDlg()
+{
+	mBringMoneyDlg->show();
+	
+	// show amount of money on buttons, according to minimum amount of bring money
+	mWidget->findChild<QPushButton*>("bringMoneyBtn0")->setText(QString("%1").arg(SETTINGS.GetRoomInfo().mMinMoney*2));
+	mWidget->findChild<QPushButton*>("bringMoneyBtn1")->setText(QString("%1").arg(SETTINGS.GetRoomInfo().mMinMoney*3));
+	mWidget->findChild<QPushButton*>("bringMoneyBtn2")->setText(QString("%1").arg(SETTINGS.GetRoomInfo().mMinMoney*4));
+
+}
+
+
+void Table::stBringMoney()
+{
+	int amount = ((QPushButton*)sender())->text().toInt();
+	emit SiBringMoney(mID, mCurrentSeatID, amount);
+}
+
+
+void Table::stBringMoneyInput()
+{
+	// get amount of money from user input
+	int amount = mWidget->findChild<QLineEdit*>("inputMoney")->text().toInt();
+	emit SiBringMoney(mID, mCurrentSeatID, amount);
+}
+
+void Table::stSit()
 {
 	int seatID = -1;
 	for ( int i = 0; i<MAX_PLAYER; i++)
@@ -104,13 +132,16 @@ void Table::stClickSeat()
 	else
 	{
 		LOG_D_INFO(QString("Player click on seatID[%1]").arg(seatID));
-		emit SiSit(mID, seatID);
+		mCurrentSeatID = seatID;
 	}
+
+	emit SiSit(mID, mCurrentSeatID);
 }
+
 
 void Table::UpdatePlayer( quint32 _seatID, TablePlayer _player )
 {
-	if ( _seatID < 0 || _seatID >3 )
+	if ( _seatID < 0 || _seatID > 3 )
 	{
 		LOG_D_ERR(QString("Invaild seatID[%1]").arg(_seatID));
 		return;
@@ -119,6 +150,12 @@ void Table::UpdatePlayer( quint32 _seatID, TablePlayer _player )
 	{
 		mNameLabel[_seatID]->setText(_player.mNickName);
 		mSeat[_seatID]->setIcon(QIcon(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.mProtraitID)));
+	}
+
+	// if this is player self, then show bring money dialog
+	if ( _player.mNickName == SETTINGS.GetPlayer().GetNickName() )
+	{
+		stShowBringMoneyDlg();
 	}
 }
 
@@ -136,3 +173,4 @@ void Table::PlayerLeave(TablePlayer _player)
 	}
 	
 }
+

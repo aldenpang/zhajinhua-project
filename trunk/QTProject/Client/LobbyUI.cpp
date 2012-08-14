@@ -68,6 +68,7 @@ void LobbyUI::regConnections()
 	for ( itr = mTableList.begin(); itr != mTableList.end(); itr++)
 	{
 		connect(*itr, SIGNAL(SiSit(quint32, quint32)), this, SLOT(stTableJoin(quint32, quint32)));
+		connect(*itr, SIGNAL(SiBringMoney(quint32, quint32, quint32)), this, SLOT(stBringMoney(quint32, quint32, quint32)));
 	}
 
 	connect(mGameList, SIGNAL(SiConnectGS(RoomInfo)), this, SLOT(stConnectGS(RoomInfo)));
@@ -222,6 +223,8 @@ void LobbyUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer _p
 
 void LobbyUI::StUpdatePlayerInfo( CommonPlayer _player )
 {
+	SETTINGS.SetPlayer(_player);
+
 	QLabel* nickNameLabel = mMainWidget->findChild<QLabel*>("nickNameText");
 	nickNameLabel->setText(_player.GetNickName());
 
@@ -234,4 +237,13 @@ void LobbyUI::StGetLoginInfo( QString _username, QString _pwd )
 {
 	mUserName = _username;
 	mPassword = _pwd;
+}
+
+void LobbyUI::stBringMoney( quint32 _tableID, quint32 _seatID, quint32 _amount )
+{
+	QMap<quint32, Table*>::iterator itr = mTableList.find(_tableID);
+	if(itr != mTableList.end())
+	{
+		mGameServer->SendBringMoney(_tableID, _seatID, _amount);
+	}
 }

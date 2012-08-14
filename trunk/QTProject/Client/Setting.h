@@ -13,6 +13,7 @@
 #include <QString>
 #include "SharedData.h"
 #include "MyToolkits.h"
+#include "CommonPlayer.h"
 
 class QSettings;
 class Setting : public Singleton<Setting>
@@ -27,6 +28,7 @@ public:
 	PROPERTY(QString, LoginADURL);
 	PROPERTY(QString, LoginNewsURL);
 	PROPERTY(RoomInfo, RoomInfo);
+	PROPERTY(CommonPlayer, Player);
 
 protected:
 private:
