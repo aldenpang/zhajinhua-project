@@ -69,12 +69,12 @@ public:
 
 	void ToPacket(Packet& _p)
 	{
-		_p<<mAccountID<<mNickName<<mGender<<mUserWalletMoney<<mExp<<mPlayTime<<mProtraitID;
+		_p<<mAccountID<<mNickName<<mGender<<mUserWalletMoney<<mSilverCoin<<mExp<<mPlayTime<<mProtraitID;
 	}
 
 	void FromPacket(Packet& _p)
 	{
-		_p>>mAccountID>>mNickName>>mGender>>mUserWalletMoney>>mExp>>mPlayTime>>mProtraitID;
+		_p>>mAccountID>>mNickName>>mGender>>mUserWalletMoney>>mSilverCoin>>mExp>>mPlayTime>>mProtraitID;
 	}
 protected:
 private:

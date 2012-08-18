@@ -240,7 +240,7 @@ void LobbyUI::StUpdatePlayerInfo( CommonPlayer _player )
 	QLabel* levelLabel = mMainWidget->findChild<QLabel*>("levelText");
 	levelLabel->setText(QString("Lv.%1").arg(getLevel(_player.GetExp())));
 
-	
+	stUpdateMoney(_player.GetUserWalletMoney(), _player.GetSilverCoin());
 }
 
 void LobbyUI::StGetLoginInfo( QString _username, QString _pwd )
