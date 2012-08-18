@@ -20,12 +20,16 @@ public:
 	AppFrame();
 	~AppFrame();
 
-	void InitDatabase();
 
 	void Run();
 protected:
 private:
 	LoginServer* mLoginServer;
+
+
+	void initDatabase();
+	void initWalletDatabase();
+
 };
 
 #endif // AppFrame_h__

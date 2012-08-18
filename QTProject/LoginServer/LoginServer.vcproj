@@ -194,6 +194,14 @@
 				RelativePath=".\main.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\WalletDB.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WalletDB.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Shared"

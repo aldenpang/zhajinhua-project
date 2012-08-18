@@ -5,6 +5,7 @@
 #include "LoginServerDB.h"
 #include "LogModule.h"
 #include "CommonPlayer.h"
+#include "WalletDB.h"
 using namespace SharedData;
 
 void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _packet )
@@ -47,6 +48,8 @@ void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet& 
 		LOG_ERR(QString("LoginFailed! Reason:[%1]").arg(res));
 	else
 		LOG_INFO("Login OK");
+
+	WDB.QueryPlayerMoney(player.GetAccountID(), &player);
 
 	// send login result
 	Packet p;

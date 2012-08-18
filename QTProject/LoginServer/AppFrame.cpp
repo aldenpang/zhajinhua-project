@@ -2,6 +2,7 @@
 #include "LoginServer.h"
 #include "SettingModule.h"
 #include "LoginServerDB.h"
+#include "WalletDB.h"
 #include "LogModule.h"
 #include "MD5.h"
 #include "SharedData.h"
@@ -13,7 +14,9 @@ AppFrame::AppFrame()
 
 	SETTINGS.Init("LSConfig.ini");
 
-	InitDatabase();
+	initDatabase();
+
+	initWalletDatabase();
 
 	LOG.SetModuleName("LS");
 }
@@ -28,7 +31,7 @@ void AppFrame::Run()
 	mLoginServer->StStart("", SETTINGS.GetPort());
 }
 
-void AppFrame::InitDatabase()
+void AppFrame::initDatabase()
 {
 	connect(&DB, SIGNAL(SiInfo(QString)), &LOG, SLOT(StInfo(QString)));
 	connect(&DB, SIGNAL(SiError(QString)), &LOG, SLOT(StError(QString)));
@@ -37,4 +40,12 @@ void AppFrame::InitDatabase()
 	//DB.VerifyUser(QString("acc3"), ToMD5(QString("1234")));
 	//DB.RegUser(QString("acc4"), ToMD5(QString("1234")));
 
+}
+
+void AppFrame::initWalletDatabase()
+{
+	connect(&WDB, SIGNAL(SiInfo(QString)), &LOG, SLOT(StInfo(QString)));
+	connect(&WDB, SIGNAL(SiError(QString)), &LOG, SLOT(StError(QString)));
+
+	WDB.Connect("../../DB/walletdb.db", "WalletDB");
 }
