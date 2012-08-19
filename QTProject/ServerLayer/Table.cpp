@@ -66,6 +66,15 @@ int Table::Leave( int _seatID )
 	if ( itr != mPlayers.end() )
 	{
 		mPlayers.erase(itr);
+
+		if ( mPlayers.size() == 1 )
+		{
+			mState = TS_WAITING;
+		}
+		else if ( mPlayers.isEmpty() )
+		{
+			reset();
+		}
 		return GS_NO_ERR;
 	}
 	else
@@ -334,6 +343,7 @@ void Table::Follow( int _seatID, int _chip )
 
 void Table::reset()
 {
+	mState = TS_WAITING;
 	mReadyAmount = 0;
 	mDealerSeat = 0;
 	mCurrentPlayer = 0;
@@ -417,6 +427,7 @@ void Table::calculateBalance()
 	int rake = mCurrentBid*RAKE;
 	int afterRake = mCurrentBid-rake;
 	winner->SetTableWalletMoney(winner->GetTableWalletMoney()+afterRake);
+	LOG_D_INFO(QString("[%1] wins [%2] coins(after rake)").arg(winner->GetNickName()).arg(afterRake));
 	// write player's current money to wallet db
 	QMap<int, ISocketInstancePtr>::iterator itr;
 	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
@@ -427,7 +438,7 @@ void Table::calculateBalance()
 
 		if ( itr.value().staticCast<GSPlayer>() != winner )
 		{
-			res = WalletDB.InsertTransactionRecord(TableToTable, itr.value().staticCast<GSPlayer>()->GetAlreadyFollow(), itr.value().staticCast<GSPlayer>()->GetTableWalletID()
+			res = WalletDB.InsertTransactionRecord(TableToTable, itr.value().staticCast<GSPlayer>()->GetAlreadyFollow()+BASE_CHIP, itr.value().staticCast<GSPlayer>()->GetTableWalletID()
 				, winner->GetTableWalletID(), res);
 			if ( res != WS_NO_ERR )
 				LOG_D_ERR(QString("InsertTransactionRecord for Player[%1] error[%2]").arg(itr.value().staticCast<GSPlayer>()->GetAccountID()).arg(res));
