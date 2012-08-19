@@ -177,7 +177,7 @@ void ConsoleClient::stTableJoinRes( quint32 _res, quint32 _tableID, quint32 _sea
 		LOG_INFO("Join Table OK");
 		mMySeatID = _seatID;
 		mMyTableID = _tableID;
-		mGameServer->SendBringMoney(mMyTableID, mMySeatID, mCurrentTableMinBringChip);
+		//mGameServer->SendBringMoney(mMyTableID, mMySeatID, mCurrentTableMinBringChip);
 	}
 	else if ( _res == ERR_GS_TABLE_NOT_FOUND )
 	{
