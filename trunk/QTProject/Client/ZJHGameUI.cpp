@@ -51,30 +51,31 @@ void ZJHGameUI::Init()
 	mShuffleAni = new QMovie(":/Images/Media/shuffle.gif");
 	mShuffleLabel->setMovie(mShuffleAni);
 	HideShuffleAni();
+	//ShowShuffleAni();
+	
+	//int amount = MAX_HAND_POKER*MAX_PLAYER;
 
-	int amount = MAX_HAND_POKER*MAX_PLAYER;
+	//for ( int i = 0; i<amount; i++ )
+	//{
+	//	PokerItem* item = new PokerItem(0);
+	//	item->setZValue(i);
+	//	item->setPos(gTableCenter);
+	//	item->ToBack();
+	//	mScene->addItem(item);
+	//	mPokers.push_back(item);
+	//}
 
-	for ( int i = 0; i<amount; i++ )
-	{
-		PokerItem* item = new PokerItem(0);
-		item->setZValue(i);
-		item->setPos(gTableCenter);
-		item->ToBack();
-		mScene->addItem(item);
-		mPokers.push_back(item);
-	}
+	//for ( int i = 0; i<amount; i++ )
+	//{
+	//	PokerItem* last = new PokerItem(0);	// last poker as background
+	//	last->setZValue(0);
+	//	last->setPos(gTableCenter);
+	//	last->ToBack();
+	//	mScene->addItem(last);
+	//	mLeftPokers.push_back(last);
+	//}
 
-	for ( int i = 0; i<amount; i++ )
-	{
-		PokerItem* last = new PokerItem(0);	// last poker as background
-		last->setZValue(0);
-		last->setPos(gTableCenter);
-		last->ToBack();
-		mScene->addItem(last);
-		mLeftPokers.push_back(last);
-	}
-
-	ShowDistributeAni(0, 1);
+	//ShowDistributeAni(0, 1);
 }
 
 void ZJHGameUI::regConnections()
@@ -83,6 +84,12 @@ void ZJHGameUI::regConnections()
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stUpdate()));
 
 	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(StShowGame(TableInfo)));
+	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
+	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
+	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
+	connect(mGameServer, SIGNAL(SiTableEnd()), this, SLOT(stTableEnd()));
+	connect(mGameServer, SIGNAL(SiFollow(int, int, int, int)), this, SLOT(stFollow(int, int, int, int)));
+	connect(mGameServer, SIGNAL(SiSyncStart()), this, SLOT(stSyncStart()));
 }
 
 void ZJHGameUI::stUpdate()
@@ -162,7 +169,49 @@ void ZJHGameUI::stMoveLeftPokers()
 
 void ZJHGameUI::StShowGame( TableInfo _tableInfo )
 {
+	reset();
+
 	Show();
+	ShowShuffleAni();
 	// update table info
 	mTableInfo = _tableInfo;
+
+}
+
+void ZJHGameUI::reset()
+{
+
+}
+
+void ZJHGameUI::stSyncStart()
+{
+	//LOG_INFO("<-= MSG_CL_GS_SYNC_START =->");
+	//Packet p;
+	//p.SetMessage(MSG_CL_GS_SYNC_START);
+	//mGameServer->Send(&p);
+}
+
+void ZJHGameUI::stDropBaseChip( int _baseChip )
+{
+
+}
+
+void ZJHGameUI::stDistribute( QVector<int> _pokers )
+{
+
+}
+
+void ZJHGameUI::stCurrentPlayer( int _currentPlayer )
+{
+
+}
+
+void ZJHGameUI::stTableEnd()
+{
+
+}
+
+void ZJHGameUI::stFollow( int _seatID, int _chip, int _currentPlayer, int _currentBid )
+{
+
 }
