@@ -164,19 +164,20 @@ void ConsoleClient::stTableList( QMap<int, TableData> _tables )
 		}
 	}
 End:
-	LOG_INFO(QString("BringMoney to table[%1] seat[%2]").arg(mTempTableID).arg(mTempSeatID));
-	//mGameServer->SendJoinTable(mTempTableID, mTempSeatID);
-	mGameServer->SendBringMoney(mTempTableID, mTempSeatID, mCurrentTableMinBringChip);
+	//LOG_INFO(QString("BringMoney to table[%1] seat[%2]").arg(mTempTableID).arg(mTempSeatID));
+	mGameServer->SendJoinTable(mTempTableID, mTempSeatID);
+	//mGameServer->SendBringMoney(mTempTableID, mTempSeatID, mCurrentTableMinBringChip);
 	return;
 }
 
 void ConsoleClient::stTableJoinRes( quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player )
 {
-	if ( _res == GS_NO_ERR )
+	if ( _res == GS_NO_ERR || _res == WS_NO_ERR )
 	{
 		LOG_INFO("Join Table OK");
 		mMySeatID = _seatID;
 		mMyTableID = _tableID;
+		mGameServer->SendBringMoney(mMyTableID, mMySeatID, mCurrentTableMinBringChip);
 	}
 	else if ( _res == ERR_GS_TABLE_NOT_FOUND )
 	{
@@ -191,7 +192,7 @@ void ConsoleClient::stTableJoinRes( quint32 _res, quint32 _tableID, quint32 _sea
 		LOG_ERR(QString("Table Join Result:ERR_GS_SEAT_OCCUPY"));
 	}
 	else
-		LOG_ERR(QString("Table Join Result:%1").arg(_res));
+		LOG_ERR(QString("Table Join Unknown Result:%1").arg(_res));
 
 
 }
@@ -287,8 +288,8 @@ void ConsoleClient::stBringMoneyRes( int _res )
 {
 	if ( _res == WS_NO_ERR )
 	{
-		LOG_INFO("Bring money successful, join to table");
-		mGameServer->SendJoinTable(mTempTableID, mTempSeatID);
+		LOG_INFO("Bring money successful");
+		//mGameServer->SendJoinTable(mTempTableID, mTempSeatID);
 	}
 	else
 		LOG_ERR(QString("BringMoneyFailed[%1]").arg(_res));

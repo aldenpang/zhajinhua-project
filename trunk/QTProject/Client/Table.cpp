@@ -101,6 +101,7 @@ void Table::stShowBringMoneyDlg()
 
 void Table::stBringMoney()
 {
+	mBringMoneyDlg->hide();
 	int amount = ((QPushButton*)sender())->text().toInt();
 	emit SiBringMoney(mID, mCurrentSeatID, amount);
 }
@@ -108,6 +109,7 @@ void Table::stBringMoney()
 
 void Table::stBringMoneyInput()
 {
+	mBringMoneyDlg->hide();
 	// get amount of money from user input
 	int amount = mWidget->findChild<QLineEdit*>("inputMoney")->text().toInt();
 	emit SiBringMoney(mID, mCurrentSeatID, amount);
@@ -152,11 +154,18 @@ void Table::UpdatePlayer( quint32 _seatID, TablePlayer _player )
 		mSeat[_seatID]->setIcon(QIcon(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.mProtraitID)));
 	}
 
-	// if this is player self, then show bring money dialog
-	if ( _player.mNickName == SETTINGS.GetPlayer().GetNickName() )
-	{
-		stShowBringMoneyDlg();
-	}
+	//// if this is player self, then show bring money dialog
+	//if ( _player.mNickName == SETTINGS.GetPlayer().GetNickName() )
+	//{
+	//	if ( SETTINGS.GetRoomInfo().mMoneyType == 1 )	// 1 is gold coin romm
+	//	{
+	//		stShowBringMoneyDlg();
+	//	}
+	//	else
+	//	{
+	//		emit SiBringMoney(mID, mCurrentSeatID, 0);
+	//	}
+	//}
 }
 
 void Table::PlayerLeave(TablePlayer _player)

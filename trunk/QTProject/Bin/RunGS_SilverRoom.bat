@@ -1,2 +1,2 @@
 ;.exe [roomID]
-.\Server_d.exe 1
+.\Server_d.exe 2

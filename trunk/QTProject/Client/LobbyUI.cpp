@@ -83,6 +83,7 @@ void LobbyUI::regConnections()
 	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32, TablePlayer)), this, SLOT(stTableJoinResult(quint32, quint32, quint32, TablePlayer)));
 	connect(mGameServer, SIGNAL(SiTableLeaveResult(quint32, quint32, TablePlayer)), this, SLOT(stTableLeaveResult(quint32, quint32, TablePlayer)));
 	connect(mGameServer, SIGNAL(SiUpdateMoney(quint32, quint32)), this, SLOT(stUpdateMoney(quint32, quint32)));
+	connect(mGameServer, SIGNAL(SiBringMoneyRes(int)), this, SLOT(stBringMoneyRes(int)));
 
 }
 
@@ -173,7 +174,7 @@ void LobbyUI::stGSLoginFailed( quint32 _errCode )
 
 void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player )
 {
-	if ( _res == GS_NO_ERR )
+	if ( _res == GS_NO_ERR || _res == WS_NO_ERR )
 	{
 		LOG_D_INFO(QString("Player joined table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
 		QMap<quint32, Table*>::iterator itr = mTableList.find(_tableID);
@@ -294,4 +295,14 @@ void LobbyUI::initLevels()
 	{
 		mLevels.push_back(i*i*100+100);
 	}
+}
+
+void LobbyUI::stBringMoneyRes( int _res )
+{
+	if ( _res == WS_NO_ERR )
+	{
+		LOG_D_INFO("Bring money successful");
+	}
+	else
+		LOG_D_ERR(QString("BringMoneyFailed[%1]").arg(_res));
 }

@@ -13,6 +13,7 @@
 #include "Table.h"
 #include "TableData.h"
 #include "CommonPlayer.h"
+#include "TableInfo.h"
 
 class GameList;
 class GameServerNet;
@@ -29,6 +30,7 @@ public:
 
 signals:
 	void SiQuit();
+
 public slots:
 	void StShowLobby(QVector<RoomInfo> _gameList);
 	void StUpdatePlayerInfo(CommonPlayer _player);
@@ -45,6 +47,7 @@ private slots:
 	void stTableLeaveResult(quint32 _res, quint32 _tableID, TablePlayer _player);
 	void stTableList(QMap<int, TableData> _tableData);
 	void stBringMoney(quint32 _tableID, quint32 _seatID, quint32 _amount);
+	void stBringMoneyRes( int _res );
 	void stUpdateMoney(quint32 _goldCoin, quint32 _silverCoin);
 protected:
 private:
