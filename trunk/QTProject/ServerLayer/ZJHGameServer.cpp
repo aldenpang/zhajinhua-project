@@ -432,7 +432,7 @@ int ZjhGameServer::bringMoney_userToTable( GSPlayerPtr _player, quint32 _tableID
 
 	// query table wallet id
 	quint32 tableWalletID = 0;
-	res = WalletDB.QueryTableWalletID(mRoomInfo.mRoomID, _tableID, _seatID, _money);
+	res = WalletDB.QueryTableWalletID(mRoomInfo.mRoomID, _tableID, _seatID, tableWalletID);
 	if ( res == WS_NO_ERR )
 	{
 		_player->SetTableWalletID(tableWalletID);
@@ -503,6 +503,7 @@ int ZjhGameServer::bringMoney_tableToUser( GSPlayerPtr _player )
 	if ( res != GS_NO_ERR )
 	{
 		LOG_WARN(QString("GetPlayerCurrentTableInfo Error[%1]").arg(res));
+		return res;
 	}
 	quint32 tableWalletMoney = 0;
 	res = WalletDB.QueryTableWallet(mRoomInfo.mRoomID, tableID, seatID, tableWalletMoney);
