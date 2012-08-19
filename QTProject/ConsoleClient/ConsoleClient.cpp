@@ -30,6 +30,7 @@ ConsoleClient::ConsoleClient()
 	connect(mLoginServer, SIGNAL(SiGameList(QVector<RoomInfo>)), this, SLOT(stGameList(QVector<RoomInfo>)));
 	connect(mLoginServer, SIGNAL(SiConnected()), this, SLOT(stLSConnected()));
 	connect(mLoginServer, SIGNAL(SiDisconnected()), this, SLOT(stLSDisconnected()));
+	connect(mLoginServer, SIGNAL(SiPlayerInfo(CommonPlayer)), this, SLOT(stPlayerInfo(CommonPlayer)));
 
 	mGameServer = new GameServerNet();
 	mGameServer->Init();
@@ -174,9 +175,12 @@ void ConsoleClient::stTableJoinRes( quint32 _res, quint32 _tableID, quint32 _sea
 {
 	if ( _res == GS_NO_ERR || _res == WS_NO_ERR )
 	{
-		LOG_INFO("Join Table OK");
-		mMySeatID = _seatID;
-		mMyTableID = _tableID;
+		LOG_INFO(QString("Player[%1] Join Table[%2] seat[%3] OK").arg(_player.mNickName).arg(_tableID).arg(_seatID));
+		if ( mMyInfo.GetNickName() == _player.mNickName )
+		{
+			mMySeatID = _seatID;
+			mMyTableID = _tableID;
+		}
 		//mGameServer->SendBringMoney(mMyTableID, mMySeatID, mCurrentTableMinBringChip);
 	}
 	else if ( _res == ERR_GS_TABLE_NOT_FOUND )
@@ -228,7 +232,7 @@ void ConsoleClient::stDistribute( QVector<int> _pokers )
 void ConsoleClient::stCurrentPlayer( int _currentPlayer )
 {
 	mCurrentPlayer = _currentPlayer;
-	//LOG_INFO(QString("CurrentPlayer[%1]").arg(mCurrentPlayer));
+	LOG_INFO(QString("CurrentPlayer[%1] mMySeatID[%2] mIsEnd[%3]").arg(mCurrentPlayer).arg(mMySeatID).arg(mIsEnd));
 	// if current player is self, he can follow, drop, or add chips
 	if ( mCurrentPlayer == mMySeatID && !mIsEnd )
 	{
@@ -294,4 +298,9 @@ void ConsoleClient::stBringMoneyRes( int _res )
 	else
 		LOG_ERR(QString("BringMoneyFailed[%1]").arg(_res));
 
+}
+
+void ConsoleClient::stPlayerInfo( CommonPlayer _player )
+{
+	mMyInfo = _player;
 }

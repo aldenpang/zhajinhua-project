@@ -273,6 +273,7 @@ void Table::UpdateReadyState( int _seatID )
 		Packet ppp;
 		ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
 		ppp<<mCurrentPlayer;
+		LOG_D_INFO(QString("CurrentPlayer[%1]").arg(mCurrentPlayer));
 		broadcastToPlaying(&ppp);
 
 		mState = TS_PLAYING;
