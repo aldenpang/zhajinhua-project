@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ZJHGameUI.h"
 #include "PokerItem.h"
+#include "GameServerNet.h"
 
 QPoint gTableCenter = QPoint(360, 220);
 QPoint gPokerPos[MAX_PLAYER][MAX_PLAYER] = {{QPoint(300, 360), QPoint(550, 220), QPoint(300, 60), QPoint(110, 220)}, 
@@ -81,7 +82,7 @@ void ZJHGameUI::regConnections()
 	connect(mMainWidget->findChild<QPushButton*>("btn_quit"), SIGNAL(clicked()), this, SIGNAL(SiQuit()));
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stUpdate()));
 
-
+	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(StShowGame(TableInfo)));
 }
 
 void ZJHGameUI::stUpdate()
@@ -157,4 +158,11 @@ void ZJHGameUI::stMoveLeftPokers()
 	{
 		mLeftPokers[i]->Move(50*i, 1000, gLeftPoker);
 	}
+}
+
+void ZJHGameUI::StShowGame( TableInfo _tableInfo )
+{
+	Show();
+	// update table info
+	mTableInfo = _tableInfo;
 }

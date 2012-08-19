@@ -1,4 +1,5 @@
 #include "WalletServerDB.h"
+#include "LogModule.h"
 
 WalletServerDB::WalletServerDB()
 {
@@ -62,15 +63,25 @@ int WalletServerDB::InsertTableWallet( quint32 _roomID, quint32 _tableID, quint3
 	QSqlQuery q = mDb.exec(sql);
 
 	int records = 0;
+	int tableAmount = 0;
 	while (q.next()) 
 	{
+		tableAmount = q.value(4).toInt();
 		records++;
 		if ( records >=2 )
 			break;
 	}
 	if ( records == 1 )
 	{
-		return ERR_WS_TABLE_WALLET_EXIST;
+		if ( tableAmount == 0 )
+		{
+			return WS_NO_ERR;
+		}
+		else
+		{
+			LOG_D_ERR(QString("this table wallet exist and coin is [%1]").arg(tableAmount));
+			return ERR_WS_TABLE_WALLET_EXIST;
+		}
 	}
 	else if( records > 1 )
 	{

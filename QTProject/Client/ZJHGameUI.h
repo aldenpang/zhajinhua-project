@@ -10,6 +10,7 @@
 #define ZJHGAMEUI_H
 
 #include "BaseUI.h"
+#include "TableInfo.h"
 
 class PokerItem;
 class GameServerNet;
@@ -28,6 +29,8 @@ public:
 	void ShowDistributeAni(quint32 _dealerIdx, quint32 _absentIdx1=-1, quint32 _absentIdx2=-1);
 
 	void ShowPreShuffleAni();
+public slots:
+	void StShowGame(TableInfo _tableInfo);
 
 signals:
 	void SiQuit();
@@ -43,6 +46,7 @@ private:
 	void regConnections();
 	QLabel* mShuffleLabel;
 	QMovie* mShuffleAni;
+	TableInfo mTableInfo;
 
 	QVector<PokerItem*> mPokers;
 	QVector<PokerItem*> mLeftPokers;
