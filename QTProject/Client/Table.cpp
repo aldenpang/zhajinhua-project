@@ -55,15 +55,17 @@ void Table::UpdateTableInfo( quint32 _tableID, TableData _data)
 	for( itr = players.begin(); itr != players.end(); itr++ )
 	{
 		int seatID = itr.key();
-		if ( seatID < 0 || seatID >3 )
-		{
-			LOG_D_ERR(QString("Invaild seatID[%1]").arg(seatID));
-			break;
-		}
-		if ( itr.value().mNickName != EMPTY_SEAT )
-		{
-			mNameLabel[seatID]->setText(itr.value().mNickName);
-		}
+		UpdatePlayer(seatID, itr.value());
+
+		//if ( seatID < 0 || seatID >3 )
+		//{
+		//	LOG_D_ERR(QString("Invaild seatID[%1]").arg(seatID));
+		//	break;
+		//}
+		//if ( itr.value().mNickName != EMPTY_SEAT )
+		//{
+		//	mNameLabel[seatID]->setText(itr.value().mNickName);
+		//}
 	}
 
 }

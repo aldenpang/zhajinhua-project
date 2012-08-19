@@ -5,6 +5,8 @@
 
 bool copyAndRun()
 {
+	QApplication::addLibraryPath("./plugins");
+
 	// copy self to a temp exe file, then run it. In order to patch self
 	QString tempPath = QDir::tempPath() + QString("/Client_XL.exe");
 	if ( QFile::exists(tempPath) )

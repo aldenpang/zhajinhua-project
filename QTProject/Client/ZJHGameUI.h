@@ -37,6 +37,12 @@ signals:
 private slots:
 	void stUpdate();
 	void stMoveLeftPokers();
+	void stDropBaseChip(int _baseChip);
+	void stDistribute(QVector<int> _pokers);
+	void stCurrentPlayer(int _currentPlayer);
+	void stTableEnd();
+	void stFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
+	void stSyncStart();
 
 protected:
 private:
@@ -50,6 +56,9 @@ private:
 
 	QVector<PokerItem*> mPokers;
 	QVector<PokerItem*> mLeftPokers;
+
+
+	void reset();
 };
 
 #endif

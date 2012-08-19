@@ -46,13 +46,13 @@ void LobbyUI::Init()
 	mSelectNotice->move(270, 200);
 	mSelectNotice->setPixmap(QPixmap(":/Images/Media/selectRoom.png"));
 
-#ifdef NDEBUG
+//#ifdef NDEBUG
 	mSelectNotice->show();
 	mTableListView->hide();
-#else
-	mSelectNotice->hide();
-	mTableListView->show();
-#endif
+//#else
+//	mSelectNotice->hide();
+//	mTableListView->show();
+//#endif
 
 	initLevels();
 
