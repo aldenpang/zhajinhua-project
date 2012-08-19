@@ -18,6 +18,7 @@
 #include "SharedData.h"
 #include "TableInfo.h"
 #include "Poker.h"
+#include "CommonPlayer.h"
 using namespace SharedData;
 
 class LoginServerNet;
@@ -41,6 +42,7 @@ private slots:
 	void stLoginOK();
 	void stLoginFailed(quint32 _errorCode);
 	void stGameList(QVector<RoomInfo> _gameList);
+	void stPlayerInfo(CommonPlayer _player);
 
 	void stGSConnected();
 	void stGSDisconnected();
@@ -63,6 +65,7 @@ private:
 	LoginServerNet* mLoginServer;
 	GameServerNet* mGameServer;
 
+	CommonPlayer mMyInfo;
 	QTimer mTimer;		// pause before follow
 	TableInfo mCurrentTableInfo;
 	QVector<PokerPtr> mPokers;
