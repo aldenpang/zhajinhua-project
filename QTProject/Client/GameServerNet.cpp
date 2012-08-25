@@ -76,14 +76,14 @@ void GameServerNet::processLogin( Packet& _packet )
 		emit SiLoginOK();
 }
 
-void GameServerNet::SendLoginGS( QString& _userName, QString& _pwd )
+void GameServerNet::SendLoginGS( QString& _userName, QString& _pwd, int _isTempLogin )
 {
 	// login gs
 	Packet p;
 	p.SetMessage(MSG_CL_GS_LOGIN);
 	QString userName = _userName;
 	QString md5pwd = ToMD5(_pwd);
-	p<<userName<<md5pwd;
+	p<<_isTempLogin<<userName<<md5pwd;
 	Send(&p);
 }
 

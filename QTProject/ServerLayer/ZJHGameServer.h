@@ -49,6 +49,7 @@ private:
 	QTimer mTimer;
 	QList<GSPlayerPtr> mPlayerList;
 	RoomInfo mRoomInfo;
+	quint32 mTempAccountID;		// for temp player use, start at 1000000
 
 private:
 	void sendTableInfo(GSPlayerPtr _to);

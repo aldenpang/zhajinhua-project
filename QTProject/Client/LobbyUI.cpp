@@ -153,7 +153,7 @@ void LobbyUI::stNetError( QString _err )
 void LobbyUI::stGSConnected()
 {
 	LOG_D_INFO("Game Server Connected");
-	mGameServer->SendLoginGS(mUserName, mPassword);
+	mGameServer->SendLoginGS(mUserName, mPassword, SETTINGS.GetTempLogin());
 }
 
 void LobbyUI::stGSLoginOK()

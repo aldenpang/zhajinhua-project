@@ -8,6 +8,13 @@
 #include "WalletDB.h"
 using namespace SharedData;
 
+
+LoginServer::LoginServer()
+{
+	//quint32 tempAccID = getTempAccountID();
+}
+
+
 void LoginServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
 	int msg = _packet.GetMessage();
@@ -49,16 +56,17 @@ void LoginServer::processClientLogin( ISocketInstancePtr _incomeSocket, Packet& 
 	else
 		LOG_INFO("Login OK");
 
-	WDB.QueryPlayerMoney(player.GetAccountID(), &player);
-
 	// send login result
+	int isTempLogin = 0;
 	Packet p;
 	p.SetMessage(MSG_LS_CL_LOGIN);
-	p<<(quint32)res;
+	p<<(quint32)res<<isTempLogin;
 	_incomeSocket->Send(&p);
 
 	if ( res == LOGIN_OK )
 	{
+		WDB.QueryPlayerMoney(player.GetAccountID(), &player);
+
 		// send player info
 		Packet p;
 		p.SetMessage(MSG_LS_CL_PLAYERINFO);
@@ -107,11 +115,35 @@ void LoginServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
 void LoginServer::processClientLoginAnonymous( ISocketInstancePtr _incomeSocket, Packet& _packet )
 {
 	// createa a temp player in memory, doesn't need write to db
-
+	int isTempLogin = 1;
 	// send login result
 	Packet p;
 	p.SetMessage(MSG_LS_CL_LOGIN);
-	p<<(quint32)LOGIN_OK;
+	p<<(quint32)LOGIN_OK<<isTempLogin;
 	_incomeSocket->Send(&p);
 
+	CommonPlayer player;
+	quint32 tempAccID = getTempAccountID();
+	player.SetAccountID(tempAccID);
+	player.SetNickName(QString("Temp"));
+	player.SetGender(0);
+	player.SetProtraitID(0);  
+	player.SetSilverCoin(TEMP_COIN);
+	
+	// send player info
+	Packet pp;
+	pp.SetMessage(MSG_LS_CL_PLAYERINFO);
+	player.ToPacket(pp);
+	_incomeSocket->Send(&pp);
 }
+
+quint32 LoginServer::getTempAccountID()
+{
+	//QString temp = QString("%1%2").arg(QDateTime::currentDateTime().date().toString("yyyyMMdd"))
+	//	.arg(QDateTime::currentDateTime().time().toString("hhmmsszzz"));
+	QString temp = QString("%1")
+		.arg(QDateTime::currentDateTime().time().toString("hhmmsszzz"));
+
+	return temp.toUInt();
+}
+

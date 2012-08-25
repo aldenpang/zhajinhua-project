@@ -39,12 +39,18 @@ void LoginServerNet::PacketHandler( Packet& _packet )
 void LoginServerNet::processLogin( Packet& _packet )
 {
 	quint32 res = 0;
-	_packet>>res;
+	int isTempLogin = 0;
+	_packet>>res>>isTempLogin;
 
 	if ( res == LOGIN_OK )
 		emit SiLoginOK();
 	else
 		emit SiLoginFailed(res);
+
+	if ( isTempLogin == 1 )
+	{
+		emit SiTempLogin();
+	}
 }
 
 void LoginServerNet::processGameList( Packet& _packet )

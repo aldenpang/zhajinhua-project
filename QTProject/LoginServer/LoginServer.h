@@ -17,6 +17,7 @@
 class LoginServer : public IServerLayer
 {
 public:
+	LoginServer();
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	virtual void ClientDisconnected(ISocketInstancePtr _clientSocket);
 protected:
@@ -26,6 +27,9 @@ private:
 	void processClientReqGameList(ISocketInstancePtr _incomeSocket, Packet& _packet);
 
 	void sendGameList(int _gameType, ISocketInstancePtr _toSocket);
+
+	quint32 getTempAccountID();
+	QString getTempNickname();
 };
 
 #endif // LoginServer_h__

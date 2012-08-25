@@ -36,6 +36,8 @@ private slots:
 	void stGameList(QVector<RoomInfo> _gameList);
 
 	void stLogin();
+	void stQuickLogin();
+	void stTempLogin();
 protected:
 private:
 	Patcher mPatcher;

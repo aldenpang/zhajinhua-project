@@ -29,6 +29,7 @@ public:
 	PROPERTY(QString, LoginNewsURL);
 	PROPERTY(RoomInfo, RoomInfo);
 	PROPERTY(CommonPlayer, Player);
+	PROPERTY(bool, TempLogin);
 
 protected:
 private:

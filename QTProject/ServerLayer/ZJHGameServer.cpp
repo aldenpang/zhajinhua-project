@@ -14,6 +14,7 @@ using namespace SharedData;
 //------------------------------------------------------------------------------
 ZjhGameServer::ZjhGameServer()
 : IServerLayer()
+, mTempAccountID(1000000)
 {
 	mTimer.setInterval(REFRESH_INTERVAL*1000);
 	//mTimer.start();
@@ -75,16 +76,21 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 {
 	QString userName;
 	QString pwd;
+	int isTempLogin = 0;
+	_packet>>isTempLogin;
 	_packet>>userName>>pwd;
+	int res = GS_NO_ERR;
+	if ( !isTempLogin )
+	{
+		LOG_INFO(QString("[%1]wants to login, pwd is[%2]").arg(userName).arg(pwd));
 
-	LOG_INFO(QString("[%1]wants to login, pwd is[%2]").arg(userName).arg(pwd));
+		res = DB.VerifyUser(userName, pwd);
 
-	int res = DB.VerifyUser(userName, pwd);
-
-	if ( res != GS_NO_ERR )
-		LOG_ERR(QString("LoginFailed! Reason:[%1]").arg(res));
-	else
-		LOG_INFO("Login OK");
+		if ( res != GS_NO_ERR )
+			LOG_ERR(QString("LoginFailed! Reason:[%1]").arg(res));
+		else
+			LOG_INFO("Login OK");
+	}
 
 	// send login result
 	Packet p;
@@ -96,69 +102,83 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 	{
 		// get player info
 		GSPlayerPtr player = GSPlayerPtr(new GSPlayer(_incomeSocket->GetSocket()));
-		quint32 accID = 0;
-		res = DB.GetAccountID(userName, accID);
-		if ( res == GS_NO_ERR )
+		if ( isTempLogin )
 		{
-			foreach(GSPlayerPtr p, mPlayerList)
-			{
-				if ( p->GetAccountID() == accID )
-				{
-					LOG_ERR(QString("Player[AccountID:%1] is already exist, deny login").arg(accID));
-					return;
-				}
-			}
+			player->SetAccountID(mTempAccountID++);
+			player->SetNickName("Temp");
+			player->SetGender(0);
+			player->SetProtraitID(0);
+			player->SetSilverCoin(TEMP_COIN);
+			// send table list
+			sendTableInfo(player);
 
-			// save player ip
-			DB.UpdatePlayerIp(accID, player->GetSocket()->peerAddress().toString());
-			player->SetAccountID(accID);
-
-			res = DB.GetPlayerInfo(player);
-			if ( res == GS_NO_ERR )
-			{
-				LOG_INFO(QString("Player[AccountID:%1] is login").arg(player->GetAccountID()));
-				// send room config
-				
-				// send table list
-				sendTableInfo(player);
-
-				mPlayerList.push_back(player);
-			}
-			else
-				LOG_ERR(QString("GetPlayerInfo Failed! Reason:[%1]").arg(res));
-
-			// query user wallet
-			quint32 chipcoin = 0;
-			res = WalletDB.QueryUserWallet(player->GetAccountID(), chipcoin);
-			if ( res == WS_NO_ERR )
-			{
-				LOG_INFO(QString("Player[%1] has [%2] chipcoin now").arg(player->GetAccountID()).arg(chipcoin));
-				player->SetUserWalletMoney(chipcoin);
-			}
-			else
-				LOG_ERR(QString("QueryUserWallet Failed! Reason:[%1]").arg(res));
-
-			// query user wallet id
-			quint32 userwalletID = 0;
-			res = WalletDB.QueryUserWalletID(player->GetAccountID(), userwalletID);
-			if ( res == WS_NO_ERR )
-			{
-				LOG_INFO(QString("Player[%1] 's user wallet id is [%2]").arg(player->GetAccountID()).arg(userwalletID));
-				player->SetUserWalletID(userwalletID);
-			}
-			else
-				LOG_ERR(QString("QueryUserWalletID Failed! Reason:[%1]").arg(res));
-
-			player->SetSilverCoin(1000);
-
-			// TODO: send player info
+			mPlayerList.push_back(player);
 		}
 		else
 		{
-			LOG_ERR(QString("GetAccountID Failed! Reason:[%1]").arg(res));
+			quint32 accID = 0;
+			res = DB.GetAccountID(userName, accID);
+			if ( res == GS_NO_ERR )
+			{
+				foreach(GSPlayerPtr p, mPlayerList)
+				{
+					if ( p->GetAccountID() == accID )
+					{
+						LOG_ERR(QString("Player[AccountID:%1] is already exist, deny login").arg(accID));
+						return;
+					}
+				}
+
+				// save player ip
+				DB.UpdatePlayerIp(accID, player->GetSocket()->peerAddress().toString());
+				player->SetAccountID(accID);
+
+				res = DB.GetPlayerInfo(player);
+				if ( res == GS_NO_ERR )
+				{
+					LOG_INFO(QString("Player[AccountID:%1] is login").arg(player->GetAccountID()));
+					// send room config
+
+					// send table list
+					sendTableInfo(player);
+
+					mPlayerList.push_back(player);
+				}
+				else
+					LOG_ERR(QString("GetPlayerInfo Failed! Reason:[%1]").arg(res));
+
+				// query user wallet
+				quint32 chipcoin = 0;
+				res = WalletDB.QueryUserWallet(player->GetAccountID(), chipcoin);
+				if ( res == WS_NO_ERR )
+				{
+					LOG_INFO(QString("Player[%1] has [%2] chipcoin now").arg(player->GetAccountID()).arg(chipcoin));
+					player->SetUserWalletMoney(chipcoin);
+				}
+				else
+					LOG_ERR(QString("QueryUserWallet Failed! Reason:[%1]").arg(res));
+
+				// query user wallet id
+				quint32 userwalletID = 0;
+				res = WalletDB.QueryUserWalletID(player->GetAccountID(), userwalletID);
+				if ( res == WS_NO_ERR )
+				{
+					LOG_INFO(QString("Player[%1] 's user wallet id is [%2]").arg(player->GetAccountID()).arg(userwalletID));
+					player->SetUserWalletID(userwalletID);
+				}
+				else
+					LOG_ERR(QString("QueryUserWalletID Failed! Reason:[%1]").arg(res));
+
+				player->SetSilverCoin(1000);
+
+				// TODO: send player info
+			}
+			else
+			{
+				LOG_ERR(QString("GetAccountID Failed! Reason:[%1]").arg(res));
+			}
 		}
 	}
-
 }
 
 void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& _packet )

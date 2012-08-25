@@ -52,6 +52,9 @@ void LoginUI::regConnections()
 	QPushButton* btn_login = mMainWidget->findChild<QPushButton*>("btn_login");
 	connect(btn_login, SIGNAL(clicked()), this, SLOT(stLogin()));
 
+	QPushButton* btn_quickLogin = mMainWidget->findChild<QPushButton*>("btn_directEnter");
+	connect(btn_quickLogin, SIGNAL(clicked()), this, SLOT(stQuickLogin()));
+
 }
 
 void LoginUI::stLogin()
@@ -77,6 +80,7 @@ void LoginUI::initLoginServer()
 	connect(mLoginServer, SIGNAL(SiLoginFailed(quint32)), this, SLOT(stLoginFailed(quint32)));
 	connect(mLoginServer, SIGNAL(SiGameList(QVector<RoomInfo>)), this, SLOT(stGameList(QVector<RoomInfo>)));
 	connect(mLoginServer, SIGNAL(SiPlayerInfo(CommonPlayer)), this, SIGNAL(SiPlayerInfo(CommonPlayer)));
+	connect(mLoginServer, SIGNAL(SiTempLogin()), this, SLOT(stTempLogin()));
 }
 
 void LoginUI::stLoginOK()
@@ -111,4 +115,21 @@ void LoginUI::stGameList( QVector<RoomInfo> _gameList )
 	qDebug()<<__FUNCTION__<<"GameList size:"<<size;
 
 	emit SiShowLobby(_gameList);
+}
+
+void LoginUI::stQuickLogin()
+{
+	if ( !mLoginServer->IsValid() )
+	{
+		mLoginServer->Connect(SETTINGS.GetIP(), SETTINGS.GetPort());
+	}
+
+	Packet p;
+	p.SetMessage(MSG_CL_LS_LOGIN_ANONYMOUS);
+	mLoginServer->Send(&p);
+}
+
+void LoginUI::stTempLogin()
+{
+	SETTINGS.SetTempLogin(true);
 }
