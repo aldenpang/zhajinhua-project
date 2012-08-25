@@ -3,7 +3,7 @@
 
 Setting::Setting()
 {
-
+	mTempLogin = false;
 }
 
 Setting::~Setting()

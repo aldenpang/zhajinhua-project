@@ -34,6 +34,7 @@ signals:
 	void SiLoginFailed(quint32 _errorCode);
 	void SiGameList(QVector<RoomInfo> _gameList);
 	void SiPlayerInfo(CommonPlayer _player);
+	void SiTempLogin();
 
 protected:
 private:
