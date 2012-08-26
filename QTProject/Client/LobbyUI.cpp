@@ -188,15 +188,16 @@ void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID
 		if ( itr != mTableList.end() )
 		{
 			itr.value()->UpdatePlayer(_seatID, _player);
-			emit SiShowGame();
-			emit SiMyTable(_tableID, _seatID);
+
+			if ( _player.mNickName == SETTINGS.GetPlayer().GetNickName() )
+			{
+				emit SiShowGame();
+				emit SiMyTable(_tableID, _seatID);
+				refreshPlayerMoney();
+			}
 		}
 		else
 			LOG_D_ERR(QString("Can not find table id[%1]").arg(_tableID));
-
-		if ( mMyTableID == _tableID || mMySeatID == _seatID )
-			refreshPlayerMoney();
-
 	}
 	else
 	{
@@ -234,8 +235,10 @@ void LobbyUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer _p
 		else
 			LOG_D_ERR(QString("Can not find table id[%1]").arg(_tableID));
 
-		if ( mMyTableID == _tableID )
+		if ( _player.mNickName == SETTINGS.GetPlayer().GetNickName() )
+		{
 			refreshPlayerMoney();
+		}
 	}
 	else
 	{
