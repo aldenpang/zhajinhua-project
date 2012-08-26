@@ -61,7 +61,7 @@ void Client::regConnections()
 	connect(mLoginUI, SIGNAL(SiLoginOK(QString, QString)), mLobbyUI, SLOT(StGetLoginInfo(QString, QString)));
 
 	connect(mLobbyUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
-	connect(mLobbyUI, SIGNAL(SiShowGame()), mZjhUI, SLOT(Show()));
+	connect(mLobbyUI, SIGNAL(SiShowGame()), mZjhUI, SLOT(StShow()));
 	connect(mLobbyUI, SIGNAL(SiMyTable(quint32, quint32)), mZjhUI, SLOT(StMyTable(quint32, quint32)));
 
 

@@ -252,8 +252,14 @@ void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet&
 	GSPlayerPtr player = findPlayer(_incomeSocket);
 	if ( player )
 	{
+		int res = bringMoney_tableToUser(player);
+		if ( res != WS_NO_ERR )
+		{
+			LOG_ERR(QString("Error when bringMoney_tableToUser, err[%1]").arg(res));
+		}
+
 		// 检查是否可离开桌子
-		int res = TABLE.StLeaveTable(player, tableID);
+		res = TABLE.StLeaveTable(player, tableID);
 		if ( res != GS_NO_ERR )
 		{
 			LOG_WARN("player can not join this table");
