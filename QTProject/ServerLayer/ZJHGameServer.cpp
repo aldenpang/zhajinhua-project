@@ -252,32 +252,7 @@ void ZjhGameServer::processTableLeave( ISocketInstancePtr _incomeSocket, Packet&
 	GSPlayerPtr player = findPlayer(_incomeSocket);
 	if ( player )
 	{
-		int res = bringMoney_tableToUser(player);
-		if ( res != WS_NO_ERR )
-		{
-			LOG_ERR(QString("Error when bringMoney_tableToUser, err[%1]").arg(res));
-		}
-
-		// 检查是否可离开桌子
-		res = TABLE.StLeaveTable(player, tableID);
-		if ( res != GS_NO_ERR )
-		{
-			LOG_WARN("player can not join this table");
-
-			// 不能离开桌子
-			Packet p;
-			p.SetMessage(MSG_GS_CL_TABLE_LEAVE);
-			p<<res;
-			_incomeSocket->Send(&p);
-			return;
-		}
-		LOG_INFO("player can join this table");
-
-		//广播此玩家离开桌子的消息
-		Packet p;
-		p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
-		p<<res<<tableID<<player->GetNickName()<<player->GetProtraitID();
-		Broadcast(&p);
+		handlePlayerLeave(player);
 	}
 	else
 	{
@@ -328,20 +303,8 @@ void ZjhGameServer::ClientDisconnected( ISocketInstancePtr _clientSocket )
 	GSPlayerPtr player = findPlayer(_clientSocket);
 	if ( player != NULL )
 	{
-		int res = bringMoney_tableToUser(player);
-		if ( res != WS_NO_ERR )
-		{
-			LOG_ERR(QString("Error when bringMoney_tableToUser, err[%1]").arg(res));
-		}
+		handlePlayerLeave(player);
 
-		// leave table first
-		quint32 from = 0;
-		res = TABLE.StLeaveTable(player, from);
-		LOG_INFO(QString("Player Leave from table[%1], res[%2]").arg(from).arg(res));
-		if ( res != GS_NO_ERR )
-		{
-			LOG_WARN(QString("StLeaveTable[%1] Error[%2]").arg(from).arg(res));
-		}
 		// remove player from memory
 		deletePlayer(player);
 
@@ -587,4 +550,34 @@ quint32 ZjhGameServer::getPlayerMoney( GSPlayerPtr _player )
 		return _player->GetSilverCoin();
 	}else
 		return 0;
+}
+
+void ZjhGameServer::handlePlayerLeave( GSPlayerPtr _player )
+{
+	int res = bringMoney_tableToUser(_player);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("Error when bringMoney_tableToUser, err[%1]").arg(res));
+	}
+	quint32 from;
+	// 检查是否可离开桌子
+	res = TABLE.StLeaveTable(_player, from);
+	if ( res != GS_NO_ERR )
+	{
+		LOG_WARN(QString("player[%1] can not join this table[%2], res[%3]").arg(_player->GetAccountID()).arg(from).arg(res));
+
+		// 不能离开桌子
+		Packet p;
+		p.SetMessage(MSG_GS_CL_TABLE_LEAVE);
+		p<<res;
+		_player->Send(&p);
+		return;
+	}
+	LOG_INFO("player can join this table");
+
+	//广播此玩家离开桌子的消息
+	Packet p;
+	p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
+	p<<res<<from<<_player->GetNickName()<<_player->GetProtraitID();
+	Broadcast(&p);
 }
