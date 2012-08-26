@@ -166,7 +166,7 @@ void LobbyUI::stGSLoginOK()
 
 	QString roomName = SETTINGS.GetRoomInfo().mName;
 
-	updateMoney();
+	refreshPlayerMoney();
 }
 
 void LobbyUI::stGSLoginFailed( quint32 _errCode )
@@ -178,11 +178,11 @@ void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID
 {
 	if ( _res == GS_NO_ERR || _res == WS_NO_ERR )
 	{
-		if ( mMyTableID != _tableID || mMySeatID != _seatID )
-		{
-			LOG_D_INFO(QString("Player joined table(not SELF)[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
-			return;
-		}
+		//if ( mMyTableID != _tableID || mMySeatID != _seatID )
+		//{
+		//	LOG_D_INFO(QString("Player joined table(not SELF)[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
+		//	return;
+		//}
 		LOG_D_INFO(QString("Player joined table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
 		QMap<quint32, Table*>::iterator itr = mTableList.find(_tableID);
 		if ( itr != mTableList.end() )
@@ -193,6 +193,10 @@ void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID
 		}
 		else
 			LOG_D_ERR(QString("Can not find table id[%1]").arg(_tableID));
+
+		if ( mMyTableID == _tableID || mMySeatID == _seatID )
+			refreshPlayerMoney();
+
 	}
 	else
 	{
@@ -229,6 +233,9 @@ void LobbyUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer _p
 		}
 		else
 			LOG_D_ERR(QString("Can not find table id[%1]").arg(_tableID));
+
+		if ( mMyTableID == _tableID )
+			refreshPlayerMoney();
 	}
 	else
 	{
@@ -274,7 +281,7 @@ void LobbyUI::stUpdateMoney( quint32 _goldCoin, quint32 _silverCoin )
 	mMainWidget->findChild<QLabel*>("silverCoinText")->setText(QString("%1").arg(_silverCoin));
 }
 
-void LobbyUI::updateMoney()
+void LobbyUI::refreshPlayerMoney()
 {
 	// query money
 	Packet p;

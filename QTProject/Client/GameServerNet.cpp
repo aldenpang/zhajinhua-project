@@ -141,7 +141,7 @@ void GameServerNet::processTableJoin( Packet& _packet )
 	quint32 seatID = 0;
 	quint32 tableID = 0;
 	TablePlayer tablePlayer;
-	_packet>>res>>tableID>>seatID>>tablePlayer.mNickName>>tablePlayer.mProtraitID;
+	_packet>>res>>tableID>>seatID>>tablePlayer.mNickName>>tablePlayer.mProtraitID>>tablePlayer.mTableMoney;
 
 	emit SiTableJoinResult(res, tableID, seatID, tablePlayer);
 }

@@ -86,6 +86,7 @@ private:
 	void reset();
 	void updatePlayerInfo(Seat _seat, quint32 _protraitID, QString& _nickName, quint32 _money);
 	quint32 convertSeatID(quint32 _serverID);
+	void refreshPlayerMoney();
 };
 
 #endif

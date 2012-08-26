@@ -220,7 +220,7 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 					// send the result of join table
 					Packet p;
 					p.SetMessage(MSG_GS_BC_TABLE_JOIN);
-					p<<res<<tableID<<seatID<<player->GetNickName()<<player->GetProtraitID();
+					p<<res<<tableID<<seatID<<player->GetNickName()<<player->GetProtraitID()<<getPlayerMoney(player);
 					//_incomeSocket->Send(&p);
 					Broadcast(&p);
 					return;
@@ -509,7 +509,14 @@ void ZjhGameServer::processQueryMoney( ISocketInstancePtr _incomeSocket, Packet&
 	GSPlayerPtr player = findPlayer(_incomeSocket);
 	if ( player )
 	{
-		quint32 goldCoin = player->GetUserWalletMoney();
+		quint32 goldCoin = 0;
+		int res = WalletDB.QueryUserWallet(player->GetAccountID(), goldCoin);
+		if ( res == WS_NO_ERR )
+		{
+			player->SetUserWalletMoney(goldCoin);
+		}
+		else
+			LOG_ERR(QString("Player[%1] query money error[%2]").arg(player->GetAccountID()).arg(res));
 		quint32 silverCoin = player->GetSilverCoin();
 
 		Packet p;
@@ -568,4 +575,16 @@ int ZjhGameServer::bringMoney_tableToUser( GSPlayerPtr _player )
 	}
 
 	return res;
+}
+
+quint32 ZjhGameServer::getPlayerMoney( GSPlayerPtr _player )
+{
+	if ( mRoomInfo.mMoneyType == GOLD_COIN )
+	{
+		return _player->GetTableWalletMoney();
+	}else if ( mRoomInfo.mMoneyType == SILVER_COIN )
+	{
+		return _player->GetSilverCoin();
+	}else
+		return 0;
 }

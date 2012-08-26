@@ -57,6 +57,8 @@ private:
 	void deletePlayer(GSPlayerPtr _player);
 	int bringMoney_userToTable(GSPlayerPtr _player, quint32 _tableID, quint32 _seatID, quint32 _money);
 	int bringMoney_tableToUser(GSPlayerPtr _player);
+
+	quint32 getPlayerMoney(GSPlayerPtr _player);
 };
 
 #endif //_ZJHGAMESERVER_H_
