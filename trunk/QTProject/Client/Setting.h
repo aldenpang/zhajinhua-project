@@ -31,9 +31,14 @@ public:
 	PROPERTY(CommonPlayer, Player);
 	PROPERTY(bool, TempLogin);
 
+	quint32 GetLevel( quint32 _exp );
+
 protected:
 private:
 	QSettings* mSettings;
+	QVector<quint32> mLevels;
+
+	void initLevels();
 };
 
 #define SETTINGS Setting::GetSingleton()

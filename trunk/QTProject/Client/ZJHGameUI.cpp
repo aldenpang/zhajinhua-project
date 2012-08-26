@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ZJHGameUI.h"
 #include "PokerItem.h"
+#include "Setting.h"
 #include "GameServerNet.h"
 
 QPoint gTableCenter = QPoint(360, 220);
@@ -14,6 +15,7 @@ QPoint gLeftPoker = QPoint(20, 20);
 
 ZJHGameUI::ZJHGameUI(GameServerNet* _gameServerNet)
 : mGameServer(_gameServerNet)
+, mMySeatID(0)
 {
 	mTimer.setInterval(50);
 }
@@ -45,6 +47,14 @@ void ZJHGameUI::Init()
 		view->size().height()-view->horizontalScrollBar()->size().height());
 	//mScene->setBackgroundBrush(Qt::blue);
 	view->setScene(mScene);
+
+	for ( int i = 0; i<MAX_PLAYER; i++ )
+	{
+		mPortrait[i] = mMainWidget->findChild<QLabel*>(QString("playerImage_%1").arg(i));
+		mNickName[i] = mMainWidget->findChild<QLabel*>(QString("nickNameText_%1").arg(i));
+		mCoin[i] = mMainWidget->findChild<QLabel*>(QString("goldCoinText_%1").arg(i));
+		mCoinLogo[i] = mMainWidget->findChild<QLabel*>(QString("goldCoin_%1").arg(i));
+	}
 
 	mShuffleLabel = new QLabel(mMainWidget);
 	mShuffleLabel->move(gTableCenter+QPoint(50, 100));
@@ -83,7 +93,7 @@ void ZJHGameUI::regConnections()
 	connect(mMainWidget->findChild<QPushButton*>("btn_quit"), SIGNAL(clicked()), this, SIGNAL(SiQuit()));
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stUpdate()));
 
-	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(StShowGame(TableInfo)));
+	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(StStartGame(TableInfo)));
 	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
 	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
@@ -167,11 +177,10 @@ void ZJHGameUI::stMoveLeftPokers()
 	}
 }
 
-void ZJHGameUI::StShowGame( TableInfo _tableInfo )
+void ZJHGameUI::StStartGame( TableInfo _tableInfo )
 {
 	reset();
 
-	Show();
 	ShowShuffleAni();
 	// update table info
 	mTableInfo = _tableInfo;
@@ -180,7 +189,22 @@ void ZJHGameUI::StShowGame( TableInfo _tableInfo )
 
 void ZJHGameUI::reset()
 {
-
+	// update money type
+	for ( int i = 0; i<MAX_PLAYER; i++ )
+	{
+		if ( SETTINGS.GetRoomInfo().mMoneyType == GOLD_COIN )
+		{
+			mCoinLogo[i]->setPixmap(QPixmap(QString(":/Images/Media/goldCoin.png")));
+		}
+		else if( SETTINGS.GetRoomInfo().mMoneyType == SILVER_COIN )
+		{
+			mCoinLogo[i]->setPixmap(QPixmap(QString(":/Images/Media/silverCoin.png")));
+		}
+		else
+		{
+			mCoinLogo[i]->setPixmap(QPixmap(QString(":/Images/Media/goldCoin.png")));
+		}
+	}
 }
 
 void ZJHGameUI::stSyncStart()
@@ -214,4 +238,38 @@ void ZJHGameUI::stTableEnd()
 void ZJHGameUI::stFollow( int _seatID, int _chip, int _currentPlayer, int _currentBid )
 {
 
+}
+
+void ZJHGameUI::StUpdatePlayerInfo( CommonPlayer _player )
+{
+	QLabel* nickNameLabel = mMainWidget->findChild<QLabel*>("nickNameText");
+	nickNameLabel->setText(_player.GetNickName());
+
+	QLabel* imageLabel = mMainWidget->findChild<QLabel*>("playerImage");
+	imageLabel->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.GetProtraitID())));
+
+	QLabel* levelLabel = mMainWidget->findChild<QLabel*>("levelText");
+	levelLabel->setText(QString("Lv.%1").arg(SETTINGS.GetLevel(_player.GetExp())));
+
+	stUpdateMoney(_player.GetUserWalletMoney(), _player.GetSilverCoin());
+
+	updatePlayerInfo(BOTTOM, _player.GetProtraitID(), _player.GetNickName(), _player.GetTableWalletMoney());
+}
+
+void ZJHGameUI::stUpdateMoney( quint32 _goldCoin, quint32 _silverCoin )
+{
+	mMainWidget->findChild<QLabel*>("goldCoinText")->setText(QString("%1").arg(_goldCoin));
+	mMainWidget->findChild<QLabel*>("silverCoinText")->setText(QString("%1").arg(_silverCoin));
+}
+
+void ZJHGameUI::StMySeat( quint32 _seatID )
+{
+	mMySeatID = _seatID;
+}
+
+void ZJHGameUI::updatePlayerInfo( Seat _seat, quint32 _protraitID, QString& _nickName, quint32 _money )
+{
+	mPortrait[_seat]->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_protraitID)));
+	mNickName[_seat]->setText(_nickName);
+	mCoin[_seat]->setText(QString("%1").arg(_money));
 }

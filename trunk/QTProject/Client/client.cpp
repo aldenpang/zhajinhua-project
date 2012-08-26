@@ -28,12 +28,12 @@ Client::Client(int & argc, char ** argv)
 
 	mLobbyUI = new LobbyUI;
 	mLobbyUI->Init();
-	mLobbyUI->Show();
+	//mLobbyUI->Show();
 	initMouseEventFilter(mLobbyUI->GetWidget());
 
 	mZjhUI = new ZJHGameUI(mLobbyUI->GetGameServerNet());
 	mZjhUI->Init();
-	mZjhUI->Show();
+	//mZjhUI->Show();
 	initMouseEventFilter(mZjhUI->GetWidget());
 
 	MSGLOADER.Load(QString("ClientMessages.txt"));
@@ -57,10 +57,13 @@ void Client::regConnections()
 	connect(mLoginUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
 	connect(mLoginUI, SIGNAL(SiShowLobby(QVector<RoomInfo>)), mLobbyUI, SLOT(StShowLobby(QVector<RoomInfo>)));
 	connect(mLoginUI, SIGNAL(SiPlayerInfo(CommonPlayer)), mLobbyUI, SLOT(StUpdatePlayerInfo(CommonPlayer)));
+	connect(mLoginUI, SIGNAL(SiPlayerInfo(CommonPlayer)), mZjhUI, SLOT(StUpdatePlayerInfo(CommonPlayer)));
 	connect(mLoginUI, SIGNAL(SiLoginOK(QString, QString)), mLobbyUI, SLOT(StGetLoginInfo(QString, QString)));
 
 	connect(mLobbyUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
-	//connect(mLobbyUI, SIGNAL(SiShowGame(TableInfo)), mZjhUI, SLOT(StShowGame(TableInfo)));
+	connect(mLobbyUI, SIGNAL(SiShowGame()), mZjhUI, SLOT(Show()));
+	connect(mLobbyUI, SIGNAL(SiMySeat(quint32)), mZjhUI, SLOT(StMySeat(quint32)));
+
 
 	connect(mZjhUI, SIGNAL(SiQuit()), this, SLOT(stQuit()));
 
