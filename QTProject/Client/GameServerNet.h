@@ -41,7 +41,7 @@ public:
 
 	virtual void PacketHandler(Packet& _packet);
 
-	void SendLoginGS(QString& _userName, QString& _pwd, int _isTempLogin);
+	void SendLoginGS(QString& _userName, QString& _pwd, int _isTempLogin=false);
 
 	void SendBringMoney( quint32 _tableID, quint32 _seatID, quint32 _money );
 

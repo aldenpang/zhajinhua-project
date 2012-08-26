@@ -24,6 +24,10 @@ void Table::Init()
 	QLabel* tableID = mWidget->findChild<QLabel*>("tableID");
 	tableID->setText(QString("%1").arg(mID+1));
 
+	// 顺序是按照顺时针方向，上0，右1，下2，左3
+	//	   [0]
+	//[3]		[1]
+	//	   [2]
 	mSeat[0] = mWidget->findChild<QPushButton*>("seat0");
 	mSeat[1] = mWidget->findChild<QPushButton*>("seat1");
 	mSeat[2] = mWidget->findChild<QPushButton*>("seat2");

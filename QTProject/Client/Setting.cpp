@@ -4,6 +4,8 @@
 Setting::Setting()
 {
 	mTempLogin = false;
+
+	initLevels();
 }
 
 Setting::~Setting()
@@ -24,4 +26,27 @@ void Setting::Init( QString _fileName )
 	mLoginADURL = mSettings->value("Login_Ad").toString();
 	mLoginNewsURL = mSettings->value("Login_News").toString();
 	mSettings->endGroup();
+}
+
+quint32 Setting::GetLevel( quint32 _exp )
+{
+	quint32 level = 0;
+	for ( int i = 0; i<mLevels.size(); i++ )
+	{
+		if ( _exp < mLevels[i] )
+		{
+			level = i+1;
+			break;
+		}
+	}
+	return level;
+}
+
+void Setting::initLevels()
+{
+	// the maxmimum level is 60
+	for ( int i = 0; i<60; i++ )
+	{
+		mLevels.push_back(i*i*100+100);
+	}
 }

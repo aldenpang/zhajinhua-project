@@ -30,6 +30,8 @@ public:
 
 signals:
 	void SiQuit();
+	void SiShowGame();
+	void SiMySeat(quint32 _seatID);
 
 public slots:
 	void StShowLobby(QVector<RoomInfo> _gameList);
@@ -59,14 +61,13 @@ private:
 	QGraphicsView* mTableListView;
 	QString mUserName;
 	QString mPassword;
-	QVector<quint32> mLevels;
+	
 
 	void regConnections();
 	void initTables(quint32 _amount);
 	void initGameServer();
 	void updateMoney();
-	void initLevels();
-	quint32 getLevel(quint32 _exp);
+
 };
 
 #endif

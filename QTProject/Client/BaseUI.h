@@ -22,6 +22,7 @@ public:
 
 	QWidget* GetWidget(){ return mMainWidget; }
 
+public slots:
 	void Show(){mMainWidget->show();}
 	void Hide(){mMainWidget->hide();}
 
