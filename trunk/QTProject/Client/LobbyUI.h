@@ -68,7 +68,7 @@ private:
 	void regConnections();
 	void initTables(quint32 _amount);
 	void initGameServer();
-	void updateMoney();
+	void refreshPlayerMoney();
 
 };
 

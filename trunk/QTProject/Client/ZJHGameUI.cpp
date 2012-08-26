@@ -105,6 +105,8 @@ void ZJHGameUI::regConnections()
 	connect(mGameServer, SIGNAL(SiTableEnd()), this, SLOT(stTableEnd()));
 	connect(mGameServer, SIGNAL(SiFollow(int, int, int, int)), this, SLOT(stFollow(int, int, int, int)));
 	connect(mGameServer, SIGNAL(SiSyncStart()), this, SLOT(stSyncStart()));
+	connect(mGameServer, SIGNAL(SiUpdateMoney(quint32, quint32)), this, SLOT(stUpdateMoney(quint32, quint32)));
+
 }
 
 void ZJHGameUI::stUpdate()
@@ -329,4 +331,14 @@ void ZJHGameUI::StShow()
 {
 	reset();
 	Show();
+
+	refreshPlayerMoney();
+}
+
+void ZJHGameUI::refreshPlayerMoney()
+{
+	// query current user wallet
+	Packet p;
+	p.SetMessage(MSG_CL_GS_QUERY_MONEY);
+	mGameServer->Send(&p);
 }
