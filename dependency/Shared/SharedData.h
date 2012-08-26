@@ -151,6 +151,8 @@ namespace SharedData
 #define MAX_POKERS_ZJH 52
 #define MAX_HAND_POKER 3
 
+#define TEMP_COIN 10000
+
 
 }
 Q_DECLARE_METATYPE(SharedData::RoomInfo);
