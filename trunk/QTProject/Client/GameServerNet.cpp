@@ -229,3 +229,10 @@ void GameServerNet::processQueryMoney( Packet& _packet )
 	emit SiUpdateMoney(goldCoin, silverCoin);
 }
 
+void GameServerNet::SendLeaveTable( quint32 _tableID )
+{
+	Packet p;
+	p.SetMessage(MSG_CL_GS_TABLE_LEAVE);
+	p<<_tableID;
+	Send(&p);
+}

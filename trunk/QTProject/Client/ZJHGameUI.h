@@ -12,6 +12,7 @@
 #include "BaseUI.h"
 #include "TableInfo.h"
 #include "CommonPlayer.h"
+#include "TableData.h"
 
 enum Seat
 {
@@ -42,11 +43,13 @@ public:
 public slots:
 	void StStartGame(TableInfo _tableInfo);
 	void StUpdatePlayerInfo(CommonPlayer _player);
-	void StMySeat(quint32 _seatID);
+	void StMyTable(quint32 _tableID, quint32 _seatID);
 
 signals:
 	void SiQuit();
 private slots:
+	void stBtn_Back();
+
 	void stUpdate();
 	void stMoveLeftPokers();
 	void stDropBaseChip(int _baseChip);
@@ -56,6 +59,8 @@ private slots:
 	void stFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
 	void stSyncStart();
 	void stUpdateMoney( quint32 _goldCoin, quint32 _silverCoin );
+	void stTableJoinResult(quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player);
+	void stTableLeaveResult(quint32 _res, quint32 _tableID, TablePlayer _player);
 
 protected:
 private:
@@ -66,6 +71,7 @@ private:
 	QLabel* mShuffleLabel;
 	QMovie* mShuffleAni;
 	TableInfo mTableInfo;
+	quint32 mMyTableID;
 	quint32 mMySeatID;
 	QLabel* mPortrait[MAX_PLAYER];
 	QLabel* mNickName[MAX_PLAYER];
@@ -78,6 +84,7 @@ private:
 private:
 	void reset();
 	void updatePlayerInfo(Seat _seat, quint32 _protraitID, QString& _nickName, quint32 _money);
+	quint32 convertSeatID(quint32 _serverID);
 };
 
 #endif
