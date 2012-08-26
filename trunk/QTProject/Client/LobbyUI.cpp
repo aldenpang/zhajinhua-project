@@ -183,7 +183,7 @@ void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID
 		//	LOG_D_INFO(QString("Player joined table(not SELF)[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
 		//	return;
 		//}
-		LOG_D_INFO(QString("Player joined table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
+		LOG_D_INFO(QString("Player[%1] joined table[%2], seat[%3], res[%4]").arg(_player.mNickName).arg(_tableID).arg(_seatID).arg(_res));
 		QMap<quint32, Table*>::iterator itr = mTableList.find(_tableID);
 		if ( itr != mTableList.end() )
 		{
@@ -200,7 +200,7 @@ void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID
 	}
 	else
 	{
-		LOG_D_WARN(QString("Player join table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
+		LOG_D_WARN(QString("Player[%1] join table[%2], seat[%3], res[%4]").arg(_player.mNickName).arg(_tableID).arg(_seatID).arg(_res));
 
 	}
 }
@@ -225,7 +225,7 @@ void LobbyUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer _p
 {
 	if ( _res == GS_NO_ERR )
 	{
-		LOG_D_INFO(QString("Player leave table[%1], seat[%2], res[%3]").arg(_tableID).arg(_res));
+		LOG_D_INFO(QString("Player[%1] leave table[%2], res[%3]").arg(_player.mNickName).arg(_tableID).arg(_res));
 		QMap<quint32, Table*>::iterator itr = mTableList.find(_tableID);
 		if ( itr != mTableList.end() )
 		{
