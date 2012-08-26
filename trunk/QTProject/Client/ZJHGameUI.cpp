@@ -311,7 +311,11 @@ void ZJHGameUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer 
 			mNickName[i]->setText("Unknown");
 			mCoin[i]->setText(QString("0"));
 
-			Hide();
+			// if player is self, hide game
+			if ( _player.mNickName == SETTINGS.GetPlayer().GetNickName() )
+			{
+				Hide();
+			}
 			return;
 		}
 	}
