@@ -88,7 +88,6 @@ void ZJHGameUI::Init()
 
 	//ShowDistributeAni(0, 1);
 
-	reset();
 }
 
 void ZJHGameUI::regConnections()
@@ -324,4 +323,10 @@ quint32 ZJHGameUI::convertSeatID( quint32 _serverID )
 void ZJHGameUI::stBtn_Back()
 {
 	mGameServer->SendLeaveTable(mMyTableID);
+}
+
+void ZJHGameUI::StShow()
+{
+	reset();
+	Show();
 }

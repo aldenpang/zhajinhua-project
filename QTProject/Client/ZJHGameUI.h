@@ -41,6 +41,7 @@ public:
 
 	void ShowPreShuffleAni();
 public slots:
+	void StShow();
 	void StStartGame(TableInfo _tableInfo);
 	void StUpdatePlayerInfo(CommonPlayer _player);
 	void StMyTable(quint32 _tableID, quint32 _seatID);
