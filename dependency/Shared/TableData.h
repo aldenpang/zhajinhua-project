@@ -22,8 +22,10 @@ struct TablePlayer
 {
 	quint32 mProtraitID;
 	QString mNickName;
+	quint32 mTableMoney;
 	TablePlayer()
 	{
+		mTableMoney = 0;
 		mProtraitID = 0;
 		mNickName = EMPTY_SEAT;
 	}

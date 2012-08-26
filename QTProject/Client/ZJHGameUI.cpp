@@ -15,6 +15,7 @@ QPoint gLeftPoker = QPoint(20, 20);
 
 ZJHGameUI::ZJHGameUI(GameServerNet* _gameServerNet)
 : mGameServer(_gameServerNet)
+, mMyTableID(0)
 , mMySeatID(0)
 {
 	mTimer.setInterval(50);
@@ -86,13 +87,18 @@ void ZJHGameUI::Init()
 	//}
 
 	//ShowDistributeAni(0, 1);
+
+	reset();
 }
 
 void ZJHGameUI::regConnections()
 {
 	connect(mMainWidget->findChild<QPushButton*>("btn_quit"), SIGNAL(clicked()), this, SIGNAL(SiQuit()));
+	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), this, SLOT(stBtn_Back()));
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stUpdate()));
 
+	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32, TablePlayer)), this, SLOT(stTableJoinResult(quint32, quint32, quint32, TablePlayer)));
+	connect(mGameServer, SIGNAL(SiTableLeaveResult(quint32, quint32, TablePlayer)), this, SLOT(stTableLeaveResult(quint32, quint32, TablePlayer)));
 	connect(mGameServer, SIGNAL(SiStartGame(TableInfo)), this, SLOT(StStartGame(TableInfo)));
 	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
@@ -253,7 +259,6 @@ void ZJHGameUI::StUpdatePlayerInfo( CommonPlayer _player )
 
 	stUpdateMoney(_player.GetUserWalletMoney(), _player.GetSilverCoin());
 
-	updatePlayerInfo(BOTTOM, _player.GetProtraitID(), _player.GetNickName(), _player.GetTableWalletMoney());
 }
 
 void ZJHGameUI::stUpdateMoney( quint32 _goldCoin, quint32 _silverCoin )
@@ -262,8 +267,9 @@ void ZJHGameUI::stUpdateMoney( quint32 _goldCoin, quint32 _silverCoin )
 	mMainWidget->findChild<QLabel*>("silverCoinText")->setText(QString("%1").arg(_silverCoin));
 }
 
-void ZJHGameUI::StMySeat( quint32 _seatID )
+void ZJHGameUI::StMyTable( quint32 _tableID, quint32 _seatID )
 {
+	mMyTableID = _tableID;
 	mMySeatID = _seatID;
 }
 
@@ -272,4 +278,50 @@ void ZJHGameUI::updatePlayerInfo( Seat _seat, quint32 _protraitID, QString& _nic
 	mPortrait[_seat]->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_protraitID)));
 	mNickName[_seat]->setText(_nickName);
 	mCoin[_seat]->setText(QString("%1").arg(_money));
+}
+
+void ZJHGameUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player )
+{
+	//if ( _res != GS_NO_ERR  )
+	//	return;
+	if ( _res != WS_NO_ERR )
+		return;
+	if ( _tableID != mMyTableID )
+		return;
+
+	updatePlayerInfo((Seat)convertSeatID(_seatID), _player.mProtraitID, _player.mNickName, _player.mTableMoney);
+
+}
+
+void ZJHGameUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer _player )
+{
+	if ( _res != GS_NO_ERR  )
+		return;
+	//if ( _res != WS_NO_ERR )
+	//	return;
+	if ( _tableID != mMyTableID )
+		return;
+
+	for ( int i = 0; i<MAX_PLAYER; i++ )
+	{
+		if ( mNickName[i]->text() == _player.mNickName )
+		{
+			mPortrait[i]->setPixmap(QPixmap(QString(":/Images/Media/nobodyImage.png")));
+			mNickName[i]->setText("Unknown");
+			mCoin[i]->setText(QString("0"));
+
+			Hide();
+			return;
+		}
+	}
+}
+
+quint32 ZJHGameUI::convertSeatID( quint32 _serverID )
+{
+	return (_serverID - mMySeatID + 6) % MAX_PLAYER;
+}
+
+void ZJHGameUI::stBtn_Back()
+{
+	mGameServer->SendLeaveTable(mMyTableID);
 }

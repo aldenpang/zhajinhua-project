@@ -47,6 +47,7 @@ public:
 
 	void SendJoinTable(quint32 _tableID, quint32 _seatID);
 
+	void SendLeaveTable(quint32 _tableID);
 protected:
 private:
 	void processLogin(Packet& _packet);

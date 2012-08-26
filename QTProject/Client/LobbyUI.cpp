@@ -6,6 +6,8 @@
 #include "BaseDialog.h"
 
 LobbyUI::LobbyUI()
+: mMyTableID(0)
+, mMySeatID(0)
 {
 
 }
@@ -128,6 +130,8 @@ void LobbyUI::StShowLobby( QVector<RoomInfo> _gameList )
 
 void LobbyUI::stTableJoin( quint32 _tableID, quint32 _seatID )
 {
+	mMyTableID = _tableID;
+	mMySeatID = _seatID;
 	mGameServer->SendJoinTable(_tableID, _seatID);
 }
 
@@ -174,13 +178,18 @@ void LobbyUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID
 {
 	if ( _res == GS_NO_ERR || _res == WS_NO_ERR )
 	{
+		if ( mMyTableID != _tableID || mMySeatID != _seatID )
+		{
+			LOG_D_INFO(QString("Player joined table(not SELF)[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
+			return;
+		}
 		LOG_D_INFO(QString("Player joined table[%1], seat[%2], res[%3]").arg(_tableID).arg(_seatID).arg(_res));
 		QMap<quint32, Table*>::iterator itr = mTableList.find(_tableID);
 		if ( itr != mTableList.end() )
 		{
 			itr.value()->UpdatePlayer(_seatID, _player);
 			emit SiShowGame();
-			emit SiMySeat(_seatID);
+			emit SiMyTable(_tableID, _seatID);
 		}
 		else
 			LOG_D_ERR(QString("Can not find table id[%1]").arg(_tableID));
