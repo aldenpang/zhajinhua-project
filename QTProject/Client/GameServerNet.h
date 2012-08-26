@@ -42,12 +42,10 @@ public:
 	virtual void PacketHandler(Packet& _packet);
 
 	void SendLoginGS(QString& _userName, QString& _pwd, int _isTempLogin=false);
-
 	void SendBringMoney( quint32 _tableID, quint32 _seatID, quint32 _money );
-
 	void SendJoinTable(quint32 _tableID, quint32 _seatID);
-
 	void SendLeaveTable(quint32 _tableID);
+	void RequestTableInfo();
 protected:
 private:
 	void processLogin(Packet& _packet);
