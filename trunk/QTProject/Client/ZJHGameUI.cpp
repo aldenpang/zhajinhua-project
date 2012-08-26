@@ -106,6 +106,7 @@ void ZJHGameUI::regConnections()
 	connect(mGameServer, SIGNAL(SiFollow(int, int, int, int)), this, SLOT(stFollow(int, int, int, int)));
 	connect(mGameServer, SIGNAL(SiSyncStart()), this, SLOT(stSyncStart()));
 	connect(mGameServer, SIGNAL(SiUpdateMoney(quint32, quint32)), this, SLOT(stUpdateMoney(quint32, quint32)));
+	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
 
 }
 
@@ -216,10 +217,10 @@ void ZJHGameUI::reset()
 
 void ZJHGameUI::stSyncStart()
 {
-	//LOG_INFO("<-= MSG_CL_GS_SYNC_START =->");
-	//Packet p;
-	//p.SetMessage(MSG_CL_GS_SYNC_START);
-	//mGameServer->Send(&p);
+	LOG_D_INFO("<-= MSG_CL_GS_SYNC_START =->");
+	Packet p;
+	p.SetMessage(MSG_CL_GS_SYNC_START);
+	mGameServer->Send(&p);
 }
 
 void ZJHGameUI::stDropBaseChip( int _baseChip )
@@ -276,6 +277,10 @@ void ZJHGameUI::StMyTable( quint32 _tableID, quint32 _seatID )
 
 void ZJHGameUI::updatePlayerInfo( Seat _seat, quint32 _protraitID, QString& _nickName, quint32 _money )
 {
+	if ( _nickName == EMPTY_SEAT )
+	{
+		return;
+	}
 	mPortrait[_seat]->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_protraitID)));
 	mNickName[_seat]->setText(_nickName);
 	mCoin[_seat]->setText(QString("%1").arg(_money));
@@ -337,6 +342,7 @@ void ZJHGameUI::StShow()
 	Show();
 
 	refreshPlayerMoney();
+	mGameServer->RequestTableInfo();
 }
 
 void ZJHGameUI::refreshPlayerMoney()
@@ -345,4 +351,18 @@ void ZJHGameUI::refreshPlayerMoney()
 	Packet p;
 	p.SetMessage(MSG_CL_GS_QUERY_MONEY);
 	mGameServer->Send(&p);
+}
+
+void ZJHGameUI::stTableList( QMap<int, TableData> _tableList )
+{
+	QMap<int, TableData>::iterator itr = _tableList.find(mMyTableID);
+	if ( itr != _tableList.end() )
+	{
+		QMap<int, TablePlayer> players = itr.value().GetPlayers();
+		QMap<int, TablePlayer>::iterator pItr;
+		for ( pItr = players.begin(); pItr != players.end(); pItr++)
+		{
+			updatePlayerInfo((Seat)convertSeatID(pItr.key()), pItr.value().mProtraitID, pItr.value().mNickName, pItr.value().mTableMoney);
+		}		
+	}
 }

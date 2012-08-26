@@ -126,7 +126,7 @@ void GameServerNet::processTableInfo( Packet& _packet )
 			int seatID = 0;
 			_packet>>seatID;
 			TablePlayer p;
-			_packet>>p.mNickName>>p.mProtraitID;
+			_packet>>p.mNickName>>p.mProtraitID>>p.mTableMoney;
 			table.AddPlayer(seatID, p);
 		}
 		tables.insert(i, table);
@@ -234,5 +234,12 @@ void GameServerNet::SendLeaveTable( quint32 _tableID )
 	Packet p;
 	p.SetMessage(MSG_CL_GS_TABLE_LEAVE);
 	p<<_tableID;
+	Send(&p);
+}
+
+void GameServerNet::RequestTableInfo()
+{
+	Packet p;
+	p.SetMessage(MSG_CL_GS_TABLE_INFO);
 	Send(&p);
 }

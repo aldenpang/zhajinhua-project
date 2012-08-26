@@ -67,6 +67,9 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pa
 	case MSG_CL_GS_QUERY_MONEY:
 		processQueryMoney(_incomeSocket, _packet);
 		break;
+	case MSG_CL_GS_TABLE_INFO:
+		processRequestTableInfo(_incomeSocket, _packet);
+		break;
 	default:
 		break;
 	}
@@ -287,6 +290,7 @@ void ZjhGameServer::sendTableInfo( GSPlayerPtr _to )
 				{
 					p<<player->GetNickName();
 					p<<player->GetProtraitID();
+					p<<getPlayerMoney(player);
 					LOG_INFO(QString("Player[%1] seat at [%2]").arg(player->GetNickName()).arg(pItr.key()));
 				}
 			}		
@@ -580,4 +584,13 @@ void ZjhGameServer::handlePlayerLeave( GSPlayerPtr _player )
 	p.SetMessage(MSG_GS_BC_TABLE_LEAVE);
 	p<<res<<from<<_player->GetNickName()<<_player->GetProtraitID();
 	Broadcast(&p);
+}
+
+void ZjhGameServer::processRequestTableInfo( ISocketInstancePtr _incomeSocket, Packet& _packet )
+{
+	GSPlayerPtr p = findPlayer(_incomeSocket);
+	if ( p )
+	{
+		sendTableInfo(p);
+	}
 }
