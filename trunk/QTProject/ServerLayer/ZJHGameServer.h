@@ -58,6 +58,8 @@ private:
 	void deletePlayer(GSPlayerPtr _player);
 	int bringMoney_userToTable(GSPlayerPtr _player, quint32 _tableID, quint32 _seatID, quint32 _money);
 	int bringMoney_tableToUser(GSPlayerPtr _player);
+	int bringMoney_silverToTable(GSPlayerPtr _player, quint32 _tableID, quint32 _seatID, quint32 _money);
+	int bringMoney_tableToSilver(GSPlayerPtr _player);
 
 	quint32 getPlayerMoney(GSPlayerPtr _player);
 	void handlePlayerLeave(GSPlayerPtr _player);

@@ -424,7 +424,7 @@ void Table::calculateBalance()
 {
 	GSPlayerPtr winner = WhoWin();
 	// transfer money from loser's table wallet to winner's table wallet, and transfer rake
-	int rake = mCurrentBid*RAKE;
+	int rake = mCurrentBid*(DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN?RAKE:0);
 	int afterRake = mCurrentBid-rake;
 	winner->SetTableWalletMoney(winner->GetTableWalletMoney()+afterRake);
 	LOG_D_INFO(QString("[%1] wins [%2] coins(after rake)").arg(winner->GetNickName()).arg(afterRake));
