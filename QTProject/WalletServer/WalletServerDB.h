@@ -22,6 +22,9 @@ enum TransactionType
 	TableToUser,
 	TableToRake,
 
+	SilverToTable,
+	TableToSilver,
+
 	TT_Total,
 };
 
@@ -49,6 +52,8 @@ public:
 
 	int InsertTransactionRecord( TransactionType _type, quint32 _amount, quint32 _fromID, quint32 _toID, quint32 _result );
 
+	int QuerySilverWallet(quint32 _accountID, quint32& _coinAmount);
+	int UpdateSilverWallet(quint32 _accountID, quint32 _coinAmount);
 protected:
 private:
 };

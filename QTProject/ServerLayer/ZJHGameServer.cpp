@@ -172,7 +172,16 @@ void ZjhGameServer::processLogin( ISocketInstancePtr _incomeSocket, Packet& _pac
 				else
 					LOG_ERR(QString("QueryUserWalletID Failed! Reason:[%1]").arg(res));
 
-				player->SetSilverCoin(1000);
+				quint32 silverCoin = 0;
+				res = WalletDB.QuerySilverWallet(player->GetAccountID(), silverCoin);
+				if ( res == WS_NO_ERR )
+				{
+					LOG_INFO(QString("Player[%1] 's silver coin is [%2]").arg(player->GetAccountID()).arg(silverCoin));
+					player->SetSilverCoin(silverCoin);
+				}
+				else
+					LOG_ERR(QString("QuerySilverWallet Failed! Reason:[%1]").arg(res));
+
 
 				// TODO: send player info
 			}
@@ -193,7 +202,15 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 	if ( player )
 	{
 		// leave player if he sit in other table
-		int res = bringMoney_tableToUser(player);
+		int res = 0;
+		if ( DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN )
+		{
+			res = bringMoney_tableToUser(player);
+		}
+		else if ( DATACENTER.mRoomInfo.mMoneyType == SILVER_COIN )
+		{
+			res = bringMoney_tableToSilver(player);
+		}
 		if ( res != WS_NO_ERR )
 		{
 			LOG_ERR(QString("Error when bringMoney_tableToUser, err[%1]").arg(res));
@@ -217,7 +234,14 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 			int res = WalletDB.InsertTableWallet(mRoomInfo.mRoomID, tableID, seatID);
 			if ( res == WS_NO_ERR )
 			{
-				res = bringMoney_userToTable(player, tableID, seatID, mRoomInfo.mMinMoney);
+				if ( DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN )
+				{
+					res = bringMoney_userToTable(player, tableID, seatID, mRoomInfo.mMinMoney);
+				}
+				else if ( DATACENTER.mRoomInfo.mMoneyType == SILVER_COIN )
+				{
+					res = bringMoney_silverToTable(player, tableID, seatID, player->GetSilverCoin());
+				}
 				if ( res == WS_NO_ERR )
 				{
 					// send the result of join table
@@ -454,10 +478,81 @@ SEND_RESULT:
 	return res;
 }
 
+int ZjhGameServer::bringMoney_silverToTable( GSPlayerPtr _player, quint32 _tableID, quint32 _seatID, quint32 _money )
+{
+	// check user wallet to ensure money is enough
+	quint32 userWalletMoney = 0;
+	int res = WalletDB.QuerySilverWallet(_player->GetAccountID(), userWalletMoney);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("Player[%1] query silver wallet error[%2]").arg(_player->GetAccountID()).arg(res));
+		goto SEND_RESULT;
+	}
+
+	if ( _money > userWalletMoney )
+	{
+		LOG_ERR(QString("Player[%1]'s user wallet has[%1], but want bring[%2] money").arg(userWalletMoney).arg(_money));
+		res = ERR_WS_USERWALLET_NOT_ENOUGH;
+		goto SEND_RESULT;
+	}
+
+	// withdraw money from user wallet to table wallet
+	res = WalletDB.UpdateTableWallet(mRoomInfo.mRoomID, _tableID, _seatID, _money);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("Player[%1] withdraw from user wallet error[%2]").arg(_player->GetAccountID()).arg(res));
+		goto SEND_RESULT;
+	}
+	res = WalletDB.UpdateSilverWallet(_player->GetAccountID(), userWalletMoney-_money);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("Player[%1] desposit to table wallet error[%2]").arg(_player->GetAccountID()).arg(res));
+		goto SEND_RESULT;
+	}
+
+	_player->SetTableWalletMoney(_money);
+
+	// query table wallet id
+	quint32 tableWalletID = 0;
+	res = WalletDB.QueryTableWalletID(mRoomInfo.mRoomID, _tableID, _seatID, tableWalletID);
+	if ( res == WS_NO_ERR )
+	{
+		_player->SetTableWalletID(tableWalletID);
+	}
+	else
+	{
+		LOG_ERR(QString("Can not find Player[%1]'s table wallet id, err[%2]").arg(_player->GetAccountID()).arg(res));
+	}
+
+	// record transaction
+	res = WalletDB.InsertTransactionRecord(SilverToTable, _money, _player->GetUserWalletID(), _player->GetTableWalletID(), res);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("InsertTransactionRecord Error[%1]").arg(res));
+		return res;
+	}
+
+	res = WS_NO_ERR;
+SEND_RESULT:
+	// send result
+	Packet p;
+	p.SetMessage(MSG_GS_CL_BRING_MONEY);
+	p<<res;
+	_player->Send(&p);
+
+	return res;
+}
+
+
 void ZjhGameServer::SetRoomInfo( RoomInfo _info )
 {
 	DATACENTER.mRoomInfo = _info;
 	mRoomInfo = _info; 
+
+	LOG_INFO(QString("///////////////////////////////////"));
+	LOG_INFO(QString("RoomInfo:MoneyType[%1] MinMoney[%2] RoomName[%3] RoomID[%4] GameType[%5]").arg(mRoomInfo.mMoneyType==GOLD_COIN?QString("Gold Coin"):QString("Silver Coin"))
+		.arg(mRoomInfo.mMinMoney).arg(mRoomInfo.mName).arg(mRoomInfo.mRoomID).arg(mRoomInfo.mType==ZJH?QString("ZJH"):QString("OtherGame")));
+	LOG_INFO(QString("///////////////////////////////////"));
 }
 
 void ZjhGameServer::processGiveUp( ISocketInstancePtr _incomeSocket, Packet& _packet )
@@ -543,6 +638,54 @@ int ZjhGameServer::bringMoney_tableToUser( GSPlayerPtr _player )
 
 	return res;
 }
+int ZjhGameServer::bringMoney_tableToSilver( GSPlayerPtr _player )
+{
+	quint32 tableID = 0;
+	quint32 seatID = 0;
+	int res = TABLE.GetPlayerCurrentTableInfo(_player, tableID, seatID);
+	if ( res != GS_NO_ERR )
+	{
+		LOG_WARN(QString("GetPlayerCurrentTableInfo Error[%1]").arg(res));
+		return res;
+	}
+	quint32 tableWalletMoney = 0;
+	res = WalletDB.QueryTableWallet(mRoomInfo.mRoomID, tableID, seatID, tableWalletMoney);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("QueryTableWallet Error[%1]").arg(res));
+		return res;
+	}
+	quint32 userWalletMoney = 0;
+	res = WalletDB.QuerySilverWallet(_player->GetAccountID(), userWalletMoney);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("QuerySilverWallet Error[%1]").arg(res));
+		return res;
+	}
+	res = WalletDB.UpdateSilverWallet(_player->GetAccountID(), tableWalletMoney+userWalletMoney);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("UpdateUserWallet Error[%1]").arg(res));
+		return res;
+	}
+	res = WalletDB.UpdateTableWallet(mRoomInfo.mRoomID, tableID, seatID, 0);
+	if ( res != WS_NO_ERR )
+	{
+		LOG_ERR(QString("QueryTableWallet Error[%1]").arg(res));
+		return res;
+	}
+	LOG_INFO(QString("Player[%1] transfer money[%2] from tableWallet to silverWallet successful, userWallet[%3]")
+		.arg(_player->GetNickName()).arg(tableWalletMoney).arg(tableWalletMoney+userWalletMoney));
+
+	//res = WalletDB.InsertTransactionRecord(TableToSilver, tableWalletMoney, _player->GetUserWalletID(), _player->GetTableWalletID(), res);
+	//if ( res != WS_NO_ERR )
+	//{
+	//	LOG_ERR(QString("InsertTransactionRecord Error[%1]").arg(res));
+	//	return res;
+	//}
+
+	return res;
+}
 
 quint32 ZjhGameServer::getPlayerMoney( GSPlayerPtr _player )
 {
@@ -558,7 +701,15 @@ quint32 ZjhGameServer::getPlayerMoney( GSPlayerPtr _player )
 
 void ZjhGameServer::handlePlayerLeave( GSPlayerPtr _player )
 {
-	int res = bringMoney_tableToUser(_player);
+	int res = 0;
+	if ( DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN )
+	{
+		res = bringMoney_tableToUser(_player);
+	}
+	else if ( DATACENTER.mRoomInfo.mMoneyType == SILVER_COIN )
+	{
+		res = bringMoney_tableToSilver(_player);
+	}
 	if ( res != WS_NO_ERR )
 	{
 		LOG_ERR(QString("Error when bringMoney_tableToUser, err[%1]").arg(res));

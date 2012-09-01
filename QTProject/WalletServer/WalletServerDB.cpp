@@ -167,6 +167,12 @@ int WalletServerDB::InsertTransactionRecord( TransactionType _type, quint32 _amo
 	case TableToRake:
 		typeStr = "TableToRake";
 		break;
+	case SilverToTable:
+		typeStr = "SilverToTable";
+		break;
+	case TableToSilver:
+		typeStr = "TableToSilver";
+		break;
 	default:
 		typeStr = "UnknowTransactionType";
 		break;
@@ -221,6 +227,49 @@ int WalletServerDB::QueryTableWalletID( quint32 _roomID, quint32 _tableID, quint
 		return ERR_WS_WALLET_NOT_FOUND;
 	else
 		return ERR_WS_MULTI_RESULT;
+
+	return WS_NO_ERR;
+}
+
+int WalletServerDB::QuerySilverWallet( quint32 _accountID, quint32& _coinAmount )
+{
+	QString sql = QString("select * from SilverWallet where AccountID=%1").arg(_accountID);
+	QSqlQuery q = mDb.exec(sql);
+
+	int records = 0;
+	int silverCoin = 0;
+	while (q.next()) 
+	{
+		silverCoin = q.value(2).toInt();
+		records++;
+		if ( records >=2 )
+			break;
+	}
+
+	if( records == 1 )
+	{
+		_coinAmount = silverCoin;
+		return WS_NO_ERR;
+	}
+	else if(records < 1 )
+	{
+		LOG_D_ERR(QString("Exception when query silver coin! record=[%1]").arg(records));
+		return ERR_WS_WALLET_NOT_FOUND;
+	}
+	else
+	{
+		LOG_D_ERR(QString("Exception when query silver coin! record=[%1]").arg(records));
+		return ERR_WS_MULTI_RESULT;
+	}
+
+	return WS_NO_ERR;
+}
+
+int WalletServerDB::UpdateSilverWallet( quint32 _accountID, quint32 _coinAmount )
+{
+	QString sql = QString("update SilverWallet set Amount=%1 where AccountID=%2")
+		.arg(_coinAmount).arg(_accountID);
+	QSqlQuery q = mDb.exec(sql);
 
 	return WS_NO_ERR;
 }
