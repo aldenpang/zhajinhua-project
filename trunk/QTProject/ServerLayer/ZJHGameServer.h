@@ -46,6 +46,7 @@ private:
 	
 private slots:
 	void stRefershTables();
+	void stTimeout();
 private:
 	QTimer mTimer;
 	QList<GSPlayerPtr> mPlayerList;

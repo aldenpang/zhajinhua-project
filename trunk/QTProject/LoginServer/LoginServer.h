@@ -16,11 +16,15 @@
 
 class LoginServer : public IServerLayer
 {
+	Q_OBJECT
 public:
 	LoginServer();
 	virtual void PacketHandler(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	virtual void ClientDisconnected(ISocketInstancePtr _clientSocket);
-protected:
+
+private slots:
+	void stTimer();
+
 private:
 	void processClientLogin(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processClientLoginAnonymous(ISocketInstancePtr _incomeSocket, Packet& _packet);
@@ -30,6 +34,7 @@ private:
 
 	quint32 getTempAccountID();
 	QString getTempNickname();
+	QTimer mTimer;
 };
 
 #endif // LoginServer_h__
