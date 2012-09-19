@@ -19,7 +19,7 @@ class MoveItem : public QGraphicsObject
 Q_OBJECT
 signals:
 public:
-	MoveItem();
+	MoveItem(const QString &_filename);
 	~MoveItem();
 
 	void Move(quint32 _delay, quint32 _duration, QPoint _to);

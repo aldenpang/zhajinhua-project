@@ -160,6 +160,15 @@ void GameServerNet::processStartGame( Packet& _packet )
 {
 	TableInfo info;
 	_packet>>info.mBaseChip>>info.mTopChip>>info.mDealerSeat;
+	quint32 playerAmount = 0;
+	_packet>>playerAmount;
+	for ( int i = 0; i<playerAmount; i++ )
+	{
+		TablePlayer p;
+		quint32 seat;
+		_packet>>seat>>p.mNickName>>p.mProtraitID>>p.mTableMoney;
+		info.mPlayers[seat] = p;
+	}
 
 	emit SiStartGame(info);
 }

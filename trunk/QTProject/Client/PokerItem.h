@@ -19,7 +19,7 @@ public:
 
 	void ToBack();
 
-	void ToFront();
+	void ToFront(quint32 _id);
 
 protected:
 private:

@@ -20,6 +20,8 @@
 
 struct TablePlayer
 {
+	PROPERTY(QVector<int>, Pokers);
+
 	quint32 mProtraitID;
 	QString mNickName;
 	quint32 mTableMoney;

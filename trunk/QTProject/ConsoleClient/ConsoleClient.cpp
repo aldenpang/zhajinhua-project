@@ -2,6 +2,7 @@
 #include "LoginServerNet.h"
 #include "GameServerNet.h"
 #include "LogModule.h"
+#include <QCoreApplication>
 
 ConsoleClient::ConsoleClient()
 : mCurrentPlayer(0)
@@ -125,6 +126,7 @@ void ConsoleClient::stGSConnected()
 void ConsoleClient::stGSDisconnected()
 {
 	LOG_ERR("Game Server Disconnected");
+	QCoreApplication::quit();
 }
 
 void ConsoleClient::stTableList( QMap<int, TableData> _tables )

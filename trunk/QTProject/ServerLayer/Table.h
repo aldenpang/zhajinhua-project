@@ -99,6 +99,8 @@ private:
 	void gameEnd();
 
 	void calculateBalance();
+
+	quint32 getPlayerMoney( GSPlayerPtr _player );
 };
 
 #endif // Table_h__

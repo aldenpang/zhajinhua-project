@@ -3,10 +3,10 @@
 
 
 PokerItem::PokerItem( quint32 _id )
-: Poker(_id)
+: MoveItem(QString(":/Pokers/Media/Pokers/%1.png").arg(_id))
+, Poker(_id)
 {
 	mImagePath = QString(":/Pokers/Media/Pokers/%1.png").arg(_id);
-	setPixmap(mImagePath);
 	//setScale(0.7);
 }
 
@@ -20,7 +20,7 @@ void PokerItem::ToBack()
 	setPixmap(":/Pokers/Media/Pokers/back.png");
 }
 
-void PokerItem::ToFront()
+void PokerItem::ToFront(quint32 _id)
 {
-	setPixmap(mImagePath);
+	setPixmap(QString(":/Pokers/Media/Pokers/%1.png").arg(_id));
 }
