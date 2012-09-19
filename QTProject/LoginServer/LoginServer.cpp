@@ -12,6 +12,8 @@ using namespace SharedData;
 LoginServer::LoginServer()
 {
 	//quint32 tempAccID = getTempAccountID();
+	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stTimer()));
+	mTimer.start(10000);
 }
 
 
@@ -147,3 +149,7 @@ quint32 LoginServer::getTempAccountID()
 	return temp.toUInt();
 }
 
+void LoginServer::stTimer()
+{
+	LOG_INFO("LoginServer is Running");
+}

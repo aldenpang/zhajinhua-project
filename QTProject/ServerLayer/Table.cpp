@@ -67,12 +67,9 @@ int Table::Leave( int _seatID )
 	{
 		mPlayers.erase(itr);
 
-		if ( mPlayers.size() == 1 )
+		if ( mPlayers.size() <= 1 )
 		{
 			mState = TS_WAITING;
-		}
-		else if ( mPlayers.isEmpty() )
-		{
 			reset();
 		}
 		return GS_NO_ERR;

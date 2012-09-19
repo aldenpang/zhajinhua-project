@@ -16,9 +16,9 @@ ZjhGameServer::ZjhGameServer()
 : IServerLayer()
 , mTempAccountID(1000000)
 {
-	mTimer.setInterval(REFRESH_INTERVAL*1000);
-	//mTimer.start();
-	//connect(&mTimer, SIGNAL(timeout()), this, SLOT(stRefershTables()));
+	mTimer.setInterval(10000);
+	mTimer.start();
+	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stTimeout()));
 
 	//GSPlayer player(NULL);
 	//QString name = "adsf";
@@ -744,4 +744,9 @@ void ZjhGameServer::processRequestTableInfo( ISocketInstancePtr _incomeSocket, P
 	{
 		sendTableInfo(p);
 	}
+}
+
+void ZjhGameServer::stTimeout()
+{
+	LOG_INFO(QString("GameServer is Running, [%1] players online").arg(mPlayerList.size()));
 }
