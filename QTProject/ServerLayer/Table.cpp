@@ -154,6 +154,7 @@ void Table::shuffle(bool _print)
 	 	LOG_D_INFO(buff);
 	}
 
+	// 洗牌算法：从原有序列中取出第一个的指针，再pop掉第一个，然后把刚才取出的指针再插入一个随机位置，理论上可以洗任意次
 	for ( int i = 0; i<MAX_POKERS_ZJH; i++ )
 	{
 		int rand = qrand() % MAX_POKERS_ZJH;
@@ -181,6 +182,14 @@ void Table::startTable()
 	Packet p;
 	p.SetMessage(MSG_GS_CL_START_GAME);
 	p<<BASE_CHIP<<TOP_CHIP<<mDealerSeat;
+	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
+	p<<(quint32)players.size();
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for (itr = players.begin(); itr != players.end(); itr++)
+	{
+		GSPlayerPtr ppp = itr.value().staticCast<GSPlayer>();
+		p<<(quint32)itr.key()<<ppp->GetNickName()<<ppp->GetProtraitID()<<getPlayerMoney(ppp);
+	}
 	broadcastToAll(&p);
 	LOG_D_INFO("Broadcast MSG_GS_CL_START_GAME");
 
@@ -191,6 +200,18 @@ void Table::startTable()
 
 	// 重置已经ready的玩家
 	mReadyAmount = 0;
+}
+
+quint32 Table::getPlayerMoney( GSPlayerPtr _player )
+{
+	if ( DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN )
+	{
+		return _player->GetTableWalletMoney();
+	}else if ( DATACENTER.mRoomInfo.mMoneyType == SILVER_COIN )
+	{
+		return _player->GetSilverCoin();
+	}else
+		return 0;
 }
 
 void Table::broadcastToPlaying( Packet* _p )

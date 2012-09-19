@@ -26,6 +26,7 @@
         <file>Media/bg.png</file>
         <file>Media/btn_login.png</file>
         <file>Media/bringMoneyBG.png</file>
+        <file>Media/chip.png</file>
     </qresource>
     <qresource prefix="/Pokers">
         <file>Media/Pokers/0.png</file>

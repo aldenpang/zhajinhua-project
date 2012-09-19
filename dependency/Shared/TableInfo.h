@@ -12,6 +12,7 @@
 
 #ifndef TableInfo_h__
 #define TableInfo_h__
+#include "TableData.h"
 
 class TableInfo
 {
@@ -19,6 +20,7 @@ public:
 	int mBaseChip;
 	int mTopChip;
 	int mDealerSeat;
+	QMap<int, TablePlayer>  mPlayers;
 
 	TableInfo()
 	{

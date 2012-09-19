@@ -689,10 +689,10 @@ int ZjhGameServer::bringMoney_tableToSilver( GSPlayerPtr _player )
 
 quint32 ZjhGameServer::getPlayerMoney( GSPlayerPtr _player )
 {
-	if ( mRoomInfo.mMoneyType == GOLD_COIN )
+	if ( DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN )
 	{
 		return _player->GetTableWalletMoney();
-	}else if ( mRoomInfo.mMoneyType == SILVER_COIN )
+	}else if ( DATACENTER.mRoomInfo.mMoneyType == SILVER_COIN )
 	{
 		return _player->GetSilverCoin();
 	}else

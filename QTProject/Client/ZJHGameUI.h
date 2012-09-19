@@ -23,6 +23,7 @@ enum Seat
 
 	TOTAL,
 };
+class MoveItem;
 class PokerItem;
 class GameServerNet;
 class ZJHGameUI : public BaseUI
@@ -80,14 +81,25 @@ private:
 	QLabel* mCoin[MAX_PLAYER];
 	QLabel* mCoinLogo[MAX_PLAYER];
 
-	QVector<PokerItem*> mPokers;
-	QVector<PokerItem*> mLeftPokers;
+	//QVector<PokerItem*> mPokers;
+	QMap<int, QVector<PokerItem*>> mPokers;
+	//QVector<PokerItem*> mLeftPokers;
+
+	QVector<MoveItem*>	mChips;	// 所有筹码都是5分的，所有钱数都应该是5分的倍数
+
+	QMap<int, TablePlayer> mPlayers;		// int is server seat id
 
 private:
 	void reset();
-	void updatePlayerInfo(Seat _seat, quint32 _protraitID, QString& _nickName, quint32 _money);
+	void updatePlayerInfo(Seat _seat, TablePlayer& _player);
+	void resetPlayerInfo(Seat _seat);
 	quint32 convertSeatID(quint32 _serverID);
 	void refreshPlayerMoney();
+	void addChip(quint32 _money);
+	void hideChips();
+	void showPokers(quint32 _seatID);
+	void hidePokers();
+	
 };
 
 #endif

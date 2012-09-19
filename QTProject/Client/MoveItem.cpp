@@ -3,10 +3,12 @@
 #include <QPropertyAnimation>
 #include <QPainter>
 
-MoveItem::MoveItem()
+MoveItem::MoveItem(const QString &_filename)
 : mDuration(0)
 , mTo(QPoint(0, 0))
 {
+	setPixmap(_filename);
+
 	mAnimation = new QPropertyAnimation(this, "pos");
 	mAnimation->setEasingCurve(QEasingCurve::OutQuint);
 

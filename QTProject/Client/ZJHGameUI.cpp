@@ -5,10 +5,12 @@
 #include "GameServerNet.h"
 
 QPoint gTableCenter = QPoint(360, 220);
-QPoint gPokerPos[MAX_PLAYER][MAX_PLAYER] = {{QPoint(300, 360), QPoint(550, 220), QPoint(300, 60), QPoint(110, 220)}, 
-											{QPoint(550, 220), QPoint(300, 60), QPoint(110, 220), QPoint(300, 360)}, 
-											{QPoint(300, 60), QPoint(110, 220), QPoint(300, 360), QPoint(550, 220)}, 
-											{QPoint(110, 220), QPoint(300, 360), QPoint(550, 220), QPoint(300, 60)}};
+//QPoint gPokerPos[MAX_PLAYER][MAX_PLAYER] = {{QPoint(300, 360), QPoint(550, 220), QPoint(300, 60), QPoint(110, 220)}, 
+											//{QPoint(550, 220), QPoint(300, 60), QPoint(110, 220), QPoint(300, 360)}, 
+											//{QPoint(300, 60), QPoint(110, 220), QPoint(300, 360), QPoint(550, 220)}, 
+											//{QPoint(110, 220), QPoint(300, 360), QPoint(550, 220), QPoint(300, 60)}};
+
+QPoint gPokerPos[MAX_PLAYER] = {QPoint(300, 60), QPoint(550, 220), QPoint(300, 360), QPoint(110, 220)};
 quint32 gPokerGap = 20;
 QPoint gLeftPoker = QPoint(20, 20);
 
@@ -64,7 +66,27 @@ void ZJHGameUI::Init()
 	HideShuffleAni();
 	//ShowShuffleAni();
 	
-	//int amount = MAX_HAND_POKER*MAX_PLAYER;
+
+	int amount = MAX_HAND_POKER*MAX_PLAYER;
+	int playerIdx = 0;
+	QVector<PokerItem*> v;
+	for ( int i = 0; i<amount; i++ )
+	{
+		PokerItem* item = new PokerItem(0);
+		item->setZValue(i);
+		item->setPos(gPokerPos[playerIdx].x()+gPokerGap*(i%MAX_HAND_POKER), gPokerPos[playerIdx].y());
+		item->ToBack();
+		item->hide();
+		mScene->addItem(item);
+		v.push_back(item);
+
+		if ( v.size() == MAX_HAND_POKER )
+		{
+			mPokers.insert(playerIdx, v);
+			v.clear();	// 存入mPokers时是值传递，这里clear了应该不影响下一个的值
+			playerIdx++;
+		}
+	}
 
 	//for ( int i = 0; i<amount; i++ )
 	//{
@@ -88,6 +110,7 @@ void ZJHGameUI::Init()
 
 	//ShowDistributeAni(0, 1);
 
+	//addChip(1000);
 }
 
 void ZJHGameUI::regConnections()
@@ -135,54 +158,54 @@ void ZJHGameUI::HideShuffleAni()
 
 void ZJHGameUI::ShowDistributeAni( quint32 _dealerIdx, quint32 _absentIdx1/*=-1*/, quint32 _absentIdx2/*=-1*/ )
 {
-	if ( _dealerIdx >= MAX_PLAYER || _dealerIdx < 0 )
-		return;
+	//if ( _dealerIdx >= MAX_PLAYER || _dealerIdx < 0 )
+	//	return;
 
-	if ( _absentIdx1 == 0 || _absentIdx2 == 0 )
-		return;
-	
-	QPoint* pos = gPokerPos[_dealerIdx];
-	int posIdx = 0;
-	int gap = 0;
-	for ( int i = 0; i<mPokers.size(); i++, posIdx++ )
-	{
-		// 如果当前发牌的player不在，就跳到下一家发牌，本来发给他的牌要push到mLeftPokers中等待收走
-		if ( posIdx == _absentIdx1 || posIdx == _absentIdx2 )
-		{
-			mLeftPokers.push_back(mPokers[i]);
-			continue;
-		}
-		
-		if ( i != 0 && i %  MAX_PLAYER == 0 )
-		{
-			gap++;
-			posIdx = 0;
-		}
+	//if ( _absentIdx1 == 0 || _absentIdx2 == 0 )
+	//	return;
+	//
+	//QPoint* pos = gPokerPos[_dealerIdx];
+	//int posIdx = 0;
+	//int gap = 0;
+	//for ( int i = 0; i<mPokers.size(); i++, posIdx++ )
+	//{
+	//	// 如果当前发牌的player不在，就跳到下一家发牌，本来发给他的牌要push到mLeftPokers中等待收走
+	//	if ( posIdx == _absentIdx1 || posIdx == _absentIdx2 )
+	//	{
+	//		mLeftPokers.push_back(mPokers[i]);
+	//		continue;
+	//	}
+	//	
+	//	if ( i != 0 && i %  MAX_PLAYER == 0 )
+	//	{
+	//		gap++;
+	//		posIdx = 0;
+	//	}
 
-		mPokers[i]->Move(150*i, 1000, QPoint(pos[posIdx].x()+gPokerGap*gap, pos[posIdx].y()));
-	}
-	
-	QTimer::singleShot(150*MAX_PLAYER*MAX_HAND_POKER, this, SLOT(stMoveLeftPokers()));
+	//	mPokers[i]->Move(150*i, 1000, QPoint(pos[posIdx].x()+gPokerGap*gap, pos[posIdx].y()));
+	//}
+	//
+	//QTimer::singleShot(150*MAX_PLAYER*MAX_HAND_POKER, this, SLOT(stMoveLeftPokers()));
 }
 
 void ZJHGameUI::ShowPreShuffleAni()
 {
-	for ( int i = 0; i<mPokers.size(); i++ )
-	{
-		mPokers[i]->Move(50*i, 1000, gTableCenter);
-	}
-	for ( int i = 0; i<mLeftPokers.size(); i++ )
-	{
-		mLeftPokers[i]->Move(50*i, 1000, gTableCenter);
-	}
+	//for ( int i = 0; i<mPokers.size(); i++ )
+	//{
+	//	mPokers[i]->Move(50*i, 1000, gTableCenter);
+	//}
+	//for ( int i = 0; i<mLeftPokers.size(); i++ )
+	//{
+	//	mLeftPokers[i]->Move(50*i, 1000, gTableCenter);
+	//}
 }
 
 void ZJHGameUI::stMoveLeftPokers()
 {
-	for ( int i = 0; i<mLeftPokers.size(); i++ )
-	{
-		mLeftPokers[i]->Move(50*i, 1000, gLeftPoker);
-	}
+	//for ( int i = 0; i<mLeftPokers.size(); i++ )
+	//{
+	//	mLeftPokers[i]->Move(50*i, 1000, gLeftPoker);
+	//}
 }
 
 void ZJHGameUI::StStartGame( TableInfo _tableInfo )
@@ -193,6 +216,18 @@ void ZJHGameUI::StStartGame( TableInfo _tableInfo )
 	// update table info
 	mTableInfo = _tableInfo;
 
+	QMap<int, TablePlayer>::iterator itr;
+	for ( itr = mTableInfo.mPlayers.begin(); itr != mTableInfo.mPlayers.end(); itr++ )
+	{
+		if ( SETTINGS.GetPlayer().GetNickName() == itr.value().mNickName )
+			// 在这里重新设置一次
+			mMySeatID = itr.key();
+	}
+
+	for ( itr = mTableInfo.mPlayers.begin(); itr != mTableInfo.mPlayers.end(); itr++ )
+	{
+		updatePlayerInfo((Seat)itr.key(), itr.value());
+	}
 }
 
 void ZJHGameUI::reset()
@@ -213,6 +248,15 @@ void ZJHGameUI::reset()
 			mCoinLogo[i]->setPixmap(QPixmap(QString(":/Images/Media/goldCoin.png")));
 		}
 	}
+
+	hidePokers();
+	hideChips();
+	mPlayers.clear();
+
+	for ( int i = 0; i<MAX_PLAYER; i++ )
+	{
+		resetPlayerInfo((Seat)i);
+	}
 }
 
 void ZJHGameUI::stSyncStart()
@@ -225,12 +269,29 @@ void ZJHGameUI::stSyncStart()
 
 void ZJHGameUI::stDropBaseChip( int _baseChip )
 {
-
+	// _baseChip是一个人投的底注数量
+	//ShowDistributeAni(mTableInfo.mDealerSeat);
+	addChip(mTableInfo.mBaseChip*mPlayers.size());
 }
 
 void ZJHGameUI::stDistribute( QVector<int> _pokers )
 {
+	// 设置自己的手牌
+	mPlayers[mMySeatID].SetPokers(_pokers);
 
+	// 显示所有人的手牌
+	QMap<int, TablePlayer>::iterator itr;
+	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
+	{
+		showPokers(convertSeatID(itr.key()));
+	}
+
+	// 显示自己的手牌
+	for ( int i = 0; i<MAX_HAND_POKER; i++ )
+	{
+		quint32 dd = convertSeatID(mMySeatID);
+		mPokers[convertSeatID(mMySeatID)].value(i)->ToFront(_pokers[i]);
+	}
 }
 
 void ZJHGameUI::stCurrentPlayer( int _currentPlayer )
@@ -275,15 +336,18 @@ void ZJHGameUI::StMyTable( quint32 _tableID, quint32 _seatID )
 	mMySeatID = _seatID;
 }
 
-void ZJHGameUI::updatePlayerInfo( Seat _seat, quint32 _protraitID, QString& _nickName, quint32 _money )
+void ZJHGameUI::updatePlayerInfo( Seat _seat, TablePlayer& _player )
 {
-	if ( _nickName == EMPTY_SEAT )
+	if ( _player.mNickName == EMPTY_SEAT )
 	{
 		return;
 	}
-	mPortrait[_seat]->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_protraitID)));
-	mNickName[_seat]->setText(_nickName);
-	mCoin[_seat]->setText(QString("%1").arg(_money));
+	quint32 dd = convertSeatID(_seat);
+	mPortrait[convertSeatID(_seat)]->setPixmap(QPixmap(QString(":/Portraits/Media/Portrait/%1.png").arg(_player.mProtraitID)));
+	mNickName[convertSeatID(_seat)]->setText(_player.mNickName);
+	mCoin[convertSeatID(_seat)]->setText(QString("%1").arg(_player.mTableMoney));
+
+	mPlayers.insert(_seat, _player);
 }
 
 void ZJHGameUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player )
@@ -295,8 +359,7 @@ void ZJHGameUI::stTableJoinResult( quint32 _res, quint32 _tableID, quint32 _seat
 	if ( _tableID != mMyTableID )
 		return;
 
-	updatePlayerInfo((Seat)convertSeatID(_seatID), _player.mProtraitID, _player.mNickName, _player.mTableMoney);
-
+	updatePlayerInfo((Seat)_seatID, _player);
 }
 
 void ZJHGameUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer _player )
@@ -312,14 +375,17 @@ void ZJHGameUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer 
 	{
 		if ( mNickName[i]->text() == _player.mNickName )
 		{
-			mPortrait[i]->setPixmap(QPixmap(QString(":/Images/Media/nobodyImage.png")));
-			mNickName[i]->setText("Unknown");
-			mCoin[i]->setText(QString("0"));
+			resetPlayerInfo((Seat)i);
 
 			// if player is self, hide game
-			if ( _player.mNickName == SETTINGS.GetPlayer().GetNickName() )
+			//if ( _player.mNickName == SETTINGS.GetPlayer().GetNickName() )
+			//{
+			//	Hide();
+			//}
+			QMap<int, TablePlayer>::iterator itr = mPlayers.find(i);
+			if ( itr != mPlayers.end() )
 			{
-				Hide();
+				mPlayers.erase(itr);
 			}
 			return;
 		}
@@ -328,21 +394,29 @@ void ZJHGameUI::stTableLeaveResult( quint32 _res, quint32 _tableID, TablePlayer 
 
 quint32 ZJHGameUI::convertSeatID( quint32 _serverID )
 {
+	// 客户端的id顺序跟server端一致，只是显示的时候将自己固定显示在最下面，其他人依次顺时针旋转
+	// 顺序是按照顺时针方向，上0，右1，下2，左3
+	//	   [0]
+	//[3]		[1]
+	//	   [2]
 	return (_serverID - mMySeatID + 6) % MAX_PLAYER;
 }
 
 void ZJHGameUI::stBtn_Back()
 {
 	mGameServer->SendLeaveTable(mMyTableID);
+
+	reset();
+
+	Hide();
 }
 
 void ZJHGameUI::StShow()
 {
-	reset();
 	Show();
 
 	refreshPlayerMoney();
-	mGameServer->RequestTableInfo();
+	//mGameServer->RequestTableInfo();
 }
 
 void ZJHGameUI::refreshPlayerMoney()
@@ -355,14 +429,71 @@ void ZJHGameUI::refreshPlayerMoney()
 
 void ZJHGameUI::stTableList( QMap<int, TableData> _tableList )
 {
-	QMap<int, TableData>::iterator itr = _tableList.find(mMyTableID);
-	if ( itr != _tableList.end() )
+	//QMap<int, TableData>::iterator itr = _tableList.find(mMyTableID);
+	//if ( itr != _tableList.end() )
+	//{
+	//	QMap<int, TablePlayer> players = itr.value().GetPlayers();
+	//	QMap<int, TablePlayer>::iterator pItr;
+	//	for ( pItr = players.begin(); pItr != players.end(); pItr++)
+	//	{
+	//		updatePlayerInfo((Seat)pItr.key(), pItr.value());
+	//	}		
+	//}
+}
+
+void ZJHGameUI::addChip( quint32 _money )
+{
+	int chipAmount = _money / 5;
+	for ( int i = 0; i<chipAmount; i++ )
 	{
-		QMap<int, TablePlayer> players = itr.value().GetPlayers();
-		QMap<int, TablePlayer>::iterator pItr;
-		for ( pItr = players.begin(); pItr != players.end(); pItr++)
-		{
-			updatePlayerInfo((Seat)convertSeatID(pItr.key()), pItr.value().mProtraitID, pItr.value().mNickName, pItr.value().mTableMoney);
-		}		
+		MoveItem* chip = new MoveItem(":/Images/Media/chip.png");
+		// 分布在围绕中心+-100个像素的范围内，z轴随机
+		chip->setPos(gTableCenter.x()+(qrand()%2?1:-1)*(qrand()%100), gTableCenter.y()+(qrand()%2?1:-1)*(qrand()%100));
+		chip->setZValue(qrand()%100);
+		mScene->addItem(chip);
+		mChips.push_back(chip);
 	}
+	
+}
+
+void ZJHGameUI::showPokers( quint32 _seatID )
+{
+	// show pokers
+	QMap<int, QVector<PokerItem*>>::iterator itr = mPokers.find(_seatID);
+	if ( itr != mPokers.end() )
+	{
+		for ( int i = 0; i<MAX_HAND_POKER; i++ )
+		{
+			itr.value()[i]->show();
+			itr.value()[i]->ToBack();
+		}
+	}
+}
+
+void ZJHGameUI::hidePokers()
+{
+	QMap<int, QVector<PokerItem*>>::iterator itr;
+	for ( itr = mPokers.begin(); itr != mPokers.end(); itr++ )
+	{
+		for ( int i = 0; i < MAX_HAND_POKER; i++ )
+		{
+			itr.value()[i]->hide();
+		}
+	}
+}
+
+void ZJHGameUI::hideChips()
+{
+	for ( int i = 0; i<mChips.size(); i++ )
+	{
+		mScene->removeItem(mChips[i]);
+	}
+}
+
+void ZJHGameUI::resetPlayerInfo( Seat _seat )
+{
+	mPortrait[_seat]->setPixmap(QPixmap(QString(":/Images/Media/nobodyImage.png")));
+	mNickName[_seat]->setText("Unknown");
+	mCoin[_seat]->setText(QString("0"));
+
 }
