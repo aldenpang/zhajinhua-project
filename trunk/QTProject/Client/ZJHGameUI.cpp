@@ -117,6 +117,8 @@ void ZJHGameUI::regConnections()
 {
 	connect(mMainWidget->findChild<QPushButton*>("btn_quit"), SIGNAL(clicked()), this, SIGNAL(SiQuit()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), this, SLOT(stBtn_Back()));
+	connect(mMainWidget->findChild<QPushButton*>("btn_oper_1"), SIGNAL(clicked()), this, SLOT(stBtn_Follow()));
+	
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stUpdate()));
 
 	connect(mGameServer, SIGNAL(SiTableJoinResult(quint32, quint32, quint32, TablePlayer)), this, SLOT(stTableJoinResult(quint32, quint32, quint32, TablePlayer)));
@@ -125,7 +127,7 @@ void ZJHGameUI::regConnections()
 	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
 	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
-	connect(mGameServer, SIGNAL(SiTableEnd()), this, SLOT(stTableEnd()));
+	connect(mGameServer, SIGNAL(SiTableEnd(TableInfo)), this, SLOT(stTableEnd(TableInfo)));
 	connect(mGameServer, SIGNAL(SiFollow(int, int, int, int)), this, SLOT(stFollow(int, int, int, int)));
 	connect(mGameServer, SIGNAL(SiSyncStart()), this, SLOT(stSyncStart()));
 	connect(mGameServer, SIGNAL(SiUpdateMoney(quint32, quint32)), this, SLOT(stUpdateMoney(quint32, quint32)));
@@ -299,13 +301,31 @@ void ZJHGameUI::stCurrentPlayer( int _currentPlayer )
 
 }
 
-void ZJHGameUI::stTableEnd()
+void ZJHGameUI::stTableEnd(TableInfo _tableInfo)
 {
+	// update table info
+	mTableInfo = _tableInfo;
 
+	QMap<int, TablePlayer>::iterator itr;
+	for ( itr = mTableInfo.mPlayers.begin(); itr != mTableInfo.mPlayers.end(); itr++ )
+	{
+		if ( SETTINGS.GetPlayer().GetNickName() == itr.value().mNickName )
+			// 在这里重新设置一次
+			mMySeatID = itr.key();
+	}
+
+	for ( itr = mTableInfo.mPlayers.begin(); itr != mTableInfo.mPlayers.end(); itr++ )
+	{
+		updatePlayerInfo((Seat)itr.key(), itr.value());
+	}
 }
 
 void ZJHGameUI::stFollow( int _seatID, int _chip, int _currentPlayer, int _currentBid )
 {
+	addChip(_chip);
+
+	QLabel* totalCoin = mMainWidget->findChild<QLabel*>("totalCoin");
+	totalCoin->setText(QString("%1").arg(_currentBid));
 
 }
 
@@ -496,4 +516,13 @@ void ZJHGameUI::resetPlayerInfo( Seat _seat )
 	mNickName[_seat]->setText("Unknown");
 	mCoin[_seat]->setText(QString("0"));
 
+}
+
+void ZJHGameUI::stBtn_Follow()
+{
+	int chip = mTableInfo.mBaseChip;
+	Packet p;
+	p.SetMessage(MSG_CL_GS_FOLLOW);
+	p<<mMyTableID<<mMySeatID<<chip;
+	mGameServer->Send(&p);
 }

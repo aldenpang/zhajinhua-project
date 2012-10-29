@@ -201,14 +201,14 @@ void Table::startTable()
 
 quint32 Table::getPlayerMoney( GSPlayerPtr _player )
 {
-	if ( DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN )
-	{
+	//if ( DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN )
+	//{
 		return _player->GetTableWalletMoney();
-	}else if ( DATACENTER.mRoomInfo.mMoneyType == SILVER_COIN )
-	{
-		return _player->GetSilverCoin();
-	}else
-		return 0;
+	//}else if ( DATACENTER.mRoomInfo.mMoneyType == SILVER_COIN )
+	//{
+	//	return _player->GetSilverCoin();
+	//}else
+	//	return 0;
 }
 
 void Table::broadcastToPlaying( Packet* _p )
@@ -482,9 +482,19 @@ void Table::gameEnd()
 
 	calculateBalance();
 
-	Packet pp;
-	pp.SetMessage(MSG_GS_BC_TABLE_END);
-	broadcastToPlaying(&pp);
+	Packet p;
+	p.SetMessage(MSG_GS_BC_TABLE_END);
+	p<<BASE_CHIP<<TOP_CHIP<<mDealerSeat;
+	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
+	p<<(quint32)players.size();
+	QMap<int, ISocketInstancePtr>::iterator itr;
+	for (itr = players.begin(); itr != players.end(); itr++)
+	{
+		GSPlayerPtr ppp = itr.value().staticCast<GSPlayer>();
+		p<<(quint32)itr.key()<<ppp->GetNickName()<<ppp->GetProtraitID()<<getPlayerMoney(ppp);
+		LOG_D_INFO(QString("///////////// CurrentPlayerMoney: [%1] has [%2]").arg(ppp->GetNickName()).arg(getPlayerMoney(ppp)));
+	}
+	broadcastToPlaying(&p);
 
 	reset();
 

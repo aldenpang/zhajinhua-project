@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>bgWidget</class>
  <widget class="QWidget" name="bgWidget">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -36,41 +39,37 @@ QLabel
 	color:rgb(255,255,255);
 }
 
-QPushButton[objectName=&quot;btn_back&quot;] 
+QGroupBox
 {
-border-image: url(:/Images/Media/btn_bg)0 312 0 0;
-color: rgb(255, 255, 255);
-}
-QPushButton[objectName=&quot;btn_back&quot;]::hover
-{ 
-border-image: url(:/Images/Media/btn_bg)0 156 0 156;
-color: rgb(255, 255, 255);
-}
-QPushButton[objectName=&quot;btn_back&quot;]::pressed
-{ 
-border-image: url(:/Images/Media/btn_bg)0 0 0 312;
-color: rgb(255, 255, 255);
+	color:rgb(255,255,255);
 }
 
-QPushButton[objectName=&quot;btn_quit&quot;] 
+QPushButton
 {
 border-image: url(:/Images/Media/btn_bg)0 312 0 0;
 color: rgb(255, 255, 255);
 }
-QPushButton[objectName=&quot;btn_quit&quot;]::hover
+QPushButton::hover
 { 
 border-image: url(:/Images/Media/btn_bg)0 156 0 156;
 color: rgb(255, 255, 255);
 }
-QPushButton[objectName=&quot;btn_quit&quot;]::pressed
+QPushButton::pressed
 { 
 border-image: url(:/Images/Media/btn_bg)0 0 0 312;
 color: rgb(255, 255, 255);
+}
+QPushButton::disabled
+{ 
+border-image: url(:/Images/Media/btn_bg)0 0 0 312;
+color: rgb(130, 130, 130);
 }
 
 QGraphicsView
 {
-	background-color: rgb(80, 0, 1);
+	/*background-color: rgb(80, 0, 1);*/
+	background-color: rgb(18, 85, 14);
+
 }
 
 </string>
@@ -118,6 +117,9 @@ QGraphicsView
    </property>
   </widget>
   <widget class="QGraphicsView" name="graphicsView">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>70</x>
@@ -523,6 +525,142 @@ QGraphicsView
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
+  </widget>
+  <widget class="QPushButton" name="btn_oper_1">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>590</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>跟注</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_oper_2">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>590</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>加注 +10</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_oper_3">
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>590</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>加注 +20</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_oper_4">
+   <property name="geometry">
+    <rect>
+     <x>850</x>
+     <y>590</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>加注 +30</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_oper_5">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>620</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>开牌</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_oper_6">
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>620</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>看牌</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_oper_7">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>620</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>放弃</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>540</y>
+     <width>161</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>下注信息</string>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>桌面总注：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="totalCoin">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>20</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>

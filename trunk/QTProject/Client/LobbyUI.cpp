@@ -69,8 +69,8 @@ void LobbyUI::regConnections()
 	QMap<quint32, Table*>::iterator itr;
 	for ( itr = mTableList.begin(); itr != mTableList.end(); itr++)
 	{
-		connect(*itr, SIGNAL(SiSit(quint32, quint32)), this, SLOT(stTableJoin(quint32, quint32)));
-		connect(*itr, SIGNAL(SiBringMoney(quint32, quint32, quint32)), this, SLOT(stBringMoney(quint32, quint32, quint32)));
+		connect(itr.value(), SIGNAL(SiSit(quint32, quint32)), this, SLOT(stTableJoin(quint32, quint32)));
+		connect(itr.value(), SIGNAL(SiBringMoney(quint32, quint32, quint32)), this, SLOT(stBringMoney(quint32, quint32, quint32)));
 	}
 
 	connect(mGameList, SIGNAL(SiConnectGS(RoomInfo)), this, SLOT(stConnectGS(RoomInfo)));
