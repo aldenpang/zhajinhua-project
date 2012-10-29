@@ -51,13 +51,14 @@ signals:
 	void SiQuit();
 private slots:
 	void stBtn_Back();
+	void stBtn_Follow();
 
 	void stUpdate();
 	void stMoveLeftPokers();
 	void stDropBaseChip(int _baseChip);
 	void stDistribute(QVector<int> _pokers);
 	void stCurrentPlayer(int _currentPlayer);
-	void stTableEnd();
+	void stTableEnd(TableInfo _tableInfo);
 	void stFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
 	void stSyncStart();
 	void stUpdateMoney( quint32 _goldCoin, quint32 _silverCoin );

@@ -240,7 +240,11 @@ void ZjhGameServer::processTableJoin( ISocketInstancePtr _incomeSocket, Packet& 
 				}
 				else if ( DATACENTER.mRoomInfo.mMoneyType == SILVER_COIN )
 				{
-					res = bringMoney_silverToTable(player, tableID, seatID, player->GetSilverCoin());
+					// query player's silver coin
+					quint32 silverCoin = 0;
+					WalletDB.QuerySilverWallet(player->GetAccountID(), silverCoin);
+					player->SetSilverCoin(silverCoin);		// update momery for insurance
+					res = bringMoney_silverToTable(player, tableID, seatID, silverCoin);
 				}
 				if ( res == WS_NO_ERR )
 				{
@@ -491,7 +495,7 @@ int ZjhGameServer::bringMoney_silverToTable( GSPlayerPtr _player, quint32 _table
 
 	if ( _money > userWalletMoney )
 	{
-		LOG_ERR(QString("Player[%1]'s user wallet has[%1], but want bring[%2] money").arg(userWalletMoney).arg(_money));
+		LOG_ERR(QString("Player[%1]'s user wallet has[%2], BUT want bring[%3] money").arg(_player->GetAccountID()).arg(userWalletMoney).arg(_money));
 		res = ERR_WS_USERWALLET_NOT_ENOUGH;
 		goto SEND_RESULT;
 	}
