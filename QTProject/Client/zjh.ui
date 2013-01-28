@@ -662,6 +662,70 @@ QGraphicsView
     </property>
    </widget>
   </widget>
+  <widget class="QLabel" name="clock_0">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>140</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/clock.gif</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="clock_1">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>340</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/clock.gif</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="clock_2">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>600</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/clock.gif</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="clock_3">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>350</y>
+     <width>32</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="client.qrc">:/Images/Media/clock.gif</pixmap>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="client.qrc"/>

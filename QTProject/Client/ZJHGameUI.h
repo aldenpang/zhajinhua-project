@@ -100,6 +100,8 @@ private:
 	void hideChips();
 	void showPokers(quint32 _seatID);
 	void hidePokers();
+	void hideAllClocks();
+	void showClock(int _seatID);
 	
 };
 
