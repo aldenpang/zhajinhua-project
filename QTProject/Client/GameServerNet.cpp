@@ -214,6 +214,14 @@ void GameServerNet::processTableEnd( Packet& _packet )
 		_packet>>seat>>p.mNickName>>p.mProtraitID>>p.mTableMoney;
 		info.mPlayers[seat] = p;
 	}
+	QMap<int, int> result;
+	for (int i = 0; i<MAX_PLAYER; i++)
+	{
+		int seatID = 0;
+		int coin = 0;
+		_packet>>seatID>>coin;
+		result.insert(seatID, coin);
+	}
 	emit SiTableEnd(info);
 }
 

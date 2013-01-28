@@ -441,7 +441,7 @@ void Table::GiveUp( int _seatID )
 	broadcastToPlaying(&p);
 }
 
-void Table::calculateBalance()
+void Table::calculateBalance(QMap<int, int>& _result)
 {
 	GSPlayerPtr winner = WhoWin();
 	// transfer money from loser's table wallet to winner's table wallet, and transfer rake
@@ -476,6 +476,20 @@ void Table::calculateBalance()
 	if ( res != WS_NO_ERR )
 		LOG_D_ERR(QString("InsertTransactionRecord error[%1]").arg(res));
 
+	// make result
+	QMap<int, ISocketInstancePtr>::iterator itr2;
+	for (itr2 = mPlayers.begin(); itr2 != mPlayers.end(); itr2++)
+	{
+		if (*itr2 == winner)
+		{
+			_result.insert(itr2.key(), afterRake);
+		}
+		else
+		{
+			_result.insert(itr2.key(), (itr2.value().staticCast<GSPlayer>()->GetAlreadyFollow()+BASE_CHIP)*-1);
+		}
+	}
+
 }
 
 void Table::gameEnd()
@@ -483,7 +497,8 @@ void Table::gameEnd()
 	LOG_D_INFO("###### GameEnd ######");
 	mState = TS_BALANCE;
 
-	calculateBalance();
+	QMap<int, int> result;
+	calculateBalance(result);
 
 	Packet p;
 	p.SetMessage(MSG_GS_BC_TABLE_END);
@@ -496,6 +511,10 @@ void Table::gameEnd()
 		GSPlayerPtr ppp = itr.value().staticCast<GSPlayer>();
 		p<<(quint32)itr.key()<<ppp->GetNickName()<<ppp->GetProtraitID()<<getPlayerMoney(ppp);
 		LOG_D_INFO(QString("///////////// CurrentPlayerMoney: [%1] has [%2]").arg(ppp->GetNickName()).arg(getPlayerMoney(ppp)));
+	}
+	for (int i = 0; i<MAX_PLAYER; i++)
+	{
+		p<<i<<result[i];
 	}
 	broadcastToPlaying(&p);
 

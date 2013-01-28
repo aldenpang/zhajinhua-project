@@ -98,7 +98,7 @@ private:
 
 	void gameEnd();
 
-	void calculateBalance();
+	void calculateBalance(QMap<int, int>& _result);
 
 	quint32 getPlayerMoney( GSPlayerPtr _player );
 };
