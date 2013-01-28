@@ -101,6 +101,8 @@ private:
 	void calculateBalance(QMap<int, int>& _result);
 
 	quint32 getPlayerMoney( GSPlayerPtr _player );
+
+	void broadcastCurrentPlayer();
 };
 
 #endif // Table_h__

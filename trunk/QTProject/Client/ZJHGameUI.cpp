@@ -88,6 +88,8 @@ void ZJHGameUI::Init()
 		}
 	}
 
+	hideAllClocks();
+
 	//for ( int i = 0; i<amount; i++ )
 	//{
 	//	PokerItem* item = new PokerItem(0);
@@ -298,7 +300,7 @@ void ZJHGameUI::stDistribute( QVector<int> _pokers )
 
 void ZJHGameUI::stCurrentPlayer( int _currentPlayer )
 {
-
+	showClock(_currentPlayer);
 }
 
 void ZJHGameUI::stTableEnd(TableInfo _tableInfo)
@@ -525,4 +527,26 @@ void ZJHGameUI::stBtn_Follow()
 	p.SetMessage(MSG_CL_GS_FOLLOW);
 	p<<mMyTableID<<mMySeatID<<chip;
 	mGameServer->Send(&p);
+}
+
+void ZJHGameUI::hideAllClocks()
+{
+	QLabel* clocks[MAX_PLAYER];
+	
+	for (int i= 0; i<MAX_PLAYER; i++)
+	{
+		clocks[i] = mMainWidget->findChild<QLabel*>(QString("clock_%1").arg(i));
+		clocks[i]->hide();
+	}
+	
+}
+
+void ZJHGameUI::showClock( int _seatID )
+{
+	hideAllClocks();
+	QLabel* clock = mMainWidget->findChild<QLabel*>(QString("clock_%1").arg(convertSeatID(_seatID)));
+	clock->show();
+	QMovie* movie = new QMovie(":/Images/Media/clock.gif");
+	clock->setMovie(movie);
+	movie->start();
 }

@@ -296,12 +296,9 @@ void Table::UpdateReadyState( int _seatID )
 			itr.value()->Send(&pp);
 			LOG_D_INFO(QString("Send Poker [%1] to Player[%2:%3]").arg(log).arg(itr.value()->IP()).arg(itr.value()->Port()));
 		}
-		// 指定当前玩家
-		Packet ppp;
-		ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
-		ppp<<mCurrentPlayer;
+		broadcastCurrentPlayer();
 		LOG_D_INFO(QString("CurrentPlayer[%1]").arg(mCurrentPlayer));
-		broadcastToPlaying(&ppp);
+		
 
 		mState = TS_PLAYING;
 	}
@@ -337,6 +334,7 @@ void Table::Follow( int _seatID, int _chip )
 	if(itr == players.end())
 		itr = players.begin();
 	mCurrentPlayer = itr.key();
+	broadcastCurrentPlayer();
 
 	// update chips
 	currentPlayer->SetTableWalletMoney(currentPlayer->GetTableWalletMoney()-_chip);
@@ -520,4 +518,12 @@ void Table::gameEnd()
 
 	reset();
 
+}
+
+void Table::broadcastCurrentPlayer()
+{
+	Packet ppp;
+	ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
+	ppp<<mCurrentPlayer;
+	broadcastToPlaying(&ppp);
 }
