@@ -332,8 +332,11 @@ void Table::Follow( int _seatID, int _chip )
 
 	LOG_D_INFO(QString("[%1] follow by [%2] chips").arg(_seatID).arg(_chip));
 	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
-	mCurrentPlayer++;
-	mCurrentPlayer = mCurrentPlayer % players.size();
+	QMap<int, ISocketInstancePtr>::iterator itr = players.find(mCurrentPlayer);
+	itr++;
+	if(itr == players.end())
+		itr = players.begin();
+	mCurrentPlayer = itr.key();
 
 	// update chips
 	currentPlayer->SetTableWalletMoney(currentPlayer->GetTableWalletMoney()-_chip);
