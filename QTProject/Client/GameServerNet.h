@@ -30,7 +30,7 @@ signals:
 	void SiDropBaseChip(int _baseChip);
 	void SiDistribute(QVector<int> _pokers);
 	void SiCurrentPlayer(int _currentPlayer);
-	void SiTableEnd(TableInfo _info);
+	void SiTableEnd(TableInfo _info, QMap<int, int> _res);
 	void SiFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
 	void SiSyncStart();
 	void SiUpdateMoney(quint32 _goldCoin, quint32 _silverCoin);

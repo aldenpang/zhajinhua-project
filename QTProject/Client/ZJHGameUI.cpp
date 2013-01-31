@@ -3,6 +3,7 @@
 #include "PokerItem.h"
 #include "Setting.h"
 #include "GameServerNet.h"
+#include "BalanceDialog.h"
 
 QPoint gTableCenter = QPoint(360, 220);
 //QPoint gPokerPos[MAX_PLAYER][MAX_PLAYER] = {{QPoint(300, 360), QPoint(550, 220), QPoint(300, 60), QPoint(110, 220)}, 
@@ -25,7 +26,7 @@ ZJHGameUI::ZJHGameUI(GameServerNet* _gameServerNet)
 
 ZJHGameUI::~ZJHGameUI()
 {
-
+	SAFE_DELETE(mBalanceDlg);
 }
 
 void ZJHGameUI::Init()
@@ -43,6 +44,8 @@ void ZJHGameUI::Init()
 
 	mTimer.setSingleShot(true);
 	mTimer.start(5000);
+
+	mBalanceDlg = new BalanceDialog(mMainWidget->findChild<QWidget*>("balance"));
 
 	QGraphicsView* view = mMainWidget->findChild<QGraphicsView*>("graphicsView");
 	mScene = new QGraphicsScene(0, 0, 
@@ -119,6 +122,7 @@ void ZJHGameUI::regConnections()
 {
 	connect(mMainWidget->findChild<QPushButton*>("btn_quit"), SIGNAL(clicked()), this, SIGNAL(SiQuit()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), this, SLOT(stBtn_Back()));
+	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), mBalanceDlg, SLOT(StHide()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_oper_1"), SIGNAL(clicked()), this, SLOT(stBtn_Follow()));
 	
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stUpdate()));
@@ -129,7 +133,7 @@ void ZJHGameUI::regConnections()
 	connect(mGameServer, SIGNAL(SiDropBaseChip(int)), this, SLOT(stDropBaseChip(int)));
 	connect(mGameServer, SIGNAL(SiDistribute(QVector<int>)), this, SLOT(stDistribute(QVector<int>)));
 	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
-	connect(mGameServer, SIGNAL(SiTableEnd(TableInfo)), this, SLOT(stTableEnd(TableInfo)));
+	connect(mGameServer, SIGNAL(SiTableEnd(TableInfo, QMap<int, int>)), this, SLOT(stTableEnd(TableInfo, QMap<int, int>)));
 	connect(mGameServer, SIGNAL(SiFollow(int, int, int, int)), this, SLOT(stFollow(int, int, int, int)));
 	connect(mGameServer, SIGNAL(SiSyncStart()), this, SLOT(stSyncStart()));
 	connect(mGameServer, SIGNAL(SiUpdateMoney(quint32, quint32)), this, SLOT(stUpdateMoney(quint32, quint32)));
@@ -303,7 +307,7 @@ void ZJHGameUI::stCurrentPlayer( int _currentPlayer )
 	showClock(_currentPlayer);
 }
 
-void ZJHGameUI::stTableEnd(TableInfo _tableInfo)
+void ZJHGameUI::stTableEnd(TableInfo _tableInfo, QMap<int, int> _res)
 {
 	// update table info
 	mTableInfo = _tableInfo;
@@ -320,6 +324,8 @@ void ZJHGameUI::stTableEnd(TableInfo _tableInfo)
 	{
 		updatePlayerInfo((Seat)itr.key(), itr.value());
 	}
+
+	mBalanceDlg->SetAndShow(_res, mPlayers);
 }
 
 void ZJHGameUI::stFollow( int _seatID, int _chip, int _currentPlayer, int _currentBid )
