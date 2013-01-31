@@ -7,6 +7,7 @@
     <file>client.ui</file>
   </qresource>
   <qresource prefix="/Images">
+    <file>Media/balanceBG.png</file>
     <file>Media/clock.gif</file>
     <file>Media/dialogBG.png</file>
     <file>Media/selectRoom.png</file>

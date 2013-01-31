@@ -222,7 +222,7 @@ void GameServerNet::processTableEnd( Packet& _packet )
 		_packet>>seatID>>coin;
 		result.insert(seatID, coin);
 	}
-	emit SiTableEnd(info);
+	emit SiTableEnd(info, result);
 }
 
 void GameServerNet::processFollow( Packet& _packet )
