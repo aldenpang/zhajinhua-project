@@ -52,6 +52,7 @@ namespace SharedData
 		MSG_CL_GS_GIVEUP,
 		MSG_GS_CL_GIVEUP,
 		MSG_GS_CL_CURRENT_BID,
+		MSG_CL_GS_CONTINUE,
 
 		MSG_GS_CL_SYNC_START,		// Sync request
 		MSG_CL_GS_SYNC_START,		// Sync response

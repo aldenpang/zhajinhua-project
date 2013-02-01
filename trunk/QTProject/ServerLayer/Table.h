@@ -68,6 +68,8 @@ public:
 
 	GSPlayerPtr WhoWin();
 
+	void Continue(int _seatID);
+
 protected:
 private:
 	QMap<int, ISocketInstancePtr>		mPlayers;	//<SeatID, PlayerInfo>
@@ -77,6 +79,7 @@ private:
 	int									mDealerSeat;
 	int									mCurrentPlayer;
 	int									mCurrentBid;
+	int									mContinueAmount;	// 记录有多少个玩家要继续，如果等于当前正在玩的玩家，则继续
 
 private:
 	void initPokers();

@@ -70,6 +70,9 @@ void ZjhGameServer::PacketHandler( ISocketInstancePtr _incomeSocket, Packet& _pa
 	case MSG_CL_GS_TABLE_INFO:
 		processRequestTableInfo(_incomeSocket, _packet);
 		break;
+	case MSG_CL_GS_CONTINUE:
+		processContinue(_incomeSocket, _packet);
+		break;
 	default:
 		break;
 	}
@@ -753,4 +756,13 @@ void ZjhGameServer::processRequestTableInfo( ISocketInstancePtr _incomeSocket, P
 void ZjhGameServer::stTimeout()
 {
 	LOG_INFO(QString("GameServer is Running, [%1] players online").arg(mPlayerList.size()));
+}
+
+void ZjhGameServer::processContinue( ISocketInstancePtr _incomeSocket, Packet& _packet )
+{
+	quint32 tableID=0;
+	quint32 seatID=0;
+	_packet>>tableID>>seatID;
+
+	TABLE.Continue(tableID, seatID);
 }

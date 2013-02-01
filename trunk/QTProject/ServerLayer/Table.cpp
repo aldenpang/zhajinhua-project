@@ -15,6 +15,7 @@ Table::Table()
 , mCurrentPlayer(0)
 , mCurrentBid(0)
 , mMinBringChip(0)
+, mContinueAmount(0)
 {
 	initPokers();
 }
@@ -346,8 +347,6 @@ void Table::Follow( int _seatID, int _chip )
 	if ( mCurrentBid >= TOP_CHIP )
 	{
 		gameEnd();
-
-		startTable();
 	}
 	else
 	{
@@ -367,6 +366,7 @@ void Table::reset()
 	mDealerSeat = 0;
 	mCurrentPlayer = 0;
 	mCurrentBid = 0;
+	mContinueAmount = 0;
 
 	// clean all player's poker
 	QMap<int, ISocketInstancePtr>::iterator itr;
@@ -526,4 +526,16 @@ void Table::broadcastCurrentPlayer()
 	ppp.SetMessage(MSG_GS_CL_CURRENT_PLAYER);
 	ppp<<mCurrentPlayer;
 	broadcastToPlaying(&ppp);
+}
+
+void Table::Continue( int _seatID )
+{
+	mContinueAmount++;
+	LOG_D_INFO(QString("#####Seat[%1]players want to continue, total[%2]#####").arg(_seatID).arg(mContinueAmount));
+	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
+	if ( mContinueAmount >= players.size() )
+	{
+		startTable();
+		mContinueAmount = 0;
+	}
 }

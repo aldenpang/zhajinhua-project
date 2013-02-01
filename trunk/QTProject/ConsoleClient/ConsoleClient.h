@@ -55,7 +55,7 @@ private slots:
 	void stDropBaseChip(int _baseChip);
 	void stDistribute(QVector<int> _pokers);
 	void stCurrentPlayer(int _currentPlayer);
-	void stTableEnd();
+	void stTableEnd(TableInfo _info, QMap<int, int> _res);
 	void stFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
 	void stSyncStart();
 
