@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2005 by Pang Shuo
+	Copyright (C) 2013 by Alden Pang
 	@date:	    2012-7-15   14:58
 	@file: 		LoginUI.h
-	@author:    Snake
+	@author:    Alden Pang
 	@desc:		Login界面的布局和逻辑
 *********************************************************************/
 

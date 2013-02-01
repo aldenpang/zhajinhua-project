@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2012 by Pang Shuo
+	Copyright (C) 2012 by Alden Pang
 	@date:	    13:8:2012   22:51
 	@file: 		BaseDialog.h
-	@author:    Pang Shuo
+	@author:    Alden Pang
 	@desc:		
 *********************************************************************/
 

@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2005 by Pang Shuo
+	Copyright (C) 2013 by Alden Pang
 	@date:	    2012-1-20   16:03
 	@file: 		LogModule.h
-	@author:    Snake
+	@author:    Alden Pang
 	@desc:		
 *********************************************************************/
 #ifndef _LOGMODULE_H_

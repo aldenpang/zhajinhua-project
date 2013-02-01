@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2012 by Pang Shuo
+	Copyright (C) 2012 by Alden Pang
 	@date:	    18:8:2012   13:43
 	@file: 		WalletDB.h
-	@author:    Pang Shuo
+	@author:    Alden Pang
 	@desc:		
 *********************************************************************/
 

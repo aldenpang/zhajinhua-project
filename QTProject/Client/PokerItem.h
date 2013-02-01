@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2012 by Pang Shuo
+	Copyright (C) 2012 by Alden Pang
 	@date:	    29:7:2012   15:04
 	@file: 		PokerItem.h
-	@author:    Pang Shuo
+	@author:    Alden Pang
 	@desc:		
 *********************************************************************/
 

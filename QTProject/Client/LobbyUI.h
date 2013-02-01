@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2005 by Pang Shuo
+	Copyright (C) 2013 by Alden Pang
 	@date:	    2012-7-15   15:12
 	@file: 		LobbyUI.h
-	@author:    Snake
+	@author:    Alden Pang
 	@desc:		Lobby界面的布局和逻辑
 *********************************************************************/
 
