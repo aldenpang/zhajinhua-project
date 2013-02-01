@@ -60,12 +60,10 @@ void ZJHGameUI::Init()
 		mCoinLogo[i] = mMainWidget->findChild<QLabel*>(QString("goldCoin_%1").arg(i));
 	}
 
-	mShuffleLabel = new QLabel(mMainWidget);
-	mShuffleLabel->move(gTableCenter+QPoint(50, 100));
+	mShuffleLabel = mMainWidget->findChild<QLabel*>("shuffleAni");
 	mShuffleAni = new QMovie(":/Images/Media/shuffle.gif");
 	mShuffleLabel->setMovie(mShuffleAni);
-	//HideShuffleAni();
-	ShowShuffleAni();
+	HideShuffleAni();
 	
 
 	int amount = MAX_HAND_POKER*MAX_PLAYER;
@@ -90,6 +88,9 @@ void ZJHGameUI::Init()
 	}
 
 	hideAllClocks();
+
+	mContinueTimer.setSingleShot(true);
+	mContinueTimer.setInterval(5000);
 
 	//for ( int i = 0; i<amount; i++ )
 	//{
@@ -124,6 +125,10 @@ void ZJHGameUI::regConnections()
 	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), this, SLOT(stBtn_Back()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), mBalanceDlg, SLOT(StHide()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_oper_1"), SIGNAL(clicked()), this, SLOT(stBtn_Follow()));
+	connect(mBalanceDlg, SIGNAL(SiBack()), this, SLOT(stBtn_Back()));
+	connect(mBalanceDlg, SIGNAL(SiContinue()), this, SLOT(stContinue()));
+	connect(&mContinueTimer, SIGNAL(timeout()), this, SLOT(stContinue()));
+	connect(&mContinueTimer, SIGNAL(timeout()), mBalanceDlg, SLOT(StHide()));
 	
 	connect(&mTimer, SIGNAL(timeout()), this, SLOT(stUpdate()));
 
@@ -161,7 +166,6 @@ void ZJHGameUI::ShowShuffleAni()
 void ZJHGameUI::HideShuffleAni()
 {
 	mShuffleLabel->hide();
-	mShuffleAni->stop();
 }
 
 void ZJHGameUI::ShowDistributeAni( quint32 _dealerIdx, quint32 _absentIdx1/*=-1*/, quint32 _absentIdx2/*=-1*/ )
@@ -269,10 +273,10 @@ void ZJHGameUI::reset()
 
 void ZJHGameUI::stSyncStart()
 {
+	ShowShuffleAni();
 	LOG_D_INFO("<-= MSG_CL_GS_SYNC_START =->");
-	Packet p;
-	p.SetMessage(MSG_CL_GS_SYNC_START);
-	mGameServer->Send(&p);
+	// start a timer to show shuffle ani for seconds, then send sync start
+	QTimer::singleShot(5000, this, SLOT(stRespSyncStart()));
 }
 
 void ZJHGameUI::stDropBaseChip( int _baseChip )
@@ -284,6 +288,8 @@ void ZJHGameUI::stDropBaseChip( int _baseChip )
 
 void ZJHGameUI::stDistribute( QVector<int> _pokers )
 {
+	//TODO: 发牌时会无故增加内存
+	HideShuffleAni();
 	// 设置自己的手牌
 	mPlayers[mMySeatID].SetPokers(_pokers);
 
@@ -326,6 +332,10 @@ void ZJHGameUI::stTableEnd(TableInfo _tableInfo, QMap<int, int> _res)
 	}
 
 	mBalanceDlg->SetAndShow(_res, mPlayers);
+	//QTimer::singleShot(5000, this, SLOT(stContinue()));// 如果没人按继续，则倒计时5秒继续	TODO:需要倒计时UI (这里应该用成员Timer，点Continue后应该销毁掉)
+	mContinueTimer.start();
+	hideAllClocks();
+	//TODO 需要锁住所有操作按钮
 }
 
 void ZJHGameUI::stFollow( int _seatID, int _chip, int _currentPlayer, int _currentBid )
@@ -555,4 +565,21 @@ void ZJHGameUI::showClock( int _seatID )
 	QMovie* movie = new QMovie(":/Images/Media/clock.gif");
 	clock->setMovie(movie);
 	movie->start();
+}
+
+void ZJHGameUI::stRespSyncStart()
+{
+	Packet p;
+	p.SetMessage(MSG_CL_GS_SYNC_START);
+	mGameServer->Send(&p);
+}
+
+void ZJHGameUI::stContinue()
+{
+	mContinueTimer.stop();
+
+	Packet p;
+	p.SetMessage(MSG_CL_GS_CONTINUE);
+	p<<mMyTableID<<mMySeatID;
+	mGameServer->Send(&p);
 }

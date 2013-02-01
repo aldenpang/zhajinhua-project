@@ -43,6 +43,7 @@ private:
 	void processGiveUp(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processQueryMoney(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	void processRequestTableInfo(ISocketInstancePtr _incomeSocket, Packet& _packet);
+	void processContinue(ISocketInstancePtr _incomeSocket, Packet& _packet);
 	
 private slots:
 	void stRefershTables();

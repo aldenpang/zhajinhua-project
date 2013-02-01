@@ -54,6 +54,7 @@ private slots:
 	void stBtn_Back();
 	void stBtn_Follow();
 
+	void stRespSyncStart();
 	void stUpdate();
 	void stMoveLeftPokers();
 	void stDropBaseChip(int _baseChip);
@@ -66,6 +67,7 @@ private slots:
 	void stTableJoinResult(quint32 _res, quint32 _tableID, quint32 _seatID, TablePlayer _player);
 	void stTableLeaveResult(quint32 _res, quint32 _tableID, TablePlayer _player);
 	void stTableList(QMap<int, TableData> _tableList);
+	void stContinue();
 
 protected:
 private:
@@ -83,6 +85,7 @@ private:
 	QLabel* mNickName[MAX_PLAYER];
 	QLabel* mCoin[MAX_PLAYER];
 	QLabel* mCoinLogo[MAX_PLAYER];
+	QTimer mContinueTimer;
 
 	//QVector<PokerItem*> mPokers;
 	QMap<int, QVector<PokerItem*>> mPokers;

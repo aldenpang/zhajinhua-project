@@ -19,6 +19,9 @@ public:
 	~BalanceDialog();
 
 	void SetAndShow( QMap<int, int>& _result, QMap<int, TablePlayer>& _players );
+signals:
+	void SiBack();
+	void SiContinue();
 public slots:
 	void StHide();
 protected:

@@ -45,6 +45,8 @@ public:
 
 	int GetPlayerCurrentTableInfo(ISocketInstancePtr _player, quint32& _tableID, quint32& _seatID);
 
+	void Continue(quint32 _tableID, quint32 _seatID);
+
 protected:
 private:
 	QMap<int, Table*> mTables;
