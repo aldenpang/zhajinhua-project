@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2005 by Pang Shuo
+	Copyright (C) 2013 by Alden Pang
 	@date:	    2011-12-31   14:43
 	@file: 		IServerLayer.h
-	@author:    Snake
+	@author:    Alden Pang
 	@desc:		
 *********************************************************************/
 #ifndef _ISERVERLAYER_H_

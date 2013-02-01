@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2012 by Pang Shuo
+	Copyright (C) 2012 by Alden Pang
 	@date:	    22:7:2012   9:57
 	@file: 		Table.h
-	@author:    Pang Shuo
+	@author:    Alden Pang
 	@desc:		
 *********************************************************************/
 

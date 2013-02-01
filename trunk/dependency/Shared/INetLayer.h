@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2005 by Pang Shuo
+	Copyright (C) 2013 by Alden Pang
 	@date:	    2011-12-19   15:27
 	@file: 		INetLayer.h
-	@author:    Snake
+	@author:    Alden Pang
 	@desc:		
 *********************************************************************/
 #ifndef _INETLAYER_H_

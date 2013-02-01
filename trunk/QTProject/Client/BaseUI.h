@@ -1,8 +1,8 @@
 /********************************************************************
-	Copyright (C) 2005 by Pang Shuo
+	Copyright (C) 2013 by Alden Pang
 	@date:	    2012-7-15   15:16
 	@file: 		BaseUI.h
-	@author:    Snake
+	@author:    Alden Pang
 	@desc:		Login\Lobby\GameµÄ³éÏó²ã
 *********************************************************************/
 
