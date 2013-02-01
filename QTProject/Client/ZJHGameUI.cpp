@@ -40,8 +40,6 @@ void ZJHGameUI::Init()
 		mMainWidget->setWindowFlags(Qt::FramelessWindowHint);
 	}
 
-	regConnections();
-
 	mTimer.setSingleShot(true);
 	mTimer.start(5000);
 
@@ -66,8 +64,8 @@ void ZJHGameUI::Init()
 	mShuffleLabel->move(gTableCenter+QPoint(50, 100));
 	mShuffleAni = new QMovie(":/Images/Media/shuffle.gif");
 	mShuffleLabel->setMovie(mShuffleAni);
-	HideShuffleAni();
-	//ShowShuffleAni();
+	//HideShuffleAni();
+	ShowShuffleAni();
 	
 
 	int amount = MAX_HAND_POKER*MAX_PLAYER;
@@ -116,6 +114,8 @@ void ZJHGameUI::Init()
 	//ShowDistributeAni(0, 1);
 
 	//addChip(1000);
+
+	regConnections();
 }
 
 void ZJHGameUI::regConnections()
