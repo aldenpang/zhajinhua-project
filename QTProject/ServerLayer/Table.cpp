@@ -318,8 +318,9 @@ void Table::Follow( int _seatID, int _chip )
 	GSPlayerPtr currentPlayer = mPlayers[mCurrentPlayer].staticCast<GSPlayer>();
 	if ( _chip > currentPlayer->GetTableWalletMoney() )
 	{
-		LOG_D_WARN(QString("SeatID[%1] has not enough money to follow").arg(_seatID));
+		LOG_D_WARN(QString("SeatID[%1] has not enough money to follow, force to giveup").arg(_seatID));
 		// TODO:Send deny message
+		GiveUp(_seatID);
 		return;
 	}
 	if ( currentPlayer->GetIsGiveUp() )
@@ -344,17 +345,16 @@ void Table::Follow( int _seatID, int _chip )
 	//if mCurrentBid is higher than TOP_CHIP, then turn to game end
 	mCurrentBid += _chip;
 	LOG_D_INFO(QString("CurrentBid[%1] CurrentPlayer[%2]").arg(mCurrentBid).arg(mCurrentPlayer));
+
+	// broadcast who follow how much
+	Packet p;
+	p.SetMessage(MSG_GS_CL_FOLLOW);
+	p<<_seatID<<_chip<<mCurrentPlayer<<mCurrentBid;
+	broadcastToPlaying(&p);
+	
 	if ( mCurrentBid >= TOP_CHIP )
 	{
 		gameEnd();
-	}
-	else
-	{
-		// broadcast who follow how much
-		Packet p;
-		p.SetMessage(MSG_GS_CL_FOLLOW);
-		p<<_seatID<<_chip<<mCurrentPlayer<<mCurrentBid;
-		broadcastToPlaying(&p);
 	}
 
 }
@@ -430,7 +430,6 @@ void Table::GiveUp( int _seatID )
 	if( notGiveUpAmount == 1 )
 	{
 		gameEnd();
-		startTable();
 	}
 	// broadcast
 	Packet p;
@@ -507,7 +506,8 @@ void Table::gameEnd()
 	for (itr = players.begin(); itr != players.end(); itr++)
 	{
 		GSPlayerPtr ppp = itr.value().staticCast<GSPlayer>();
-		p<<(quint32)itr.key()<<ppp->GetNickName()<<ppp->GetProtraitID()<<getPlayerMoney(ppp);
+		QList<PokerPtr> pokers = ppp->GetPokers();
+		p<<(quint32)itr.key()<<ppp->GetNickName()<<ppp->GetProtraitID()<<getPlayerMoney(ppp)<<pokers.at(0)->mID<<pokers.at(1)->mID<<pokers.at(2)->mID;
 		LOG_D_INFO(QString("///////////// CurrentPlayerMoney: [%1] has [%2]").arg(ppp->GetNickName()).arg(getPlayerMoney(ppp)));
 	}
 	for (int i = 0; i<MAX_PLAYER; i++)

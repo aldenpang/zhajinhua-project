@@ -64,5 +64,5 @@ void BalanceDialog::regConnections()
 	connect(mMain->findChild<QPushButton*>("blbtn_continue"), SIGNAL(clicked()), this, SLOT(StHide()));
 	connect(mMain->findChild<QPushButton*>("blbtn_continue"), SIGNAL(clicked()), this, SIGNAL(SiContinue()));
 	connect(mMain->findChild<QPushButton*>("blbtn_back"), SIGNAL(clicked()), this, SIGNAL(SiBack()));
-
+	connect(mMain->findChild<QPushButton*>("blbtn_back"), SIGNAL(clicked()), this, SLOT(StHide()));
 }
