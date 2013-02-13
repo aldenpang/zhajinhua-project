@@ -211,7 +211,15 @@ void GameServerNet::processTableEnd( Packet& _packet )
 	{
 		TablePlayer p;
 		quint32 seat;
-		_packet>>seat>>p.mNickName>>p.mProtraitID>>p.mTableMoney;
+		QVector<int> pokers;
+		int res[3]={0, 0, 0};
+		_packet>>seat>>p.mNickName>>p.mProtraitID>>p.mTableMoney>>res[0]>>res[1]>>res[2];
+		pokers.push_back(res[0]);
+		pokers.push_back(res[1]);
+		pokers.push_back(res[2]);
+
+		p.SetPokers(pokers);
+
 		info.mPlayers[seat] = p;
 	}
 	QMap<int, int> result;

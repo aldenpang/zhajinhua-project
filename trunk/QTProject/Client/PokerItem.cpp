@@ -18,9 +18,11 @@ PokerItem::~PokerItem()
 void PokerItem::ToBack()
 {
 	setPixmap(":/Pokers/Media/Pokers/back.png");
+	update();
 }
 
 void PokerItem::ToFront(quint32 _id)
 {
 	setPixmap(QString(":/Pokers/Media/Pokers/%1.png").arg(_id));
+	update();
 }

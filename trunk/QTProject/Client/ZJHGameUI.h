@@ -53,6 +53,7 @@ signals:
 private slots:
 	void stBtn_Back();
 	void stBtn_Follow();
+	void stBtn_test();
 
 	void stRespSyncStart();
 	void stUpdate();
@@ -103,11 +104,12 @@ private:
 	void refreshPlayerMoney();
 	void addChip(quint32 _money);
 	void hideChips();
-	void showPokers(quint32 _seatID);
+	void showPokers(quint32 _seatID, bool _isBackUp);		// _isBackUp 是否背面向上
 	void hidePokers();
 	void hideAllClocks();
 	void showClock(int _seatID);
-	
+	void lockOperBtn();
+	void unlockOperBtn();
 };
 
 #endif

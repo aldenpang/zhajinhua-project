@@ -125,6 +125,7 @@ void ZJHGameUI::regConnections()
 	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), this, SLOT(stBtn_Back()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), mBalanceDlg, SLOT(StHide()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_oper_1"), SIGNAL(clicked()), this, SLOT(stBtn_Follow()));
+	connect(mMainWidget->findChild<QPushButton*>("btn_oper_2"), SIGNAL(clicked()), this, SLOT(stBtn_test()));
 	connect(mBalanceDlg, SIGNAL(SiBack()), this, SLOT(stBtn_Back()));
 	connect(mBalanceDlg, SIGNAL(SiContinue()), this, SLOT(stContinue()));
 	connect(&mContinueTimer, SIGNAL(timeout()), this, SLOT(stContinue()));
@@ -283,7 +284,12 @@ void ZJHGameUI::stDropBaseChip( int _baseChip )
 {
 	// _baseChip是一个人投的底注数量
 	//ShowDistributeAni(mTableInfo.mDealerSeat);
-	addChip(mTableInfo.mBaseChip*mPlayers.size());
+
+	int base = mTableInfo.mBaseChip*mPlayers.size();
+	addChip(base);
+
+	QLabel* totalCoin = mMainWidget->findChild<QLabel*>("totalCoin");
+	totalCoin->setText(QString("%1").arg(base));
 }
 
 void ZJHGameUI::stDistribute( QVector<int> _pokers )
@@ -293,24 +299,29 @@ void ZJHGameUI::stDistribute( QVector<int> _pokers )
 	// 设置自己的手牌
 	mPlayers[mMySeatID].SetPokers(_pokers);
 
-	// 显示所有人的手牌
+	// 显示所有人的手牌（背面）
 	QMap<int, TablePlayer>::iterator itr;
 	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
 	{
-		showPokers(convertSeatID(itr.key()));
+		showPokers(itr.key(), true);
 	}
 
 	// 显示自己的手牌
-	for ( int i = 0; i<MAX_HAND_POKER; i++ )
-	{
-		quint32 dd = convertSeatID(mMySeatID);
-		mPokers[convertSeatID(mMySeatID)].value(i)->ToFront(_pokers[i]);
-	}
+	showPokers(mMySeatID, false);
+	//for ( int i = 0; i<MAX_HAND_POKER; i++ )
+	//{
+	//	quint32 dd = convertSeatID(mMySeatID);
+	//	mPokers[convertSeatID(mMySeatID)].value(i)->ToFront(_pokers[i]);
+	//}
 }
 
 void ZJHGameUI::stCurrentPlayer( int _currentPlayer )
 {
 	showClock(_currentPlayer);
+	if (_currentPlayer == mMySeatID)
+		unlockOperBtn();
+	else
+		lockOperBtn();
 }
 
 void ZJHGameUI::stTableEnd(TableInfo _tableInfo, QMap<int, int> _res)
@@ -324,6 +335,12 @@ void ZJHGameUI::stTableEnd(TableInfo _tableInfo, QMap<int, int> _res)
 		if ( SETTINGS.GetPlayer().GetNickName() == itr.value().mNickName )
 			// 在这里重新设置一次
 			mMySeatID = itr.key();
+		else
+		{
+			mPlayers[itr.key()].SetPokers(itr.value().GetPokers());
+			showPokers(itr.key(), false);
+		}
+
 	}
 
 	for ( itr = mTableInfo.mPlayers.begin(); itr != mTableInfo.mPlayers.end(); itr++ )
@@ -332,10 +349,9 @@ void ZJHGameUI::stTableEnd(TableInfo _tableInfo, QMap<int, int> _res)
 	}
 
 	mBalanceDlg->SetAndShow(_res, mPlayers);
-	//QTimer::singleShot(5000, this, SLOT(stContinue()));// 如果没人按继续，则倒计时5秒继续	TODO:需要倒计时UI (这里应该用成员Timer，点Continue后应该销毁掉)
 	mContinueTimer.start();
 	hideAllClocks();
-	//TODO 需要锁住所有操作按钮
+	lockOperBtn();
 }
 
 void ZJHGameUI::stFollow( int _seatID, int _chip, int _currentPlayer, int _currentBid )
@@ -494,16 +510,23 @@ void ZJHGameUI::addChip( quint32 _money )
 	
 }
 
-void ZJHGameUI::showPokers( quint32 _seatID )
+void ZJHGameUI::showPokers( quint32 _seatID, bool _isBackUp )
 {
 	// show pokers
-	QMap<int, QVector<PokerItem*>>::iterator itr = mPokers.find(_seatID);
+	QMap<int, QVector<PokerItem*>>::iterator itr = mPokers.find(convertSeatID(_seatID));
+	QVector<int> pokers = mPlayers[_seatID].GetPokers();
 	if ( itr != mPokers.end() )
 	{
 		for ( int i = 0; i<MAX_HAND_POKER; i++ )
 		{
+			if(_isBackUp)
+				itr.value()[i]->ToBack();
+			else
+			{
+				if(pokers.size() != 0)
+					itr.value()[i]->ToFront(pokers[i]);
+			}
 			itr.value()[i]->show();
-			itr.value()[i]->ToBack();
 		}
 	}
 }
@@ -582,4 +605,39 @@ void ZJHGameUI::stContinue()
 	p.SetMessage(MSG_CL_GS_CONTINUE);
 	p<<mMyTableID<<mMySeatID;
 	mGameServer->Send(&p);
+}
+
+void ZJHGameUI::lockOperBtn()
+{
+	for (int i = 1; i<8; i++)
+	{
+		QPushButton* btn = mMainWidget->findChild<QPushButton*>(QString("btn_oper_%1").arg(i));
+		if (btn)
+		{
+			btn->setEnabled(false);
+		}
+	}
+}
+
+void ZJHGameUI::unlockOperBtn()
+{
+	for (int i = 1; i<8; i++)
+	{
+		QPushButton* btn = mMainWidget->findChild<QPushButton*>(QString("btn_oper_%1").arg(i));
+		if (btn)
+		{
+			btn->setEnabled(true);
+		}
+	}
+}
+
+void ZJHGameUI::stBtn_test()
+{
+	QVector<int> testP;
+	testP.push_back(1);
+	testP.push_back(2);
+	testP.push_back(3);
+
+	mPlayers[1].SetPokers(testP);
+	showPokers(1, rand()%2==0?true:false);
 }

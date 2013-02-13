@@ -729,8 +729,8 @@ QGraphicsView
   <widget class="QWidget" name="balance" native="true">
    <property name="geometry">
     <rect>
-     <x>360</x>
-     <y>260</y>
+     <x>340</x>
+     <y>220</y>
      <width>317</width>
      <height>259</height>
     </rect>
