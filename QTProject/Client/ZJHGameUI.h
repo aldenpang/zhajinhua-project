@@ -53,6 +53,8 @@ signals:
 private slots:
 	void stBtn_Back();
 	void stBtn_Follow();
+	void stBtn_Giveup();
+
 	void stBtn_test();
 
 	void stRespSyncStart();
@@ -69,6 +71,7 @@ private slots:
 	void stTableLeaveResult(quint32 _res, quint32 _tableID, TablePlayer _player);
 	void stTableList(QMap<int, TableData> _tableList);
 	void stContinue();
+	void stGiveUp(int _seatID);
 
 protected:
 private:
@@ -110,6 +113,8 @@ private:
 	void showClock(int _seatID);
 	void lockOperBtn();
 	void unlockOperBtn();
+	void hideGiveUps();
+	void showGiveUp(int _seatID);
 };
 
 #endif

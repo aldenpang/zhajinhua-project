@@ -32,6 +32,7 @@ signals:
 	void SiCurrentPlayer(int _currentPlayer);
 	void SiTableEnd(TableInfo _info, QMap<int, int> _res);
 	void SiFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
+	void SiGiveUp(int _seatID);
 	void SiSyncStart();
 	void SiUpdateMoney(quint32 _goldCoin, quint32 _silverCoin);
 
@@ -61,6 +62,7 @@ private:
 	void processFollow(Packet& _packet);
 	void processSyncStart(Packet& _packet);
 	void processQueryMoney(Packet& _packet);
+	void processGiveUp(Packet& _packet);
 };
 
 #endif // GameServerNet_h__

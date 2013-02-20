@@ -241,7 +241,7 @@ void ConsoleClient::stCurrentPlayer( int _currentPlayer )
 		// follow after 1 second, can be a randomly number
 		//int ran = qrand() % 3 + 1;
 		int ran = 1;
-		QTimer::singleShot(ran * 1000, this, SLOT(stFollowByTimer()));
+		QTimer::singleShot(ran * 1000, this, SLOT(stActionByTimer()));
 	}
 }
 
@@ -260,14 +260,25 @@ void ConsoleClient::stTableEnd(TableInfo _info, QMap<int, int> _res)
 	mGameServer->Send(&p);
 }
 
-void ConsoleClient::stFollowByTimer()
+void ConsoleClient::stActionByTimer()
 {
-	int chip = 5;
-	Packet p;
-	p.SetMessage(MSG_CL_GS_FOLLOW);
-	p<<mMyTableID<<mMySeatID<<chip;
-	mGameServer->Send(&p);
-	LOG_INFO("#####Send [MSG_CL_GS_FOLLOW]########");
+	if ( rand()%3 == 0 )
+	{
+		Packet p;
+		p.SetMessage(MSG_CL_GS_GIVEUP);
+		p<<mMyTableID<<mMySeatID;
+		mGameServer->Send(&p);
+		LOG_INFO("#####Send [MSG_CL_GS_GIVEUP]########");
+	}
+	else
+	{
+		int chip = 5;
+		Packet p;
+		p.SetMessage(MSG_CL_GS_FOLLOW);
+		p<<mMyTableID<<mMySeatID<<chip;
+		mGameServer->Send(&p);
+		LOG_INFO("#####Send [MSG_CL_GS_FOLLOW]########");
+	}
 }
 
 void ConsoleClient::stFollow( int _seatID, int _chip, int _currentPlayer, int _currentBid )

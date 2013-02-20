@@ -59,7 +59,7 @@ private slots:
 	void stFollow(int _seatID, int _chip, int _currentPlayer, int _currentBid);
 	void stSyncStart();
 
-	void stFollowByTimer();
+	void stActionByTimer();	// 可能是跟，也可能是放弃
 protected:
 private:
 	LoginServerNet* mLoginServer;
