@@ -88,7 +88,7 @@ void ZJHGameUI::Init()
 	}
 
 	hideAllClocks();
-
+	hideGiveUps();
 	mContinueTimer.setSingleShot(true);
 	mContinueTimer.setInterval(5000);
 
@@ -126,6 +126,7 @@ void ZJHGameUI::regConnections()
 	connect(mMainWidget->findChild<QPushButton*>("btn_back"), SIGNAL(clicked()), mBalanceDlg, SLOT(StHide()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_oper_1"), SIGNAL(clicked()), this, SLOT(stBtn_Follow()));
 	connect(mMainWidget->findChild<QPushButton*>("btn_oper_2"), SIGNAL(clicked()), this, SLOT(stBtn_test()));
+	connect(mMainWidget->findChild<QPushButton*>("btn_oper_7"), SIGNAL(clicked()), this, SLOT(stBtn_Giveup()));
 	connect(mBalanceDlg, SIGNAL(SiBack()), this, SLOT(stBtn_Back()));
 	connect(mBalanceDlg, SIGNAL(SiContinue()), this, SLOT(stContinue()));
 	connect(&mContinueTimer, SIGNAL(timeout()), this, SLOT(stContinue()));
@@ -141,6 +142,7 @@ void ZJHGameUI::regConnections()
 	connect(mGameServer, SIGNAL(SiCurrentPlayer(int)), this, SLOT(stCurrentPlayer(int)));
 	connect(mGameServer, SIGNAL(SiTableEnd(TableInfo, QMap<int, int>)), this, SLOT(stTableEnd(TableInfo, QMap<int, int>)));
 	connect(mGameServer, SIGNAL(SiFollow(int, int, int, int)), this, SLOT(stFollow(int, int, int, int)));
+	connect(mGameServer, SIGNAL(SiGiveUp(int)), this, SLOT(stGiveUp(int)));
 	connect(mGameServer, SIGNAL(SiSyncStart()), this, SLOT(stSyncStart()));
 	connect(mGameServer, SIGNAL(SiUpdateMoney(quint32, quint32)), this, SLOT(stUpdateMoney(quint32, quint32)));
 	connect(mGameServer, SIGNAL(SiTableList(QMap<int, TableData>)), this, SLOT(stTableList(QMap<int, TableData>)));
@@ -224,7 +226,7 @@ void ZJHGameUI::stMoveLeftPokers()
 void ZJHGameUI::StStartGame( TableInfo _tableInfo )
 {
 	reset();
-
+	
 	ShowShuffleAni();
 	// update table info
 	mTableInfo = _tableInfo;
@@ -264,6 +266,7 @@ void ZJHGameUI::reset()
 
 	hidePokers();
 	hideChips();
+	hideGiveUps();
 	mPlayers.clear();
 
 	for ( int i = 0; i<MAX_PLAYER; i++ )
@@ -640,4 +643,34 @@ void ZJHGameUI::stBtn_test()
 
 	mPlayers[1].SetPokers(testP);
 	showPokers(1, rand()%2==0?true:false);
+}
+
+void ZJHGameUI::stBtn_Giveup()
+{
+	Packet p;
+	p.SetMessage(MSG_CL_GS_GIVEUP);
+	p<<mMyTableID<<mMySeatID;
+	mGameServer->Send(&p);
+}
+
+void ZJHGameUI::stGiveUp( int _seatID )
+{
+	showGiveUp(_seatID);
+}
+
+void ZJHGameUI::hideGiveUps()
+{
+	for (int i = 0; i<MAX_PLAYER; i++)
+	{
+		QLabel* giveup = mMainWidget->findChild<QLabel*>(QString("giveup_%1").arg(i));
+		if(giveup)
+			giveup->hide();
+	}
+}
+
+void ZJHGameUI::showGiveUp( int _seatID )
+{
+	QLabel* giveup = mMainWidget->findChild<QLabel*>(QString("giveup_%1").arg(_seatID));
+	if(giveup)
+		giveup->show();
 }

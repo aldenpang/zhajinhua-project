@@ -60,6 +60,9 @@ void GameServerNet::PacketHandler( Packet& _packet )
 	case MSG_GS_CL_QUERY_MONEY:
 		processQueryMoney(_packet);
 		break;
+	case MSG_GS_CL_GIVEUP:
+		processGiveUp(_packet);
+		break;
 	default:
 		break;
 	}
@@ -278,4 +281,11 @@ void GameServerNet::RequestTableInfo()
 	Packet p;
 	p.SetMessage(MSG_CL_GS_TABLE_INFO);
 	Send(&p);
+}
+
+void GameServerNet::processGiveUp( Packet& _packet )
+{
+	int seatID = 0;
+	_packet>>seatID;
+	emit SiGiveUp(seatID);
 }

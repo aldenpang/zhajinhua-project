@@ -384,9 +384,12 @@ GSPlayerPtr Table::WhoWin()
 {
 	GSPlayerPtr winPlayer;
 	QMap<int, ISocketInstancePtr>::iterator itr;
+	//把自己的牌与其他所有人都轮询一遍
 	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
 	{
 		GSPlayerPtr player = itr.value().staticCast<GSPlayer>();
+		if (player->GetIsGiveUp())//如果放弃，就跳到下个人
+			continue;
 		int pushCounter = 0;
 		QMap<int, ISocketInstancePtr>::iterator otherItr;
 		for ( otherItr = mPlayers.begin(); otherItr != mPlayers.end(); otherItr++ )
@@ -394,7 +397,11 @@ GSPlayerPtr Table::WhoWin()
 			GSPlayerPtr otherPlayer = otherItr.value().staticCast<GSPlayer>();
 			if ( player == otherPlayer )		// if this player is same player, continue
 				continue;
-
+			if (otherPlayer->GetIsGiveUp())//如果放弃，就跳到下个人
+			{
+				pushCounter++;	// 一定大过放弃的人
+				continue;
+			}
 			PokerType playerType = player->GetPokerType();
 			QList<PokerPtr> playerPokers = player->GetPokers();
 			PokerType otherType = otherPlayer->GetPokerType();
@@ -413,6 +420,9 @@ GSPlayerPtr Table::WhoWin()
 
 void Table::GiveUp( int _seatID )
 {
+	if ( mState != TS_PLAYING )
+		return;
+
 	// check player amount, if less than 2, game will end, otherwise this player will end himself
 	GSPlayerPtr player = mPlayers[_seatID].staticCast<GSPlayer>();
 	player->SetIsGiveUp(true);
