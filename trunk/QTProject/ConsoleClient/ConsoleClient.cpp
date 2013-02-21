@@ -290,7 +290,7 @@ void ConsoleClient::stFollow( int _seatID, int _chip, int _currentPlayer, int _c
 		LOG_INFO("End");
 		return;
 	}
-	stCurrentPlayer(_currentPlayer);
+	//stCurrentPlayer(_currentPlayer);
 }
 
 void ConsoleClient::stSyncStart()

@@ -80,7 +80,8 @@ private:
 	int									mCurrentPlayer;
 	int									mCurrentBid;
 	int									mContinueAmount;	// 记录有多少个玩家要继续，如果等于当前正在玩的玩家，则继续
-
+	GSPlayerPtr							mLastWinner;
+	QMap<int, ISocketInstancePtr>		mLastPlayers;		// 上局结算时保存
 private:
 	void initPokers();
 
@@ -106,6 +107,10 @@ private:
 	quint32 getPlayerMoney( GSPlayerPtr _player );
 
 	void broadcastCurrentPlayer();
+
+	int getDealer();
+
+	void recaculateCurrentPlayer();
 };
 
 #endif // Table_h__
