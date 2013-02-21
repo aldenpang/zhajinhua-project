@@ -18,6 +18,7 @@ Table::Table()
 , mContinueAmount(0)
 {
 	initPokers();
+	mLastWinner = GSPlayerPtr(NULL);
 }
 
 Table::~Table()
@@ -176,6 +177,10 @@ void Table::shuffle(bool _print)
 
 void Table::startTable()
 {
+	// 计算庄家
+	mDealerSeat = getDealer();
+	mCurrentPlayer = mDealerSeat;
+
 	// 广播开始消息
 	Packet p;
 	p.SetMessage(MSG_GS_CL_START_GAME);
@@ -189,7 +194,7 @@ void Table::startTable()
 		p<<(quint32)itr.key()<<ppp->GetNickName()<<ppp->GetProtraitID()<<getPlayerMoney(ppp);
 	}
 	broadcastToAll(&p);
-	LOG_D_INFO("Broadcast MSG_GS_CL_START_GAME");
+	LOG_D_INFO(QString("Broadcast MSG_GS_CL_START_GAME, Dealer[%1]").arg(mDealerSeat));
 
 	// send sync message
 	Packet ppp;
@@ -266,6 +271,11 @@ void Table::UpdateReadyState( int _seatID )
 	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
 	if ( mReadyAmount >= players.size() )
 	{
+		// 如果人变化，就清除mLastWinner
+		if ( players != mLastPlayers )
+		{
+			mLastWinner = GSPlayerPtr(NULL);
+		}
 		// 先投底注
 		int baseChip = BASE_CHIP;
 		Packet p;
@@ -330,12 +340,7 @@ void Table::Follow( int _seatID, int _chip )
 	}
 
 	LOG_D_INFO(QString("[%1] follow by [%2] chips").arg(_seatID).arg(_chip));
-	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
-	QMap<int, ISocketInstancePtr>::iterator itr = players.find(mCurrentPlayer);
-	itr++;
-	if(itr == players.end())
-		itr = players.begin();
-	mCurrentPlayer = itr.key();
+	recaculateCurrentPlayer();
 	broadcastCurrentPlayer();
 
 	// update chips
@@ -367,7 +372,6 @@ void Table::reset()
 	mCurrentPlayer = 0;
 	mCurrentBid = 0;
 	mContinueAmount = 0;
-
 	// clean all player's poker
 	QMap<int, ISocketInstancePtr>::iterator itr;
 	for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++ )
@@ -422,7 +426,12 @@ void Table::GiveUp( int _seatID )
 {
 	if ( mState != TS_PLAYING )
 		return;
-
+	if ( _seatID != mCurrentPlayer )
+	{
+		LOG_D_WARN(QString("SeatID[%1] not match with mCurrentPlayer[%2]").arg(_seatID).arg(mCurrentPlayer));
+		return;
+	}
+	LOG_D_INFO(QString("Seat [%1] player wants to giveup").arg(_seatID));
 	// check player amount, if less than 2, game will end, otherwise this player will end himself
 	GSPlayerPtr player = mPlayers[_seatID].staticCast<GSPlayer>();
 	player->SetIsGiveUp(true);
@@ -451,6 +460,7 @@ void Table::GiveUp( int _seatID )
 void Table::calculateBalance(QMap<int, int>& _result)
 {
 	GSPlayerPtr winner = WhoWin();
+	mLastWinner = winner;
 	// transfer money from loser's table wallet to winner's table wallet, and transfer rake
 	int rake = mCurrentBid*(DATACENTER.mRoomInfo.mMoneyType == GOLD_COIN?RAKE:0);
 	int afterRake = mCurrentBid-rake;
@@ -511,6 +521,7 @@ void Table::gameEnd()
 	p.SetMessage(MSG_GS_BC_TABLE_END);
 	p<<BASE_CHIP<<TOP_CHIP<<mDealerSeat;
 	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
+	mLastPlayers = players;
 	p<<(quint32)players.size();
 	QMap<int, ISocketInstancePtr>::iterator itr;
 	for (itr = players.begin(); itr != players.end(); itr++)
@@ -548,4 +559,34 @@ void Table::Continue( int _seatID )
 		startTable();
 		mContinueAmount = 0;
 	}
+}
+
+int Table::getDealer()
+{
+	if ( mLastWinner == GSPlayerPtr(NULL) )
+	{
+		return 0;
+	}
+	else
+	{
+		QMap<int, ISocketInstancePtr>::iterator itr;
+		for ( itr = mPlayers.begin(); itr != mPlayers.end(); itr++)
+		{
+			if (itr.value() == mLastWinner)
+			{
+				return itr.key();
+			}
+		}
+		return 0;
+	}
+}
+
+void Table::recaculateCurrentPlayer()
+{
+	QMap<int, ISocketInstancePtr> players = getPlayingPlayers();
+	QMap<int, ISocketInstancePtr>::iterator itr = players.find(mCurrentPlayer);
+	itr++;
+	if(itr == players.end())
+		itr = players.begin();
+	mCurrentPlayer = itr.key();
 }
