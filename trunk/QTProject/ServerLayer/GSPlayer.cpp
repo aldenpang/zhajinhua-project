@@ -83,7 +83,7 @@ PokerType GSPlayer::analysePokerType( QList<PokerPtr>& _input )
 	}
 	else
 	{
-		if ( (_input[2]->mValue-_input[1]->mValue == 1) && (_input[1]->mValue-_input[0]->mValue == 1) )
+		if ( (_input[2]->mValue%13-_input[1]->mValue%13 == 1) && (_input[1]->mValue%13-_input[0]->mValue%13 == 1) )
 		{
 			return SHUNZI;
 		}
