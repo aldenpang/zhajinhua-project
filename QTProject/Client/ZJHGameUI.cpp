@@ -670,7 +670,7 @@ void ZJHGameUI::hideGiveUps()
 
 void ZJHGameUI::showGiveUp( int _seatID )
 {
-	QLabel* giveup = mMainWidget->findChild<QLabel*>(QString("giveup_%1").arg(_seatID));
+	QLabel* giveup = mMainWidget->findChild<QLabel*>(QString("giveup_%1").arg(convertSeatID(_seatID)));
 	if(giveup)
 		giveup->show();
 }

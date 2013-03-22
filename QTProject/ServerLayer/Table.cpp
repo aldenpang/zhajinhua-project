@@ -296,16 +296,16 @@ void Table::UpdateReadyState( int _seatID )
 			Packet pp;
 			pp.SetMessage(MSG_GS_CL_DISTRIBUTE);
 			QString log;
+			GSPlayerPtr player = itr.value().staticCast<GSPlayer>();
 			for ( int i = 0; i<MAX_HAND_POKER; i++ )
 			{
 				PokerPtr p = distribute();
-				GSPlayerPtr player = itr.value().staticCast<GSPlayer>();
 				player->AddPoker(p);
 				pp<<p->mID;
 				log += QString("%1/").arg(p->mID);
 			}
 			itr.value()->Send(&pp);
-			LOG_D_INFO(QString("Send Poker [%1] to Player[%2:%3]").arg(log).arg(itr.value()->IP()).arg(itr.value()->Port()));
+			LOG_D_INFO(QString("Send Poker [%1] to Player[%2]").arg(log).arg(player->GetNickName()));
 		}
 		broadcastCurrentPlayer();
 		LOG_D_INFO(QString("CurrentPlayer[%1]").arg(mCurrentPlayer));
